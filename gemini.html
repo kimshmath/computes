@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curve Graph C(S₀,₅) Subgraph Decider</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --primary-color: #4a90e2;
+            --button-hover: #357abd;
+            --success-bg: #e8f5e9;
+            --success-color: #2e7d32;
+            --success-border: #c8e6c9;
+            --error-bg: #ffebee;
+            --error-color: #c62828;
+            --error-border: #ffcdd2;
+            --warn-bg: #fff8e1;
+            --warn-color: #f57f17;
+            --warn-border: #ffecb3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 24px;
+            text-align: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        p.description {
+            line-height: 1.6;
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: none;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .result.yes {
+            display: block;
+            background-color: var(--success-bg);
+            color: var(--success-color);
+            border: 1px solid var(--success-border);
+        }
+
+        .result.no {
+            display: block;
+            background-color: var(--error-bg);
+            color: var(--error-color);
+            border: 1px solid var(--error-border);
+        }
+
+        .result.warn {
+            display: block;
+            background-color: var(--warn-bg);
+            color: var(--warn-color);
+            border: 1px solid var(--warn-border);
+        }
+
+        .math {
+            font-style: italic;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>C(S<sub>0,5</sub>) Induced Subgraph Decider</h1>
+        <p class="description">
+            This app decides whether a given finite graph appears as an induced subgraph of the curve graph of the
+            five-punctured sphere, <span class="math">C(S<sub>0,5</sub>)</span>.
+            <br><br>
+            By the theorem of <strong>Aougab, Biringer, and Gaster</strong>, a finite graph embeds as an induced
+            subgraph of a curve graph <span class="math">C(S)</span> if and only if its clique number is at most the
+            surface's complexity <span class="math">&xi;(S)</span>. Because <span class="math">&xi;(S<sub>0,5</sub>) =
+                2</span>, a graph embeds if and only if it is strictly <strong>triangle-free</strong>.
+        </p>
+
+        <label for="graph-input">Input Graph (Set of pairs of vertices):</label>
+        <textarea id="graph-input"
+            placeholder="Example: { {1,2}, {1,3}, {1,4}, {2,4} }">{ {1,2}, {1,3}, {1,4}, {2,4} }</textarea>
+
+        <button onclick="checkSubgraph()">Decide Embedding</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function checkSubgraph() {
+            const input = document.getElementById('graph-input').value;
+            const resultDiv = document.getElementById('result');
+
+            // Flexible regex to parse graph edges matching {1,2}, [1, 2], or (1, 2)
+            const edgeRegex = /[\{\[\(]\s*([^,\{\}\[\]\(\)]+?)\s*,\s*([^,\{\}\[\]\(\)]+?)\s*[\}\]\)]/g;
+            let match;
+            const edges = [];
+
+            while ((match = edgeRegex.exec(input)) !== null) {
+                // Trim whitespace and remove arbitrary quotes
+                let u = match[1].replace(/['"]/g, '').trim();
+                let v = match[2].replace(/['"]/g, '').trim();
+                edges.push([u, v]);
+            }
+
+            if (edges.length === 0) {
+                if (input.trim().match(/[a-zA-Z0-9]/)) {
+                    resultDiv.innerHTML = "<strong>Error:</strong> Could not parse edges. Please use the set pair format, e.g., <code>{ {1,2}, {1,3} }</code>.";
+                    resultDiv.className = "result warn";
+                    return;
+                } else {
+                    resultDiv.innerHTML = "<strong>Yes.</strong> An empty graph trivially embeds into <span class='math'>C(S<sub>0,5</sub>)</span>.";
+                    resultDiv.className = "result yes";
+                    return;
+                }
+            }
+
+            const adj = new Map();
+
+            for (let i = 0; i < edges.length; i++) {
+                const u = edges[i][0];
+                const v = edges[i][1];
+
+                // Reject self loops since the Curve Graph strictly identifies simple graphs
+                if (u === v) {
+                    resultDiv.innerHTML = `<strong>No.</strong><br><br>The input graph contains a self-loop at vertex <strong>${u}</strong>. The curve graph <span class='math'>C(S<sub>0,5</sub>)</span> is a simple graph, therefore it cannot contain self-loops.`;
+                    resultDiv.className = "result no";
+                    return;
+                }
+
+                if (!adj.has(u)) adj.set(u, new Set());
+                if (!adj.has(v)) adj.set(v, new Set());
+
+                adj.get(u).add(v);
+                adj.get(v).add(u);
+            }
+
+            const vertices = Array.from(adj.keys());
+
+            // Traverse to find triangles (a clique of size 3)
+            for (let i = 0; i < vertices.length; i++) {
+                const u = vertices[i];
+                const neighbors = Array.from(adj.get(u));
+                for (let j = 0; j < neighbors.length; j++) {
+                    for (let k = j + 1; k < neighbors.length; k++) {
+                        const v = neighbors[j];
+                        const w = neighbors[k];
+
+                        if (adj.get(v).has(w)) {
+                            resultDiv.innerHTML = `<strong>No.</strong><br><br>The graph does not appear as an induced subgraph of <span class='math'>C(S<sub>0,5</sub>)</span>.<br><br>` +
+                                `<strong>Reason:</strong> The graph contains a triangle formed by the mutually adjacent vertices <strong>{${u}, ${v}, ${w}}</strong>, implying its clique number is at least 3.<br><br>` +
+                                `The curve graph of the five-punctured sphere has complexity <span class='math'>&xi;(S<sub>0,5</sub>) = 3(0) - 3 + 5 = 2</span>. Its maximal clique size is precisely 2, inherently rendering it triangle-free.`;
+                            resultDiv.className = "result no";
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Passed constraints: Graph is triangle-free and simple
+            resultDiv.innerHTML = `<strong>Yes!</strong><br><br>The graph appears as an induced subgraph of <span class='math'>C(S<sub>0,5</sub>)</span>.<br><br>` +
+                `<strong>Reason:</strong> The graph is simple and entirely triangle-free (clique number &le; 2). ` +
+                `By the theorem of Aougab–Biringer–Gaster, any finite graph embeds as an induced subgraph of a curve graph if and only if its clique number is at most the surface's complexity. ` +
+                `Since <span class='math'>&xi;(S<sub>0,5</sub>) = 2</span>, every finite triangle-free graph successfully embeds into <span class='math'>C(S<sub>0,5</sub>)</span>.`;
+            resultDiv.className = "result yes";
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curve Graph C(S₀,₅) Subgraph Decider</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success-bg: #f0fdf4;
+            --success-border: #bbf7d0;
+            --success-text: #166534;
+            --error-bg: #fef2f2;
+            --error-border: #fecaca;
+            --error-text: #991b1b;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-color); color: var(--text-main);
+            margin: 0; padding: 2rem 1rem; display: flex; justify-content: center;
+        }
+        .container {
+            background: var(--card-bg); padding: 2.5rem; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 600px; width: 100%;
+        }
+        h1 { margin-top: 0; font-size: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
+        .math { font-family: "Cambria Math", serif; font-style: italic; }
+        p { color: var(--text-muted); line-height: 1.6; }
+        textarea {
+            width: 100%; height: 100px; padding: 1rem; margin-bottom: 1rem;
+            border: 1px solid #cbd5e1; border-radius: 8px; font-family: monospace; font-size: 14px; box-sizing: border-box;
+        }
+        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        button {
+            width: 100%; padding: 0.875rem; background: var(--primary); color: white;
+            border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        button:hover { background: var(--primary-hover); }
+        .result { margin-top: 1.5rem; padding: 1.25rem; border-radius: 8px; display: none; line-height: 1.5; }
+        .yes { display: block; background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success-text); }
+        .no { display: block; background: var(--error-bg); border: 1px solid var(--error-border); color: var(--error-text); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><span class="math">C(S<sub>0,5</sub>)</span> Subgraph Decider</h1>
+    <p>
+        Determines if a graph embeds as an induced subgraph in the curve graph of the 5-punctured sphere. By the Aougab–Biringer–Gaster theorem, since the complexity is <span class="math">&xi;(S<sub>0,5</sub>) = 2</span>, the graph must be simple and strictly triangle-free.
+    </p>
+
+    <label for="edges" style="display:block; margin-bottom: 0.5rem; font-weight: 600;">Input Edges:</label>
+    <textarea id="edges" placeholder="{{1,2}, {2,3}, {1,3}}">{{1,2}, {1,3}, {1,4}, {2,4}}</textarea>
+    
+    <button onclick="check()">Decide Embedding</button>
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+    function check() {
+        const input = document.getElementById('edges').value;
+        const res = document.getElementById('result');
+        const regex = /[\{\[\(]\s*([^,\{\}\[\]\(\)]+?)\s*,\s*([^,\{\}\[\]\(\)]+?)\s*[\}\]\)]/g;
+        let match, edges = [];
+        
+        while ((match = regex.exec(input)) !== null) {
+            edges.push([match[1].trim(), match[2].trim()]);
+        }
+        
+        if (!edges.length) {
+            res.className = 'result yes';
+            res.innerHTML = "<strong>Yes.</strong> An empty graph embeds trivially.";
+            return;
+        }
+        
+        const adj = new Map();
+        for (let [u, v] of edges) {
+            if (u === v) {
+                res.className = 'result no';
+                res.innerHTML = `<strong>No.</strong> Found a self-loop at <strong>${u}</strong>. Curve graphs are strictly simple graphs.`;
+                return;
+            }
+            if (!adj.has(u)) adj.set(u, new Set());
+            if (!adj.has(v)) adj.set(v, new Set());
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        const vertices = Array.from(adj.keys());
+        for (let u of vertices) {
+            const neighbors = Array.from(adj.get(u));
+            for (let i = 0; i < neighbors.length; i++) {
+                for (let j = i + 1; j < neighbors.length; j++) {
+                    const v = neighbors[i];
+                    const w = neighbors[j];
+                    if (adj.get(v).has(w)) {
+                        res.className = 'result no';
+                        res.innerHTML = `<strong>No.</strong> Triangle found at vertices <strong>{${u}, ${v}, ${w}}</strong>. The clique number exceeds <span class="math">&xi;(S<sub>0,5</sub>) = 2</span>.`;
+                        return;
+                    }
+                }
+            }
+        }
+        
+        res.className = 'result yes';
+        res.innerHTML = "<strong>Yes!</strong> Graph is simple and triangle-free. It smoothly embeds by the Aougab–Biringer–Gaster theorem.";
+    }
+</script>
+
+</body>
+</html>
