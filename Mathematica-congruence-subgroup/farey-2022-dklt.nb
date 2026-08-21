@@ -1,0 +1,124 @@
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[         0,          0]
+NotebookDataLength[      4037,        123]
+NotebookOptionsPosition[      3261,         96]
+NotebookOutlinePosition[      3708,        114]
+CellTagsIndexPosition[      3665,        111]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Prerequisite", ":", " ", 
+    RowBox[{"MAGMA", " ", "installed", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"at", " ", "/", "Applications"}], "/", "Magma"}], "/", 
+      "magma"}]}]}], "  ", "*)"}]}]], "Input",
+ CellChangeTimes->{{3.871663840392421*^9, 
+  3.871663855729269*^9}},ExpressionUUID->"2c6cb34e-109e-42b9-8fb8-\
+b512e6ea5750"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearSystemCache", "[", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"n", "=", 
+   RowBox[{"37", "*", "5"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strtmp", "=", 
+   RowBox[{"\"\<n := \>\"", "<>", 
+    RowBox[{"ToString", "[", "n", "]"}], "<>", "\"\<;\>\""}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{"\"\<farey-2022-initial.txt\>\"", ",", "strtmp"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Run", "[", 
+   "\"\</Applications/Magma/magma farey-2022-initial.txt \
+farey-2022-dklt.m\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cusps", "=", 
+   RowBox[{"Import", "[", "\"\<./farey-2022-cusps.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gens", "=", 
+   RowBox[{"Import", "[", "\"\<./farey-2022-generators.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cusps", "=", 
+   RowBox[{"ToExpression", "[", 
+    RowBox[{"StringReplace", "[", 
+     RowBox[{"cusps", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<[\>\"", "\[Rule]", "\"\<{\>\""}], ",", 
+        RowBox[{"\"\<]\>\"", "\[Rule]", "\"\<}\>\""}], ",", 
+        RowBox[{"\"\<oo\>\"", "->", "\"\<Infty\>\""}]}], "}"}]}], "]"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cusps", "=", 
+   RowBox[{"Drop", "[", 
+    RowBox[{
+     RowBox[{"Drop", "[", 
+      RowBox[{"cusps", ",", "1"}], "]"}], ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"denom", "=", 
+   RowBox[{"Denominator", "[", "cusps", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"mF", "=", 
+  RowBox[{"Max", "[", "denom", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.871663220813905*^9, 3.871663291364481*^9}, {
+  3.8716634033500557`*^9, 3.871663408272706*^9}, {3.871663756676367*^9, 
+  3.871663771641173*^9}, {3.871663807050909*^9, 3.871663822102399*^9}},
+ CellLabel->
+  "In[183]:=",ExpressionUUID->"7c835add-dd4a-469d-96cd-972a6b382a62"],
+
+Cell[BoxData["37"], "Output",
+ CellChangeTimes->{{3.871663757700707*^9, 3.871663772039146*^9}, {
+  3.871663808104644*^9, 3.871663822525938*^9}},
+ CellLabel->
+  "Out[194]=",ExpressionUUID->"0a1396e4-505f-4430-8442-cacae1cab46f"]
+}, Open  ]]
+},
+WindowSize->{1235, 747},
+WindowMargins->{{10, Automatic}, {Automatic, 76}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (July 9, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"185c4737-bada-435d-9fac-75fc62a55d6d"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[400, 13, 424, 11, 54, "Input",ExpressionUUID->"2c6cb34e-109e-42b9-8fb8-b512e6ea5750"],
+Cell[CellGroupData[{
+Cell[849, 28, 2166, 59, 262, "Input",ExpressionUUID->"7c835add-dd4a-469d-96cd-972a6b382a62"],
+Cell[3018, 89, 227, 4, 34, "Output",ExpressionUUID->"0a1396e4-505f-4430-8442-cacae1cab46f"]
+}, Open  ]]
+}
+]
+*)
+

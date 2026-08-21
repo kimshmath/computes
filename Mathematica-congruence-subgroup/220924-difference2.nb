@@ -1,0 +1,169 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      5389,        159]
+NotebookOptionsPosition[      4045,        126]
+NotebookOutlinePosition[      4438,        142]
+CellTagsIndexPosition[      4395,        139]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"p", "=", "193"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"l", "=", 
+   RowBox[{"SpecialPolygon", "[", "p", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"Max", "[", 
+    RowBox[{"l", "[", 
+     RowBox[{"[", "2", "]"}], "]"}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<The bound is between \>\"", ",", 
+    RowBox[{"Floor", "[", 
+     RowBox[{"Sqrt", "[", "p", "]"}], "]"}], ",", "\"\< and \>\"", ",", 
+    RowBox[{"Floor", "[", 
+     RowBox[{"Sqrt", "[", 
+      RowBox[{"4", 
+       RowBox[{"p", "/", "3"}]}], "]"}], "]"}]}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.872978056511504*^9, 3.8729780806384487`*^9}, {
+  3.872978136229021*^9, 
+  3.872978201782913*^9}},ExpressionUUID->"a8440059-37cc-43d6-bd51-\
+81a7ed0335dd"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Complete at p = \"\>", "\[InvisibleSpace]", "193"}],
+  SequenceForm["Complete at p = ", 193],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.8729780595019693`*^9, 3.87297808091074*^9}, {
+  3.872978168724483*^9, 3.872978191534412*^9}},
+ CellLabel->
+  "During evaluation of \
+In[16]:=",ExpressionUUID->"8c7d1354-5e22-4f6a-a04d-663019acfad9"],
+
+Cell[BoxData["15"], "Print",
+ CellChangeTimes->{{3.8729780595019693`*^9, 3.87297808091074*^9}, {
+  3.872978168724483*^9, 3.8729781915361423`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[16]:=",ExpressionUUID->"a01c1998-5cfe-40c6-ab0b-f5c1c6b5a34f"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The bound is between \"\>", "\[InvisibleSpace]", "13", 
+   "\[InvisibleSpace]", "\<\" and \"\>", "\[InvisibleSpace]", "16"}],
+  SequenceForm["The bound is between ", 13, " and ", 16],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.8729780595019693`*^9, 3.87297808091074*^9}, {
+  3.872978168724483*^9, 3.872978191538814*^9}},
+ CellLabel->
+  "During evaluation of \
+In[16]:=",ExpressionUUID->"b8a9493a-3014-4fcc-a748-98700617cbde"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Max", "[", 
+  RowBox[{"l", "[", 
+   RowBox[{"[", "2", "]"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.8729780822236547`*^9, 3.87297809154088*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"2f506bb1-a1d7-4d5f-b406-f92b15e7ed35"],
+
+Cell[BoxData["15"], "Output",
+ CellChangeTimes->{{3.872978083957242*^9, 3.8729780920402737`*^9}},
+ CellLabel->"Out[6]=",ExpressionUUID->"24fd29ac-f1ee-4064-baee-47a415f96db2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"p", "=", "193"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Floor", "[", 
+  RowBox[{"Sqrt", "[", 
+   RowBox[{"4", 
+    RowBox[{"p", "/", "3"}]}], "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.8729780945311613`*^9, 3.8729781034850397`*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"5d26831a-6f6d-4393-bd72-86697cafa205"],
+
+Cell[BoxData["16"], "Output",
+ CellChangeTimes->{{3.872978100515209*^9, 3.8729781036899767`*^9}},
+ CellLabel->"Out[10]=",ExpressionUUID->"9e6c0a85-e9d9-433c-8f1a-c91aeead5e1d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.872978107196723*^9, 3.872978109607333*^9}, 
+   3.8729781548620768`*^9},ExpressionUUID->"ace1bd64-6509-4d23-b80a-\
+c5af34fc2af0"],
+
+Cell[BoxData["13"], "Output",
+ CellChangeTimes->{3.872978109890255*^9},
+ CellLabel->"Out[11]=",ExpressionUUID->"b9eae830-0112-4be0-9601-441c57e87905"]
+}, Open  ]]
+},
+WindowSize->{808, 692},
+WindowMargins->{{Automatic, -96}, {Automatic, 28}},
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (July 9, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"1ece79f5-9679-4dcb-9137-ca48519a95cc"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 875, 25, 94, "Input",ExpressionUUID->"a8440059-37cc-43d6-bd51-81a7ed0335dd"],
+Cell[CellGroupData[{
+Cell[1480, 51, 393, 9, 24, "Print",ExpressionUUID->"8c7d1354-5e22-4f6a-a04d-663019acfad9"],
+Cell[1876, 62, 251, 5, 24, "Print",ExpressionUUID->"a01c1998-5cfe-40c6-ab0b-f5c1c6b5a34f"],
+Cell[2130, 69, 483, 10, 24, "Print",ExpressionUUID->"b8a9493a-3014-4fcc-a748-98700617cbde"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2662, 85, 253, 5, 30, "Input",ExpressionUUID->"2f506bb1-a1d7-4d5f-b406-f92b15e7ed35"],
+Cell[2918, 92, 175, 2, 34, "Output",ExpressionUUID->"24fd29ac-f1ee-4064-baee-47a415f96db2"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3130, 99, 353, 8, 52, "Input",ExpressionUUID->"5d26831a-6f6d-4393-bd72-86697cafa205"],
+Cell[3486, 109, 176, 2, 34, "Output",ExpressionUUID->"9e6c0a85-e9d9-433c-8f1a-c91aeead5e1d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3699, 116, 177, 3, 30, "Input",ExpressionUUID->"ace1bd64-6509-4d23-b80a-c5af34fc2af0"],
+Cell[3879, 121, 150, 2, 34, "Output",ExpressionUUID->"b9eae830-0112-4be0-9601-441c57e87905"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
