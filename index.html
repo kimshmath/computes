@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>computes — Sang-hyun Kim</title>
+<meta name="description" content="Computations in geometric group theory, hyperbolic geometry, and the mapping class group, by Sang-hyun Kim (KIAS).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05060f;--bg2:#0c0d1e;--gold:#c9a84c;--gold2:#e8cc80;
+  --cyan:#3cb8c3;--text:#ede5d8;--muted:#7c7693;
+  --border:rgba(201,168,76,0.13);
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);
+  font-family:'EB Garamond',Georgia,serif;font-size:1.08rem;line-height:1.75;
+  overflow-x:hidden;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(201,168,76,.08),transparent 70%)}
+
+.wrap{max-width:1060px;margin:0 auto;padding:0 2rem}
+
+/* ---------- masthead ---------- */
+header{padding:4.5rem 0 0}
+.eyebrow{font-family:'Cormorant Garamond',serif;font-size:1.05rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold);opacity:.95;margin-bottom:1.4rem}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.2rem,10vw,6.5rem);
+  font-weight:300;line-height:1;letter-spacing:-.02em;
+  text-shadow:0 0 70px rgba(201,168,76,.22)}
+h1 em{font-style:italic;color:var(--gold2)}
+.tagline{font-size:1.2rem;color:var(--muted);max-width:36rem;margin-top:1.4rem}
+.bio{font-size:1.02rem;color:var(--muted);max-width:40rem;margin-top:1.5rem}
+.bio strong{color:var(--text);font-weight:500}
+
+/* ---------- portals: the two personal sites ---------- */
+.portals{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;
+  margin:2.5rem 0 1rem}
+a.portal{position:relative;overflow:hidden;display:block;
+  background:linear-gradient(150deg,rgba(201,168,76,.12),rgba(12,13,30,.75) 55%);
+  border:1px solid rgba(201,168,76,.38);border-radius:4px;
+  padding:2.1rem 2rem 1.8rem;text-decoration:none;color:inherit;
+  transition:border-color .35s ease,transform .35s ease,box-shadow .35s ease}
+a.portal::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 85% 0%,rgba(201,168,76,.16),transparent 60%);
+  opacity:0;transition:opacity .35s ease}
+a.portal:hover{border-color:var(--gold);transform:translateY(-4px);
+  box-shadow:0 18px 46px -22px rgba(201,168,76,.55)}
+a.portal:hover::after{opacity:1}
+a.portal:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.portal .domain{font-family:'Cormorant Garamond',serif;font-size:.8rem;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:.85rem}
+.portal h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.4vw,2.4rem);
+  font-weight:400;line-height:1.15;margin-bottom:.5rem;color:var(--text)}
+.portal h2 em{font-style:italic;color:var(--gold2)}
+.portal p{color:var(--muted);font-size:1rem;line-height:1.6}
+.portal .go{display:inline-block;margin-top:1.2rem;color:var(--gold2);font-size:.95rem}
+a.portal:hover .go{color:var(--gold)}
+
+.rule{width:52px;height:1px;background:var(--gold);opacity:.45;margin:3rem 0 0}
+
+/* ---------- sections ---------- */
+section{padding:3.5rem 0}
+.sec-label{font-family:'Cormorant Garamond',serif;font-size:.75rem;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.7rem;opacity:.9}
+h3.sec{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,4vw,2.9rem);
+  font-weight:300;line-height:1.15;margin-bottom:.5rem}
+h3.sec em{color:var(--gold2);font-style:italic}
+.sec-note{color:var(--muted);font-size:1rem;max-width:38rem;margin-bottom:2.4rem}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:1.4rem}
+.grid.two{grid-template-columns:repeat(2,1fr)}
+
+.card{position:relative;display:flex;flex-direction:column;
+  background:linear-gradient(160deg,rgba(12,13,30,.9),rgba(5,6,15,.6));
+  border:1px solid var(--border);border-radius:3px;
+  padding:2rem 1.9rem;text-decoration:none;color:inherit;
+  transition:border-color .35s ease,transform .35s ease,background .35s ease}
+a.card:hover{border-color:rgba(201,168,76,.42);transform:translateY(-3px);
+  background:linear-gradient(160deg,rgba(18,19,40,.95),rgba(8,9,22,.7))}
+a.card:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.card .kind{font-family:'Cormorant Garamond',serif;font-size:.7rem;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:.9rem}
+.card h4{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:400;
+  line-height:1.2;margin-bottom:.6rem}
+.card p{color:var(--muted);font-size:1rem;line-height:1.65;flex:1}
+.card .meta{margin-top:1.5rem;padding-top:1.1rem;border-top:1px solid var(--border);
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  font-size:.85rem;color:var(--muted)}
+.card .go{color:var(--gold2);white-space:nowrap}
+a.card:hover .go{color:var(--gold)}
+
+.alts{margin-top:1.4rem;display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;font-size:.9rem}
+.alts a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;
+  transition:color .25s,border-color .25s}
+.alts a:hover{color:var(--gold2);border-bottom-color:rgba(201,168,76,.4)}
+
+/* ---------- source list ---------- */
+.rows{border-top:1px solid var(--border)}
+a.row{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:1.5rem;
+  padding:1.5rem .4rem;border-bottom:1px solid var(--border);
+  text-decoration:none;color:inherit;transition:background .3s,padding .3s}
+a.row:hover{background:rgba(201,168,76,.045);padding-left:1rem}
+a.row:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.row h4{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;margin-bottom:.25rem}
+.row p{color:var(--muted);font-size:.97rem;line-height:1.6;max-width:44rem}
+.row .tag{font-family:'Cormorant Garamond',serif;font-size:.72rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);opacity:.8;white-space:nowrap}
+a.row:hover .tag{opacity:1}
+
+/* ---------- footer ---------- */
+footer{padding:4rem 0 5rem;margin-top:2rem;border-top:1px solid var(--border);
+  color:var(--muted);font-size:.95rem}
+.foot-links{display:flex;flex-wrap:wrap;gap:.6rem 2rem;margin-bottom:1.3rem}
+footer a{color:var(--gold2);text-decoration:none;border-bottom:1px solid rgba(201,168,76,.28)}
+footer a:hover{color:var(--gold)}
+.foot-note{opacity:.7;font-size:.87rem}
+
+@media (max-width:760px){
+  .wrap{padding:0 1.4rem}
+  header{padding:4rem 0 0}
+  .portals,.grid.two{grid-template-columns:1fr}
+  a.row{grid-template-columns:1fr;gap:.5rem}
+  .row .tag{order:-1}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Sang-hyun Kim</div>
+    <h1><em>computes</em></h1>
+    <p class="tagline">Computations in geometric group theory, hyperbolic geometry,
+    and the mapping class group &mdash; interactive tools alongside the notebooks and
+    source they grew out of.</p>
+    <p class="bio"><strong>Professor and Chair, School of Mathematics, Korea Institute
+    for Advanced Study (KIAS)</strong>, and affiliate professor at the Graduate School
+    of AI4Math, KAIST. Since 2025 also working with the Superhuman Reasoning team at
+    Google DeepMind on AI for mathematical research.</p>
+
+    <!-- the two personal sites, deliberately the most prominent thing on the page -->
+    <div class="portals">
+
+      <a class="portal" href="https://kimsh.kr">
+        <div class="domain">kimsh.kr</div>
+        <h2>Homepage &amp; <em>research</em></h2>
+        <p>Publications, research in geometric group theory and low-dimensional
+        topology, activities, and full academic background.</p>
+        <span class="go">Visit kimsh.kr &rarr;</span>
+      </a>
+
+      <a class="portal" href="https://edu.kimsh.kr">
+        <div class="domain">edu.kimsh.kr</div>
+        <h2>Mellow Math &mdash; <em>interactive</em></h2>
+        <p>Interactive mathematics across space, flow, quantum, sense, machine, and
+        mechanics &mdash; 37 chapters of explorable explanations, in English and Korean.</p>
+        <span class="go">Visit edu.kimsh.kr &rarr;</span>
+      </a>
+
+    </div>
+
+    <div class="rule"></div>
+  </header>
+
+  <!-- ============ INTERACTIVE ============ -->
+  <section>
+    <span class="sec-label">Run in your browser</span>
+    <h3 class="sec">Interactive <em>pages</em> in this repository</h3>
+    <p class="sec-note">These run entirely client-side &mdash; nothing to install.</p>
+
+    <div class="grid two">
+
+      <a class="card" href="HTML-MCG-words/">
+        <div class="kind">Decider &middot; JavaScript</div>
+        <h4>Induced subgraph decider for C(S<sub>0,5</sub>)</h4>
+        <p>Decides whether a given graph embeds as an induced subgraph of the curve
+        graph of the five-punctured sphere. Since the complexity is &xi;(S<sub>0,5</sub>) = 2,
+        the Aougab&ndash;Biringer&ndash;Gaster theorem forces any such graph to be simple
+        and strictly triangle-free. Offers a practical certificate search and an exact
+        certified mode, with built-in examples.</p>
+        <div class="meta"><span>Latest version</span><span class="go">Open &rarr;</span></div>
+      </a>
+
+      <a class="card" href="HTML-hyp-geom-visual/hyperbolic.html">
+        <div class="kind">Visualization &middot; Canvas</div>
+        <h4>Living in a Hyperbolic Space</h4>
+        <p>An illustrated tour of what it would be like to inhabit hyperbolic space:
+        how distance, area, and the horizon behave when the geometry curves away from
+        you everywhere at once.</p>
+        <div class="meta"><span>English &middot; 한국어</span><span class="go">Open &rarr;</span></div>
+      </a>
+
+    </div>
+
+    <div class="alts">
+      <a href="HTML-hyp-geom-visual/hyperbolic_ko.html">쌍곡 공간에서 산다는 것 (한국어판) &rarr;</a>
+      <a href="HTML-MCG-words/mcg-word.html">Decider &mdash; earlier version 1</a>
+      <a href="HTML-MCG-words/mcg-word2.html">earlier version 2</a>
+    </div>
+  </section>
+
+  <!-- ============ SOURCE ============ -->
+  <section>
+    <span class="sec-label">Notebooks &amp; source</span>
+    <h3 class="sec">Computations <em>behind</em> them</h3>
+    <p class="sec-note">Mathematica notebooks, C++, and GAP scripts. These do not run
+    in a browser &mdash; each link opens the folder on GitHub, where notebooks and PDFs
+    can be previewed or downloaded.</p>
+
+    <div class="rows">
+
+      <a class="row" href="https://github.com/kimshmath/computes/tree/main/Mathematica-congruence-subgroup">
+        <div>
+          <h4>Optimal congruence subgroups</h4>
+          <p>Farey compact lists, special polygons, and binary-tree searches for full
+          Farey numbers. Nineteen notebooks and data files, 2022&ndash;2023.</p>
+        </div>
+        <span class="tag">Mathematica</span>
+      </a>
+
+      <a class="row" href="https://github.com/kimshmath/computes/tree/main/CPP-Mathematica-Polygonality">
+        <div>
+          <h4>Polygonality</h4>
+          <p>Polygonality and geometric-likeness tests: a C++ search over random and
+          specific words, with Mathematica notebooks summarizing the runs. The largest
+          collection here &mdash; 89 files, dating back to 2010.</p>
+        </div>
+        <span class="tag">C++ &amp; Mathematica</span>
+      </a>
+
+      <a class="row" href="https://github.com/kimshmath/computes/tree/main/Mathematica-relation-number">
+        <div>
+          <h4>Relation number</h4>
+          <p>The relation-number algorithm and the output of a full run.</p>
+        </div>
+        <span class="tag">Mathematica</span>
+      </a>
+
+      <a class="row" href="https://github.com/kimshmath/computes/tree/main/GAP-hyperbolic-manifolds">
+        <div>
+          <h4>Hyperbolic manifolds</h4>
+          <p>Early GAP working notes.</p>
+        </div>
+        <span class="tag">GAP</span>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-links">
+      <a href="https://kimsh.kr">kimsh.kr &mdash; homepage</a>
+      <a href="https://edu.kimsh.kr">edu.kimsh.kr &mdash; Mellow Math</a>
+      <a href="https://github.com/kimshmath">github.com/kimshmath</a>
+    </div>
+    <div class="foot-note">Source for this page and everything on it:
+    <a href="https://github.com/kimshmath/computes">github.com/kimshmath/computes</a>.</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
