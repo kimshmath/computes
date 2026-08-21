@@ -1,0 +1,3405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RQVK6SF2E6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-RQVK6SF2E6');
+    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Living in a Hyperbolic Space</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05060f;--bg2:#0c0d1e;--gold:#c9a84c;--gold2:#e8cc80;
+  --cyan:#3cb8c3;--text:#ede5d8;--muted:#7c7693;--red:#c45555;
+  --border:rgba(201,168,76,0.13);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;
+  font-size:1.08rem;line-height:1.75;overflow-x:hidden}
+#hero{position:relative;width:100vw;height:100vh;display:flex;
+  align-items:center;justify-content:center;overflow:hidden}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-overlay{position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,
+    rgba(5,6,15,0.0) 0%,rgba(5,6,15,0.55) 65%,rgba(5,6,15,0.92) 100%);
+  pointer-events:none}
+.hero-content{position:relative;z-index:10;text-align:center;padding:2rem;max-width:800px}
+.hero-label{font-family:'Cormorant Garamond',serif;font-size:.8rem;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:2rem;opacity:.9}
+.hero-title{font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,9vw,7.5rem);font-weight:300;line-height:1.02;
+  letter-spacing:-.01em;margin-bottom:1.5rem;
+  text-shadow:0 0 80px rgba(201,168,76,.25)}
+.hero-title em{font-style:italic;color:var(--gold2)}
+.hero-sub{font-size:1.15rem;color:var(--muted);max-width:520px;margin:0 auto 3rem;font-weight:400}
+.hero-scroller{display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--muted);font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
+  animation:bob 2.2s ease-in-out infinite}
+.scroll-bar{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+.wrap{max-width:1120px;margin:0 auto;padding:5.5rem 2rem}
+.sec-label{font-family:'Cormorant Garamond',serif;font-size:.75rem;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1rem;opacity:.9}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.8rem);
+  font-weight:300;line-height:1.1;color:var(--text);margin-bottom:1.4rem}
+h2 em{color:var(--gold2);font-style:italic}
+h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--text);margin-bottom:.6rem}
+p{color:var(--muted);margin-bottom:1rem}
+p strong{color:var(--text);font-weight:500}
+.rule{width:52px;height:1px;background:var(--gold);opacity:.45;margin:1.8rem 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.disk-wrap{position:relative;border-radius:14px;overflow:hidden;
+  border:1px solid var(--border);background:#08091b;
+  box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 0 60px rgba(201,168,76,.025)}
+.disk-wrap canvas{display:block;width:100%;height:auto}
+.ctrl-bar{display:flex;gap:.7rem;padding:.85rem 1.3rem;
+  background:rgba(8,9,27,.95);border-top:1px solid var(--border);
+  flex-wrap:wrap;align-items:center}
+.ctrl-bar span{font-size:.85rem;color:var(--muted)}
+.ctrl-btn{padding:.35rem .9rem;border-radius:4px;border:1px solid rgba(201,168,76,.3);
+  background:transparent;color:var(--gold);font-family:'EB Garamond',serif;
+  font-size:.95rem;cursor:pointer;transition:.2s}
+.ctrl-btn:hover{background:rgba(201,168,76,.1)}
+.ctrl-btn.active{background:rgba(201,168,76,.18);border-color:var(--gold)}
+select{background:#0c0d1e;border:1px solid rgba(201,168,76,.3);color:var(--gold);
+  padding:.3rem .7rem;border-radius:4px;font-family:'EB Garamond',serif;font-size:.95rem;cursor:pointer}
+.geo-card{background:rgba(12,13,30,.7);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;transition:border-color .3s}
+.geo-card:hover{border-color:rgba(201,168,76,.3)}
+.geo-card canvas{width:100%;display:block}.geo-card svg{width:100%;display:block}
+.geo-info{padding:1.1rem 1.3rem}
+.geo-info h3{font-size:1.3rem;margin-bottom:.25rem}
+.geo-tag{font-size:.85rem;font-style:italic;color:var(--gold);margin-bottom:.5rem;display:block}
+.geo-info p{font-size:.9rem;margin:0;color:var(--muted)}
+.theorem-box{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.5rem;color:var(--text);text-align:center;padding:1.8rem 2rem;
+  border:1px solid rgba(201,168,76,.2);border-radius:8px;margin:1.5rem 0;
+  background:rgba(201,168,76,.03);line-height:1.6}
+.theorem-box span{color:var(--gold2);font-style:normal}
+.info-box{background:rgba(201,168,76,.06);border-left:3px solid var(--gold);
+  padding:.9rem 1.4rem;border-radius:0 7px 7px 0;margin:1.3rem 0}
+.info-box p{color:var(--text);margin:0;font-size:.95rem}
+.formula{font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+  color:var(--gold2);font-style:italic;text-align:center;
+  padding:.5rem 0;display:block}
+#gaussData{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
+  display:flex;flex-direction:column;gap:.15rem}
+.angle-row{color:var(--muted)}
+.angle-row strong{color:var(--text)}
+.area-row{color:var(--gold);font-size:1.05rem}
+#tilingStatus{font-size:.82rem;margin-left:auto}
+#tilingStatus.ok{color:#7ec8a4}
+#tilingStatus.warn{color:var(--red)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.vis{opacity:1;transform:none}
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);
+  color:var(--muted);font-size:.9rem}
+footer .name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+  color:var(--gold);display:block;margin-bottom:.5rem}
+.sep{border:none;border-top:1px solid var(--border);max-width:1120px;margin:0 auto}
+#growthData{margin-top:.8rem;display:grid;grid-template-columns:auto 1fr 1fr;
+  gap:.2rem .8rem;font-size:.85rem}
+.gd-head{color:var(--gold);font-size:.75rem;letter-spacing:.1em}
+.gd-r{color:var(--text)}
+.gd-euc{color:var(--muted)}
+.gd-hyp{color:var(--cyan)}
+@media(max-width:760px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* ── TEICHMÜLLER / MIRZAKHANI ADDITIONS ── */
+.slider-grid{display:grid;grid-template-columns:auto 1fr auto;
+  gap:.45rem .9rem;align-items:center;margin:.8rem 0}
+.slider-grid label{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.05rem;color:var(--text);white-space:nowrap}
+.slider-grid input[type=range]{width:100%;accent-color:var(--gold);cursor:pointer;
+  height:3px;background:rgba(201,168,76,.2);border-radius:2px;outline:none}
+.slider-grid span{font-family:'Cormorant Garamond',serif;font-size:.9rem;
+  color:var(--gold);min-width:3.5rem;text-align:right}
+.mirz-banner{background:linear-gradient(135deg,rgba(12,13,30,.97),rgba(8,9,27,.97));
+  border:1px solid rgba(201,168,76,.18);border-radius:14px;
+  padding:2.8rem 3rem;margin:2.5rem 0;position:relative;overflow:hidden}
+.mirz-banner::before{content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:linear-gradient(to bottom,transparent,var(--gold),transparent)}
+.mirz-name{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;
+  color:var(--gold2);margin-bottom:.3rem}
+.mirz-dates{font-size:.85rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;
+  margin-bottom:1.4rem}
+.mirz-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;
+  color:var(--text);line-height:1.65;border-left:none;max-width:680px}
+.mirz-medal{display:inline-block;background:rgba(201,168,76,.12);
+  border:1px solid rgba(201,168,76,.3);border-radius:4px;
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+  padding:.25rem .8rem;margin-bottom:1rem}
+.torus-row{display:flex;gap:2rem;align-items:center;margin-top:1.2rem;flex-wrap:wrap}
+.torus-info{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;color:var(--text);flex:1;min-width:180px}
+.torus-info span{color:var(--gold2)}
+.fund-label{font-size:.8rem;color:var(--muted);margin-top:.4rem;text-align:center}
+.half-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start}
+@media(max-width:760px){.half-wrap{grid-template-columns:1fr}.mirz-banner{padding:1.8rem 1.5rem}}
+
+/* ── §9 VISUAL EXPERIENCE ── */
+.wide-disk{max-width:640px;margin:1.8rem auto}
+
+/* ── RANGE SLIDER STYLING ── */
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  height:4px;border-radius:2px;outline:none;cursor:pointer;
+  background:linear-gradient(to right,rgba(201,168,76,.7),rgba(201,168,76,.2));
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:16px;height:16px;border-radius:50%;
+  background:#c9a84c;border:2px solid #e8cc80;
+  box-shadow:0 0 6px rgba(201,168,76,.5);cursor:pointer;
+}
+input[type=range]::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;
+  background:#c9a84c;border:2px solid #e8cc80;cursor:pointer;
+}
+/* colour the q slider cyan */
+#qSel{
+  background:linear-gradient(to right,rgba(60,184,195,.7),rgba(60,184,195,.2));
+}
+#qSel::-webkit-slider-thumb{ background:#3cb8c3;border-color:#7cdde3;box-shadow:0 0 6px rgba(60,184,195,.5); }
+#qSel::-moz-range-thumb{     background:#3cb8c3;border-color:#7cdde3; }
+
+/* ── H3 INTERACTIVE CONTROLS ── */
+.h3-scene{position:relative}
+#h3Btns{display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:.7rem 1rem;background:rgba(5,6,18,.7);border-top:1px solid rgba(201,168,76,.12)}
+.h3btn{background:rgba(201,168,76,.13);border:1px solid rgba(201,168,76,.28);
+  color:#e8cc80;font-size:1.4rem;padding:.45rem .7rem;border-radius:6px;
+  cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;
+  min-width:2.6rem;transition:background .12s}
+.h3btn:active{background:rgba(201,168,76,.28)}
+.h3-row{display:flex;gap:4px;justify-content:center}
+
+/* ─── Floating badge ─── */
+.floating-badge{position:fixed;bottom:1.75rem;left:1.75rem;z-index:10000;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:lowercase;color:#8db830;background:transparent;padding:.35rem .7rem;text-decoration:none;transition:color .25s,text-shadow .25s,transform .25s;text-shadow:0 0 6px rgba(141,184,48,.4),0 0 16px rgba(141,184,48,.15)}
+.floating-badge:hover{color:#a8d43a;text-shadow:0 0 8px rgba(141,184,48,.65),0 0 22px rgba(141,184,48,.28);transform:translateY(-1px)}
+</style>
+  <link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="narration_player.css">
+  <link rel="stylesheet" href="typography.css">
+</head>
+<body>
+
+<div id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-label">A Mathematical Journey</p>
+    <h1 class="hero-title">Living in a<br><em>Hyperbolic Space</em></h1>
+    <p class="hero-sub">Where the parallel postulate fails, triangles contain less than 180°, and an infinite world hides inside a finite disk.</p>
+    
+    
+    <p style="font-family:'Cormorant Garamond',serif;font-size:.82rem;letter-spacing:.22em;color:rgba(201,168,76,0.62);text-transform:uppercase;margin-top:-.4rem;margin-bottom:2.4rem"></p>
+    <div class="hero-scroller">
+      <div class="scroll-bar"></div>
+      <span>Explore</span>
+    </div>
+  </div>
+</div>
+
+<section class="wrap reveal">
+  <span class="sec-label">§ 1 — Negatively Curved Space</span>
+  <h2>A world with <em>too much room</em></h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div>
+      <p>In 1830, <strong>Nikolai Lobachevsky</strong> and <strong>János Bolyai</strong> independently discovered a geometry where Euclid's fifth postulate is not merely wrong — but richly, consistently, beautifully wrong.</p>
+      <p>In hyperbolic space, through any point not on a given line there pass <strong>infinitely many</strong> lines that never meet it. Space curves away from itself at every point. Triangles contain strictly less than 180°. And the farther you travel, the faster the room around you expands.</p>
+      <p>The <strong>Poincaré disk model</strong> compresses the entire infinite hyperbolic plane into the open unit disk. Geodesics appear as circular arcs meeting the boundary at right angles — or as diameters. The boundary circle is not really there; it represents points at infinite hyperbolic distance.</p>
+      <div class="info-box">
+        <p>The hyperbolic plane ℍ² has constant Gaussian curvature <strong>K = −1</strong>. The Poincaré disk metric is <strong>ds² = 4(dx²+dy²)/(1−|z|²)²</strong>. Distances are distorted: equal hyperbolic lengths appear shorter the closer they are to the boundary.</p>
+      </div>
+      <p>Click two points inside the disk to draw a geodesic. Switch to "Show parallels" to see infinitely many lines through a third point that never meet the first geodesic.</p>
+    </div>
+    <div>
+      <div class="disk-wrap">
+        <canvas id="parallelCanvas" width="440" height="440"></canvas>
+        <div class="ctrl-bar">
+          <button class="ctrl-btn active" id="btnDraw" onclick="setParallelMode('draw')">Draw geodesic</button>
+          <button class="ctrl-btn" id="btnParallel" onclick="setParallelMode('parallel')">Show parallels</button>
+          <button class="ctrl-btn" onclick="resetParallel()">Reset</button>
+        </div>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:.7rem;text-align:center">
+        Click inside the disk to place points. All arcs are exact geodesics (hyperbolic straight lines).
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="wrap reveal">
+  <span class="sec-label">§ 2 — Three Worlds</span>
+  <h2>The <em>trinity</em> of constant curvature</h2>
+  <div class="rule"></div>
+  <p>Riemannian geometry offers exactly three homogeneous, isotropic, simply connected surfaces of constant curvature. Each satisfies its own version of triangle geometry and the parallel postulate.</p>
+  <div class="three-col" style="margin-top:2rem">
+    <div class="geo-card">
+      <svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spherical geometry: triangle on a globe with angle sum exceeding pi">
+  <defs>
+    <!-- Globe shading: lit from upper-left -->
+    <radialGradient id="sg" cx="38%" cy="30%" r="68%">
+      <stop offset="0%"   stop-color="#3a4080"/>
+      <stop offset="40%"  stop-color="#1c2060"/>
+      <stop offset="75%"  stop-color="#0d1040"/>
+      <stop offset="100%" stop-color="#05060f"/>
+    </radialGradient>
+    <!-- Limb darkening -->
+    <radialGradient id="slimb" cx="50%" cy="50%" r="50%">
+      <stop offset="72%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,8,0.82)"/>
+    </radialGradient>
+    <clipPath id="sc"><circle cx="150" cy="115" r="88"/></clipPath>
+    <filter id="sglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="300" height="240" fill="#06070f"/>
+
+  <!-- Globe body -->
+  <circle cx="150" cy="115" r="88" fill="url(#sg)"/>
+
+  <!-- Latitude lines (clipped to globe) -->
+  <g clip-path="url(#sc)" fill="none" stroke="rgba(180,160,255,0.10)" stroke-width="0.7">
+    <!-- equator -->
+    <ellipse cx="150" cy="115" rx="88" ry="24"/>
+    <!-- ±30° lat: rx = 88·cos30 = 76.2, ry scaled -->
+    <ellipse cx="150" cy="89"  rx="76" ry="21"/>
+    <ellipse cx="150" cy="141" rx="76" ry="21"/>
+    <!-- ±60° lat: rx = 88·cos60 = 44 -->
+    <ellipse cx="150" cy="63"  rx="44" ry="12"/>
+    <ellipse cx="150" cy="167" rx="44" ry="12"/>
+  </g>
+  <!-- Longitude lines (clipped) -->
+  <g clip-path="url(#sc)" fill="none" stroke="rgba(180,160,255,0.10)" stroke-width="0.7">
+    <!-- meridians as vertical ellipses -->
+    <ellipse cx="150" cy="115" rx="88" ry="88"/>
+    <ellipse cx="150" cy="115" rx="44" ry="88"/>
+    <ellipse cx="150" cy="115" rx="76" ry="88"/>
+    <line   x1="150" y1="27" x2="150" y2="203"/>
+  </g>
+
+  <!-- Triangle: three vertices on the front hemisphere
+       A(150,40) top-center, B(74,158) lower-left, C(226,158) lower-right
+       Sides are great-circle arcs bowing outward (convex = spherical excess) -->
+  <!-- Triangle fill -->
+  <path d="M150 40 Q86 72 74 158 Q150 190 226 158 Q214 72 150 40 Z"
+        clip-path="url(#sc)" fill="rgba(220,190,100,0.13)"/>
+
+  <!-- Side A→B  (bows left) -->
+  <path d="M150 40 Q86 72 74 158"
+        fill="none" stroke="#e8cc80" stroke-width="2.3" stroke-linecap="round"
+        filter="url(#sglow)" clip-path="url(#sc)"/>
+  <!-- Side B→C  (bows down) -->
+  <path d="M74 158 Q150 190 226 158"
+        fill="none" stroke="#e8cc80" stroke-width="2.3" stroke-linecap="round"
+        filter="url(#sglow)" clip-path="url(#sc)"/>
+  <!-- Side C→A  (bows right) -->
+  <path d="M226 158 Q214 72 150 40"
+        fill="none" stroke="#e8cc80" stroke-width="2.3" stroke-linecap="round"
+        filter="url(#sglow)" clip-path="url(#sc)"/>
+
+  <!-- Angle arcs at each vertex, bowing inward -->
+  <!-- At A(150,40): opening angle ~110°, sides head down-left and down-right -->
+  <path d="M 140.8 51.2 A 14 14 0 0 0 159.2 51.2"
+        fill="none" stroke="rgba(232,204,128,0.85)" stroke-width="1.6" stroke-linecap="round" clip-path="url(#sc)"/>
+  <!-- At B(74,158): angle ~110°, sides head up-right and right -->
+  <path d="M 78 145.8 A 14 14 0 0 0 87.5 158"
+        fill="none" stroke="rgba(232,204,128,0.85)" stroke-width="1.6" stroke-linecap="round" clip-path="url(#sc)"/>
+  <!-- At C(226,158): angle ~110° -->
+  <path d="M 212.5 158 A 14 14 0 0 0 222 145.8"
+        fill="none" stroke="rgba(232,204,128,0.85)" stroke-width="1.6" stroke-linecap="round" clip-path="url(#sc)"/>
+
+  <!-- Vertex dots -->
+  <circle cx="150" cy="40"  r="3.5" fill="#e8cc80" filter="url(#sglow)"/>
+  <circle cx="74"  cy="158" r="3.5" fill="#e8cc80" filter="url(#sglow)"/>
+  <circle cx="226" cy="158" r="3.5" fill="#e8cc80" filter="url(#sglow)"/>
+
+  <!-- Vertex angle labels -->
+  <text x="150" y="29" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(232,204,128,0.95)">γ</text>
+  <text x="57" y="162" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(232,204,128,0.95)">α</text>
+  <text x="243" y="162" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(232,204,128,0.95)">β</text>
+
+  <!-- Limb darkening overlay -->
+  <circle cx="150" cy="115" r="88" fill="url(#slimb)"/>
+  <!-- Specular highlight -->
+  <ellipse cx="121" cy="85" rx="23" ry="15"
+           fill="rgba(255,255,255,0.055)" transform="rotate(-20,121,85)"/>
+  <!-- Globe border -->
+  <circle cx="150" cy="115" r="88"
+          fill="none" stroke="rgba(201,168,76,0.30)" stroke-width="1.3"/>
+
+  <!-- "α+β+γ > π" annotation -->
+  <text x="150" y="224" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="12.5"
+        fill="rgba(201,168,76,0.62)">α + β + γ = π + Area &gt; π</text>
+</svg>
+      <div class="geo-info">
+        <h3>Spherical &nbsp; S²</h3>
+        <span class="geo-tag">K = +1</span>
+        <p>No parallel lines — every pair of great circles meets. Triangle angle sum <em>exceeds π</em>.</p>
+        <span class="formula">α + β + γ = π + Area</span>
+      </div>
+    </div>
+    <div class="geo-card">
+      <svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Euclidean geometry: triangle with exactly one parallel line through apex">
+  <defs>
+    <pattern id="egrid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0L0 0 0 28" fill="none" stroke="rgba(201,168,76,0.065)" stroke-width="0.65"/>
+    </pattern>
+    <filter id="eglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- right-angle box clip -->
+  </defs>
+
+  <rect width="300" height="240" fill="#06070f"/>
+  <rect width="300" height="240" fill="url(#egrid)"/>
+
+  <!-- ── Parallel lines ── -->
+  <!-- Base line (through A and B, y=183) -->
+  <line x1="0" y1="183" x2="300" y2="183"
+        stroke="rgba(201,168,76,0.25)" stroke-width="1.1" stroke-dasharray="7,5"/>
+  <!-- The ONE parallel through C (y=42): exact same direction -->
+  <line x1="0" y1="42" x2="300" y2="42"
+        stroke="rgba(60,184,195,0.80)" stroke-width="1.7" stroke-dasharray="7,5"
+        filter="url(#eglow)"/>
+
+  <!-- Triangle A(62,183) B(238,183) C(150,42): isoceles, straight sides -->
+  <path d="M62 183 L238 183 L150 42 Z"
+        fill="rgba(201,168,76,0.09)"
+        stroke="#e8cc80" stroke-width="2.2"
+        stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Exact angle arcs (from Python computation) -->
+  <!-- arcA at (62,183): M 75.0 183.0 A 13 13 0 0 0 69.2 164.2  -->
+  <!-- arcB at (238,183): M 225.0 183.0 A 13 13 0 0 1 230.8 164.2 -->
+  <!-- arcC at (150,42): M 142.8 52.8 A 13 13 0 0 0 157.2 52.8 -->
+  <!-- Re-fitting for A(62,183) B(238,183) C(150,42) -->
+  <!-- tA1 = (1,0) toward B, tA2 = toward C = (88/141,-141/141) -->
+  <path d="M 75.0 183.0 A 13 13 0 0 0 69.2 172.2"
+        fill="none" stroke="rgba(232,204,128,0.80)" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M 230.8 172.2 A 13 13 0 0 0 225.0 183.0"
+        fill="none" stroke="rgba(232,204,128,0.80)" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M 142.8 52.8 A 13 13 0 0 0 157.2 52.8"
+        fill="none" stroke="rgba(232,204,128,0.80)" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Z-angle markers: alternate interior angles at parallel lines -->
+  <!-- At apex C, angles with transversals equal base angles -->
+  <!-- Small ticks to indicate equality of alternate interior angles -->
+  <!-- Left transversal CA: copy angle α above base → angle at parallel -->
+  <path d="M 142.8 31.2 A 13 13 0 0 0 137.0 42.0"
+        fill="none" stroke="rgba(60,184,195,0.65)" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M 163.0 42.0 A 13 13 0 0 0 157.2 31.2"
+        fill="none" stroke="rgba(60,184,195,0.65)" stroke-width="1.3" stroke-linecap="round"/>
+
+  <!-- Equality tick marks on equal segments -->
+  <!-- Single tick on left side CA -->
+  <line x1="99"  y1="116" x2="107" y2="109"
+        stroke="rgba(201,168,76,0.50)" stroke-width="1.6"/>
+  <!-- Single tick on right side CB -->
+  <line x1="193" y1="109" x2="201" y2="116"
+        stroke="rgba(201,168,76,0.50)" stroke-width="1.6"/>
+
+  <!-- Vertex dots -->
+  <circle cx="62"  cy="183" r="3.2" fill="#e8cc80"/>
+  <circle cx="238" cy="183" r="3.2" fill="#e8cc80"/>
+  <circle cx="150" cy="42"  r="3.2" fill="#e8cc80"/>
+
+  <!-- Labels -->
+  <text x="44"  y="182" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(232,204,128,0.95)">α</text>
+  <text x="256" y="182" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(232,204,128,0.95)">β</text>
+  <text x="150" y="30" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(232,204,128,0.95)">γ</text>
+  <text x="62"  y="199"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="12.5"
+        fill="rgba(232,204,128,0.55)">A</text>
+  <text x="234" y="199"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="12.5"
+        fill="rgba(232,204,128,0.55)">B</text>
+  <text x="153" y="57"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="12.5"
+        fill="rgba(232,204,128,0.55)">C</text>
+
+  <!-- Formula -->
+  <text x="150" y="226" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="12.5"
+        fill="rgba(201,168,76,0.62)">α + β + γ = π  (exactly, always)</text>
+</svg>
+      <div class="geo-info">
+        <h3>Euclidean &nbsp; ℝ²</h3>
+        <span class="geo-tag">K = 0</span>
+        <p>Exactly one parallel. Triangle angle sum is <em>exactly π</em> for every triangle.</p>
+        <span class="formula">α + β + γ = π</span>
+      </div>
+    </div>
+    <div class="geo-card">
+      <svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hyperbolic geometry: triangle in Poincaré disk with angle sum less than pi, and infinitely many parallels">
+  <defs>
+    <radialGradient id="hbg" cx="50%" cy="46%" r="50%">
+      <stop offset="0%"   stop-color="#131840"/>
+      <stop offset="55%"  stop-color="#07091e"/>
+      <stop offset="100%" stop-color="#020308"/>
+    </radialGradient>
+    <radialGradient id="hlimb" cx="50%" cy="50%" r="50%">
+      <stop offset="76%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,10,0.80)"/>
+    </radialGradient>
+    <clipPath id="hc"><circle cx="150" cy="110" r="93"/></clipPath>
+    <filter id="hglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="pglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="300" height="240" fill="#06070f"/>
+
+  <!-- Disk -->
+  <circle cx="150" cy="110" r="93" fill="url(#hbg)"/>
+
+  <!-- Background geodesics (faint texture) -->
+  <g clip-path="url(#hc)" fill="none" stroke="rgba(201,168,76,0.07)" stroke-width="0.75">
+    <!-- two diameters -->
+    <line x1="57" y1="110" x2="243" y2="110"/>
+    <line x1="150" y1="17" x2="150" y2="203"/>
+    <!-- circular geodesics -->
+    <path d="M 104 26 A 160 160 0 0 0 204 26"/>
+    <path d="M 204 194 A 160 160 0 0 0 104 194"/>
+    <path d="M 60 60 A 130 130 0 0 1 240 60"/>
+    <path d="M 60 160 A 130 130 0 0 0 240 160"/>
+  </g>
+
+  <!-- ── Parallel geodesics through C that miss side AB (cyan, faint) ── -->
+  <!-- These demonstrate: infinitely many parallels exist through C -->
+  <g clip-path="url(#hc)" fill="none">
+    <!-- para0 (outermost) -->
+    <path d="M 67.6 67.9 A 83.3 83.3 0 0 1 110.9 158.4 A 83.3 83.3 0 0 1 98.9 187.2"
+          stroke="rgba(60,184,195,0.22)" stroke-width="1.3"/>
+    <!-- para1 -->
+    <path d="M 63.2 142.2 A 40.5 40.5 0 0 1 110.9 158.4 A 40.5 40.5 0 0 1 114.3 195.4"
+          stroke="rgba(60,184,195,0.28)" stroke-width="1.3"/>
+    <!-- para2 -->
+    <path d="M 115.0 195.7 A 40.3 40.3 0 0 0 110.9 158.4 A 40.3 40.3 0 0 0 63.5 142.9"
+          stroke="rgba(60,184,195,0.28)" stroke-width="1.3"/>
+    <!-- para3 -->
+    <path d="M 189.4 193.7 A 66.7 66.7 0 0 0 110.9 158.4 A 66.7 66.7 0 0 0 83.1 173.9"
+          stroke="rgba(60,184,195,0.22)" stroke-width="1.3"/>
+  </g>
+
+  <!-- ── Triangle fill ── -->
+  <path d="M 136.1 58.8
+           A 171.2 171.2 0 0 0 203.9 117.4
+           A 189.1 189.1 0 0 0 110.9 158.4
+           A 209.5 209.5 0 0 0 136.1 58.8 Z"
+        clip-path="url(#hc)" fill="rgba(201,168,76,0.11)"/>
+
+  <!-- ── Triangle sides (exact geodesic arcs) ── -->
+  <path d="M 136.1 58.8 A 171.2 171.2 0 0 0 203.9 117.4"
+        clip-path="url(#hc)" fill="none"
+        stroke="#e8cc80" stroke-width="2.3" stroke-linecap="round"
+        filter="url(#hglow)"/>
+  <path d="M 203.9 117.4 A 189.1 189.1 0 0 0 110.9 158.4"
+        clip-path="url(#hc)" fill="none"
+        stroke="#e8cc80" stroke-width="2.3" stroke-linecap="round"
+        filter="url(#hglow)"/>
+  <path d="M 110.9 158.4 A 209.5 209.5 0 0 0 136.1 58.8"
+        clip-path="url(#hc)" fill="none"
+        stroke="#e8cc80" stroke-width="2.3" stroke-linecap="round"
+        filter="url(#hglow)"/>
+
+  <!-- ── Angle arcs at vertices ── -->
+  <!-- arcA at A(136.1,58.8) -->
+  <path d="M 143.3 69.6 A 13 13 0 0 1 136.1 71.8"
+        fill="none" stroke="rgba(232,204,128,0.85)" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- arcB at B(203.9,117.4) -->
+  <path d="M 192.2 111.8 A 13 13 0 0 0 191.1 119.3"
+        fill="none" stroke="rgba(232,204,128,0.85)" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- arcC at C(110.9,158.4) -->
+  <path d="M 121.0 150.1 A 13 13 0 0 0 117.1 146.9"
+        fill="none" stroke="rgba(232,204,128,0.85)" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- Vertex dots -->
+  <circle cx="136.1" cy="58.8"  r="3.3" fill="#e8cc80" filter="url(#hglow)"/>
+  <circle cx="203.9" cy="117.4" r="3.3" fill="#e8cc80" filter="url(#hglow)"/>
+  <circle cx="110.9" cy="158.4" r="3.3" fill="#e8cc80" filter="url(#hglow)"/>
+
+  <!-- Vertex labels -->
+  <text x="136.1" y="48" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="14"
+        fill="rgba(232,204,128,0.95)">A</text>
+  <text x="216" y="119" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="14"
+        fill="rgba(232,204,128,0.95)">B</text>
+  <text x="98" y="172" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="14"
+        fill="rgba(232,204,128,0.95)">C</text>
+
+  <!-- Limb + border -->
+  <circle cx="150" cy="110" r="93" fill="url(#hlimb)"/>
+  <circle cx="150" cy="110" r="92.5"
+          fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="9"/>
+  <circle cx="150" cy="110" r="92.5"
+          fill="none" stroke="rgba(201,168,76,0.36)" stroke-width="1.4"/>
+
+  <!-- Formula -->
+  <text x="150" y="228" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="12.5"
+        fill="rgba(201,168,76,0.62)">α + β + γ = 90.1° &lt; 180°  (deficit = area)</text>
+</svg>
+      <div class="geo-info">
+        <h3>Hyperbolic &nbsp; ℍ²</h3>
+        <span class="geo-tag">K = −1</span>
+        <p>Infinitely many parallels. Triangle angle sum is <em>less than π</em>. Deficit = area.</p>
+        <span class="formula">α + β + γ = π − Area</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="wrap reveal">
+  <span class="sec-label">§ 3 — The Gauss–Bonnet Theorem</span>
+  <h2><em>Area</em> encoded in angles</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div>
+      <p>The most striking fact in hyperbolic geometry: the area of a triangle is completely determined by its three angles alone — no side lengths needed.</p>
+      <div class="theorem-box">
+        <span>Area(△) = π − (α + β + γ)</span>
+      </div>
+      <p>This is the Gauss–Bonnet theorem in action. The <em>angle deficit</em> directly measures area. As a vertex approaches the boundary circle (a point at infinity), its angle approaches <strong>zero</strong>.</p>
+      <p>An <em>ideal triangle</em> — all three vertices on the boundary — has all angles equal to zero and achieves the <strong>maximum possible area of π</strong>. Every ideal triangle is congruent to every other ideal triangle.</p>
+      <div class="info-box">
+        <p>In Euclidean geometry, similar non-congruent triangles exist. In hyperbolic geometry <strong>this is impossible</strong>: equal angles force equal sides. There is an absolute scale — no zoom-in or zoom-out symmetry.</p>
+      </div>
+      <p>Drag the orange vertices on the Poincaré disk. Watch the angles and area update in real time.</p>
+    </div>
+    <div>
+      <div class="disk-wrap">
+        <canvas id="gaussCanvas" width="440" height="440"></canvas>
+        <div class="ctrl-bar">
+          <div id="gaussData">
+            <span class="angle-row">α = <strong id="ga">—</strong>, β = <strong id="gb">—</strong>, γ = <strong id="gc">—</strong></span>
+            <span class="angle-row">Sum = <strong id="gsum">—</strong> &nbsp;(deficit = <strong id="gdef">—</strong>)</span>
+            <span class="area-row">Area = <strong id="garea">—</strong></span>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:.7rem;text-align:center">Drag the vertices. Area equals π minus the angle sum.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="wrap reveal">
+  <span class="sec-label">§ 4 — Hyperbolic Tessellations</span>
+  <h2>Tiling the <em>infinite plane</em></h2>
+  <div class="rule"></div>
+  <p>A regular {p, q} tessellation fills the hyperbolic plane with regular p-gons, q meeting at every vertex. It is hyperbolic when <strong>(p−2)(q−2) &gt; 4</strong>. While the Euclidean plane admits only three regular tilings, the hyperbolic plane admits <em>infinitely many</em>. M.C. Escher, guided by the geometer H.S.M. Coxeter, based his <em>Circle Limit</em> woodcut series on these patterns.</p>
+  <div class="disk-wrap" style="max-width:620px;margin:2rem auto">
+    <canvas id="tilingCanvas" width="580" height="580"></canvas>
+    <div class="ctrl-bar" style="flex-direction:column;align-items:stretch;gap:.55rem;padding:.9rem 1.3rem">
+      <div style="display:flex;align-items:center;gap:.9rem">
+        <span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;min-width:2.2rem">p =</span>
+        <strong id="pVal" style="color:var(--gold2);font-size:1.25rem;min-width:1.4rem;text-align:right">7</strong>
+        <input type="range" id="pSel" min="3" max="12" value="7" step="1"
+               oninput="document.getElementById('pVal').textContent=this.value; rebuildTiling()"
+               style="flex:1">
+        <span style="color:var(--muted);font-size:.82rem;min-width:6rem">sides per tile</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.9rem">
+        <span style="color:var(--cyan);font-family:'Cormorant Garamond',serif;font-size:1.1rem;min-width:2.2rem">q =</span>
+        <strong id="qVal" style="color:var(--cyan);font-size:1.25rem;min-width:1.4rem;text-align:right">3</strong>
+        <input type="range" id="qSel" min="3" max="8" value="3" step="1"
+               oninput="document.getElementById('qVal').textContent=this.value; rebuildTiling()"
+               style="flex:1">
+        <span style="color:var(--muted);font-size:.82rem;min-width:6rem">tiles per vertex</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.1rem">
+        <span style="color:var(--muted);font-size:.82rem">{p, q} tessellation · hyperbolic when (p−2)(q−2) &gt; 4</span>
+        <span id="tilingStatus" class="ok">Hyperbolic ✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section class="wrap reveal">
+  <span class="sec-label">§ 5 — Exponential Expansion</span>
+  <h2>Space that grows <em>exponentially</em></h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div>
+      <p>In Euclidean space, a circle of radius r has circumference 2πr. In hyperbolic space:</p>
+      <div class="theorem-box" style="font-size:1.3rem">
+        <span>C(r) = 2π sinh(r) ≈ π e<sup>r</sup></span>
+      </div>
+      <p>For large r, sinh(r) ≈ eʳ/2, so circumference grows <em>exponentially</em>. The area of a hyperbolic disk is <strong>A(r) = 2π(cosh r − 1)</strong>, also asymptotically exponential.</p>
+      <p>This explains the Poincaré disk picture: each ring of hyperbolic "unit length" must fit exponentially more tiles than the last, so tiles appear exponentially smaller near the boundary.</p>
+      <div class="info-box">
+        <p>This exponential growth is the geometric heart of <strong>Gromov hyperbolicity</strong>, and explains why hyperbolic groups have linear Dehn functions and solvable word problems. The internet, phylogenetic trees, and knowledge graphs all embed naturally in hyperbolic space.</p>
+      </div>
+      <div id="growthData">
+        <span class="gd-head">r</span>
+        <span class="gd-head">Euclidean 2πr</span>
+        <span class="gd-head">Hyperbolic 2π sinh r</span>
+        <span class="gd-r">0.5</span><span class="gd-euc">3.14</span><span class="gd-hyp">3.27</span>
+        <span class="gd-r">1.0</span><span class="gd-euc">6.28</span><span class="gd-hyp">7.38</span>
+        <span class="gd-r">1.5</span><span class="gd-euc">9.42</span><span class="gd-hyp">13.38</span>
+        <span class="gd-r">2.0</span><span class="gd-euc">12.57</span><span class="gd-hyp">22.79</span>
+        <span class="gd-r">2.5</span><span class="gd-euc">15.71</span><span class="gd-hyp">38.01</span>
+        <span class="gd-r">3.0</span><span class="gd-euc">18.85</span><span class="gd-hyp">62.94</span>
+      </div>
+    </div>
+    <div>
+      <div class="disk-wrap">
+        <svg viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="Concentric hyperbolic circles at radii 0.5 through 3, drawn in the Poincaré disk; circumference grows as 2π sinh(r)">
+  <defs>
+    <radialGradient id="gbkg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#0e1240"/>
+      <stop offset="65%"  stop-color="#06081e"/>
+      <stop offset="100%" stop-color="#020308"/>
+    </radialGradient>
+    <radialGradient id="glimb" cx="50%" cy="50%" r="50%">
+      <stop offset="75%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,10,0.75)"/>
+    </radialGradient>
+    <clipPath id="egclip"><circle cx="220" cy="220" r="185"/></clipPath>
+    <filter id="gcglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="440" height="440" fill="#04050e"/>
+  <circle cx="220" cy="220" r="185" fill="url(#gbkg)"/>
+
+  <!-- Faint tessellation texture: radial geodesics -->
+  <g clip-path="url(#egclip)">
+  <line x1="35.0" y1="220.0" x2="405.0" y2="220.0" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+  <line x1="59.8" y1="127.5" x2="380.2" y2="312.5" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+  <line x1="127.5" y1="59.8" x2="312.5" y2="380.2" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+  <line x1="220.0" y1="35.0" x2="220.0" y2="405.0" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+  <line x1="312.5" y1="59.8" x2="127.5" y2="380.2" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+  <line x1="380.2" y1="127.5" x2="59.8" y2="312.5" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+  
+  </g>
+
+  <!-- Hyperbolic circles (tanh(r/2)*R in disk coords) -->
+  <g clip-path="url(#gc)">
+  <circle cx="220" cy="220" r="45.3" fill="none" stroke="rgba(201,168,76,0.90)" stroke-width="2.1"/>
+  <circle cx="220" cy="220" r="85.5" fill="none" stroke="rgba(198,158,56,0.85)" stroke-width="1.9"/>
+  <circle cx="220" cy="220" r="117.5" fill="none" stroke="rgba(60,184,195,0.85)" stroke-width="1.8"/>
+  <circle cx="220" cy="220" r="140.9" fill="none" stroke="rgba(48,162,175,0.80)" stroke-width="1.7"/>
+  <circle cx="220" cy="220" r="156.9" fill="none" stroke="rgba(196,85,85,0.80)" stroke-width="1.6" stroke-dasharray="5,4"/>
+  <circle cx="220" cy="220" r="167.5" fill="none" stroke="rgba(178,68,68,0.75)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  
+  </g>
+
+  <!-- Labels (outside clip so they can overflow slightly) -->
+  <text x="272.3" y="224.0" font-family="EB Garamond,serif" font-size="12.5" fill="rgba(201,168,76,0.90)">r = 0.5</text>
+  <text x="312.5" y="224.0" font-family="EB Garamond,serif" font-size="12.5" fill="rgba(198,158,56,0.85)">r = 1.0</text>
+  <text x="344.5" y="224.0" font-family="EB Garamond,serif" font-size="12.5" fill="rgba(60,184,195,0.85)">r = 1.5</text>
+  <text x="367.9" y="224.0" font-family="EB Garamond,serif" font-size="12.5" fill="rgba(48,162,175,0.80)">r = 2.0</text>
+  <text x="383.9" y="224.0" font-family="EB Garamond,serif" font-size="12.5" fill="rgba(196,85,85,0.80)">r = 2.5</text>
+  <text x="394.5" y="224.0" font-family="EB Garamond,serif" font-size="12.5" fill="rgba(178,68,68,0.75)">r = 3.0</text>
+  
+
+  <!-- Limb darkening + border -->
+  <circle cx="220" cy="220" r="185" fill="url(#glimb)"/>
+  <circle cx="220" cy="220" r="184.5" fill="none"
+          stroke="rgba(201,168,76,0.08)" stroke-width="9"/>
+  <circle cx="220" cy="220" r="184.5" fill="none"
+          stroke="rgba(201,168,76,0.36)" stroke-width="1.4" filter="url(#gcglow)"/>
+
+  <!-- Caption inside disk -->
+  <text x="220" y="226" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="13.5"
+        fill="rgba(201,168,76,0.30)">C(r) = 2π sinh r</text>
+</svg>
+        <div class="ctrl-bar" style="flex-direction:column;align-items:flex-start;gap:.3rem">
+          <span style="color:var(--text);font-size:.88rem">Concentric hyperbolic circles at r = 0.5, 1, 1.5, 2, 2.5, 3</span>
+          <span style="color:var(--muted);font-size:.82rem">Drawn as Euclidean circles — but they are NOT Euclidean circles in general</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ══════════════════════════════ §6 TEICHMÜLLER SPACE -->
+<section class="wrap reveal">
+  <span class="sec-label">§ 6 — Teichmüller Space</span>
+  <h2>The <em>space of shapes</em> of a surface</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div>
+      <p>Fixing the topology of a surface — say, a closed genus-3 surface — there are still <em>infinitely many distinct hyperbolic geometries</em> it can carry. The <strong>Teichmüller space</strong> T<sub>g</sub> is the space of all such geometries, carefully organized.</p>
+      <p>Cut a genus-g surface along <strong>3g − 3</strong> disjoint simple closed geodesics. It decomposes into <strong>2g − 2</strong> <em>pairs of pants</em> — each a sphere with three geodesic boundary circles. Two real numbers parametrize each seam: its <em>length</em> ℓᵢ &gt; 0 (how wide the neck is) and a <em>twist</em> θᵢ ∈ ℝ (by how much we rotate before regluing). This gives the <strong>Fenchel–Nielsen coordinates</strong>:</p>
+      <div class="theorem-box" style="font-size:1.15rem">
+        <span>T<sub>g</sub> ≅ ℝ<sub>&gt;0</sub><sup>3g−3</sup> × ℝ<sup>3g−3</sup> ≅ ℝ<sup>6g−6</sup></span>
+      </div>
+      <p>For <em>genus 3</em>: 3g−3 = <strong>6 seam geodesics</strong>, giving T₃ ≅ <strong>ℝ¹²</strong> (6 lengths + 6 twists). The surface at right has 4 pairs of pants arranged in a Y: a central junction P₀ with 3 arms, each arm ending in a handle (torus). Seams γ₁, γ₂, γ₃ are the <em>neck</em> circles connecting the central piece to each handle; seams γ₄, γ₅, γ₆ are the circles where each handle is sewn to itself.</p>
+      <div class="info-box">
+        <p>The <strong>Weil–Petersson symplectic form</strong> takes the strikingly clean form <em>ω<sub>WP</sub> = Σᵢ dℓᵢ ∧ dθᵢ</em> in Fenchel–Nielsen coordinates. T<sub>g</sub> becomes a symplectic manifold — the same structure as classical mechanics. Mirzakhani's volume computations integrate polynomials in ℓᵢ² over this symplectic structure.</p>
+      </div>
+      <p>Drag the sliders below. The top three (ℓ₁–ℓ₃) control the <strong>neck widths</strong> — as ℓᵢ → 0 the arm pinches off into a cusp. The bottom three (ℓ₄–ℓ₆) control the <strong>hole sizes</strong> in each handle — as ℓⱼ → 0 the handle collapses, as ℓⱼ grows the torus opens up. The six twists θ₁–θ₆ (not shown) rotate the handles without changing the shape visible here.</p>
+    </div>
+    <div>
+      <div class="disk-wrap" style="background:#07081c">
+        <canvas id="pantsCanvas" width="460" height="420"></canvas>
+        <div class="ctrl-bar" style="flex-direction:column;gap:.25rem;padding:1rem 1.3rem">
+          <div class="slider-grid" id="teichSliders">
+            <label>ℓ₁ neck</label><input type="range" id="sl_l1" min="8" max="90" value="45" oninput="drawGenus3()"><span id="vl1">0.45</span>
+            <label>ℓ₂ neck</label><input type="range" id="sl_l2" min="8" max="90" value="55" oninput="drawGenus3()"><span id="vl2">0.55</span>
+            <label>ℓ₃ neck</label><input type="range" id="sl_l3" min="8" max="90" value="38" oninput="drawGenus3()"><span id="vl3">0.38</span>
+            <label>ℓ₄ hole</label><input type="range" id="sl_l4" min="5" max="90" value="40" oninput="drawGenus3()"><span id="vl4">0.40</span>
+            <label>ℓ₅ hole</label><input type="range" id="sl_l5" min="5" max="90" value="55" oninput="drawGenus3()"><span id="vl5">0.55</span>
+            <label>ℓ₆ hole</label><input type="range" id="sl_l6" min="5" max="90" value="30" oninput="drawGenus3()"><span id="vl6">0.30</span>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:.7rem;text-align:center">
+        Genus-3 surface: 4 pairs of pants · 6 seam geodesics (γ₁…γ₆) · T₃ ≅ ℝ¹² (setting all twists = 0)
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ══════════════════════════════ §7 MODULI SPACE -->
+<section class="wrap reveal">
+  <span class="sec-label">§ 7 — Moduli Space &amp; the Mapping Class Group</span>
+  <h2>All shapes <em>at once</em></h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div>
+      <p>Teichmüller space T<sub>g</sub> remembers <em>too much</em>: it distinguishes surfaces that are geometrically identical but labeled differently. The <strong>moduli space</strong> M<sub>g</sub> = T<sub>g</sub> / Mod<sub>g</sub> quotients by the <strong>mapping class group</strong> Mod<sub>g</sub> — all topological symmetries of the surface.</p>
+      <p>The simplest non-trivial example: the moduli space of <em>flat tori</em>. Every complex torus is ℂ / (ℤ + τℤ) for some τ in the upper half-plane ℍ. Two values τ, τ′ give the same torus if and only if they are related by a <strong>Möbius transformation</strong> in PSL(2, ℤ): τ′ = (aτ+b)/(cτ+d).</p>
+      <div class="theorem-box" style="font-size:1.1rem">
+        <span>ℳ<sub>1,1</sub> = ℍ / PSL(2, ℤ)</span>
+      </div>
+      <p>The <strong>fundamental domain</strong> — the region {|τ| ≥ 1, |Re τ| ≤ ½} — contains exactly one representative of each distinct torus shape. Drag the gold point to see how τ controls the lattice shape of the torus.</p>
+      <div class="info-box">
+        <p>The cusp of this fundamental domain (Im τ → ∞) corresponds to tori with very long thin necks — surfaces approaching degeneration. This "compactification" behavior of moduli space is crucial in Mirzakhani's work.</p>
+      </div>
+      <p>The mapping class group for a genus-g surface is a rich, finitely presented group. For the torus it is PSL(2, ℤ), generated by two elements: a <em>Dehn twist</em> along the longitude and along the meridian.</p>
+    </div>
+    <div>
+      <div class="disk-wrap" style="background:#07081c">
+        <canvas id="modCanvas" width="440" height="360"></canvas>
+        <div class="ctrl-bar" style="flex-direction:column;align-items:flex-start;gap:.3rem">
+          <div class="torus-row">
+            <canvas id="torusCanvas" width="160" height="130" style="border-radius:6px;border:1px solid rgba(201,168,76,.2)"></canvas>
+            <div class="torus-info" id="torusInfo">
+              τ = <span id="tauVal">i</span><br>
+              <span style="font-size:.88rem;color:var(--muted)">Drag the point in ℍ/PSL(2,ℤ) above</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="fund-label">The fundamental domain of PSL(2, ℤ) acting on ℍ — the moduli space ℳ<sub>1,1</sub> of complex tori.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ══════════════════════════════ §8 MIRZAKHANI -->
+<section class="wrap reveal">
+  <span class="sec-label">§ 8 — Maryam Mirzakhani</span>
+  <h2>Geodesics, volumes, and the <em>Witten conjecture</em></h2>
+  <div class="rule"></div>
+
+  <div class="mirz-banner">
+    <div class="mirz-medal">Fields Medal · 2014</div>
+    <div class="mirz-name">Maryam Mirzakhani</div>
+    <div class="mirz-dates">1977 – 2017 &nbsp;·&nbsp; Tehran → Harvard → Stanford</div>
+    <p class="mirz-quote">
+      "The more I spent time on mathematics, the more excited I got."<br>
+      <span style="font-size:1rem;color:var(--muted);font-style:normal">
+        — First woman, and first Iranian, to receive the Fields Medal.
+        Her work united hyperbolic geometry, symplectic topology, dynamical systems, and mathematical physics in unexpected ways.
+      </span>
+    </p>
+  </div>
+
+  <div class="two-col" style="margin-top:2.5rem">
+    <div>
+      <h3>Counting simple closed geodesics</h3>
+      <div class="rule" style="margin:.8rem 0 1rem"></div>
+      <p>On a fixed hyperbolic surface Σ, how many simple closed geodesics (non-self-intersecting closed curves, pulled taut) have length at most L? For large L, Mirzakhani proved:</p>
+      <div class="theorem-box" style="font-size:1.1rem">
+        <span>#{γ simple : ℓ(γ) ≤ L} &nbsp;∼&nbsp; c(Σ) · L<sup>6g−6</sup></span>
+      </div>
+      <p>The exponent <strong>6g − 6</strong> is exactly the dimension of Teichmüller space — a deep coincidence. The constant c(Σ) depends on the geometry of the surface.</p>
+      <p>Compare: counting <em>all</em> closed geodesics gives exponential growth e<sup>L</sup>/L (the prime geodesic theorem). The simple ones are far rarer, growing only polynomially.</p>
+
+      <h3 style="margin-top:1.8rem">Weil–Petersson volumes</h3>
+      <div class="rule" style="margin:.8rem 0 1rem"></div>
+      <p>Mirzakhani's key idea: instead of fixing one surface, <em>average over all surfaces</em>. The moduli space M<sub>g,n</sub>(b₁,…,bₙ) parametrizes hyperbolic surfaces of genus g with n geodesic boundary circles of prescribed lengths b₁,…,bₙ. She computed its volume with respect to the Weil–Petersson symplectic form.</p>
+      <div class="theorem-box" style="font-size:1rem;line-height:1.8">
+        <span>V<sub>1,1</sub>(b) = <sup>1</sup>⁄<sub>2</sub>(b²/4 + π²/3) &nbsp; [once-punctured torus]</span>
+      </div>
+      <p>Mirzakhani proved a <strong>topological recursion</strong>: V<sub>g,n</sub> can be expressed in terms of V<sub>g′,n′</sub> for smaller (g′, n′). The key tool is the <strong>McShane identity</strong> — a remarkable formula saying that a certain sum over simple geodesics on a hyperbolic surface with one cusp equals exactly 1.</p>
+
+      <h3 style="margin-top:1.8rem">The Witten conjecture</h3>
+      <div class="rule" style="margin:.8rem 0 1rem"></div>
+      <p>In 1990, physicist <strong>Edward Witten</strong> proposed a conjecture about <em>2-dimensional quantum gravity</em>: the generating function of <strong>intersection numbers</strong> ⟨τ<sub>d₁</sub> ··· τ<sub>dₙ</sub>⟩<sub>g</sub> on the moduli space of Riemann surfaces satisfies an integrable system called the <strong>KdV hierarchy</strong>.</p>
+      <p>Here, ⟨τ<sub>d₁</sub> ··· τ<sub>dₙ</sub>⟩<sub>g</sub> is a rational number measuring how many times certain natural geometric cycles on M<sub>g,n</sub> intersect — a purely algebraic-geometric quantity.</p>
+      <div class="theorem-box" style="font-size:1.05rem">
+        <span>⟨τ<sub>0</sub><sup>3</sup>⟩<sub>0</sub> = 1 &nbsp;·&nbsp; ⟨τ<sub>1</sub>⟩<sub>1</sub> = <sup>1</sup>⁄<sub>24</sub> &nbsp;·&nbsp; ⟨τ<sub>0</sub><sup>2</sup>τ<sub>2</sub>⟩<sub>0</sub> = 1</span>
+      </div>
+      <p><strong>Kontsevich</strong> proved the conjecture in 1992 using matrix models and ribbon graphs. <strong>Mirzakhani</strong> gave a completely different proof in 2007: her volume recursion, when decoded algebraically, implies exactly the KdV equations. A bridge from counting geodesics on random hyperbolic surfaces to the equations of integrable systems in mathematical physics.</p>
+      <div class="info-box">
+        <p>The generating function F(t₀, t₁, …) = Σ<sub>g,n</sub> ℏ<sup>g−1</sup>/n! Σ ⟨τ<sub>d₁</sub>···τ<sub>dₙ</sub>⟩<sub>g</sub> ∏tᵢ satisfies (∂/∂t₀)³F = (∂/∂t₁)F + ½[(∂/∂t₀)²F]² + <sup>1</sup>⁄<sub>12</sub>ℏ (∂/∂t₀)⁴F and infinitely many more KdV equations. Mirzakhani's proof makes this concrete and geometric.</p>
+      </div>
+    </div>
+    <div>
+      <div class="disk-wrap" style="background:#07081c;margin-bottom:1.5rem">
+        <svg viewBox="0 0 440 330" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="Simple closed geodesics on a genus-2 surface counted by length, growing polynomially">
+  <defs>
+    <radialGradient id="gbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#0f1135"/>
+      <stop offset="70%"  stop-color="#06081a"/>
+      <stop offset="100%" stop-color="#020308"/>
+    </radialGradient>
+    <filter id="gglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="440" height="330" fill="#05060f"/>
+
+  <!-- ── Left: Poincaré disk with concentric geodesic rings ── -->
+  <!-- Disk background -->
+  <circle cx="142" cy="158" r="118" fill="url(#gbg)"/>
+
+  <!-- Band fills: r₁..r₂ in disk pixels (disk radius 118) -->
+  <!-- L=1: r=0..53 -->
+  <circle cx="142" cy="158" r="53"  fill="rgba(201,168,76,0.55)"/>
+  <!-- L=2: r=53..85 -->
+  <path d="M142 40 A118 118 0 1 1 141.99 40 Z" fill="rgba(195,155,55,0.45)"/>
+  <circle cx="142" cy="158" r="85"  fill="rgba(201,168,76,0.0)"/>
+  <!-- Actually use annulus rings -->
+  <!-- Ring L=2 -->
+  <clipPath id="r2c"><circle cx="142" cy="158" r="85"/></clipPath>
+  <circle cx="142" cy="158" r="85" fill="rgba(185,148,50,0.50)" clip-path="url(#r2c)"/>
+  <circle cx="142" cy="158" r="53" fill="#05060f"/>
+  <!-- Redo properly with mask -->
+
+  <!-- Let me use a different approach: filled circles bottom-to-top -->
+  <!-- largest band first -->
+  <circle cx="142" cy="158" r="115" fill="rgba(170,65,65,0.55)"/>    <!-- L=6 -->
+  <circle cx="142" cy="158" r="107" fill="rgba(180,70,70,0.60)"/>    <!-- L=5 -->
+  <circle cx="142" cy="158" r="96"  fill="rgba(50,155,170,0.65)"/>   <!-- L=4 -->
+  <circle cx="142" cy="158" r="83"  fill="rgba(55,170,185,0.70)"/>   <!-- L=3 -->
+  <circle cx="142" cy="158" r="66"  fill="rgba(195,155,55,0.75)"/>   <!-- L=2 -->
+  <circle cx="142" cy="158" r="45"  fill="rgba(201,168,76,0.85)"/>   <!-- L=1 -->
+
+  <!-- Band separator circles -->
+  <circle cx="142" cy="158" r="45"  fill="none" stroke="rgba(5,6,15,0.80)" stroke-width="1.2"/>
+  <circle cx="142" cy="158" r="66"  fill="none" stroke="rgba(5,6,15,0.80)" stroke-width="1.2"/>
+  <circle cx="142" cy="158" r="83"  fill="none" stroke="rgba(5,6,15,0.80)" stroke-width="1.2"/>
+  <circle cx="142" cy="158" r="96"  fill="none" stroke="rgba(5,6,15,0.80)" stroke-width="1.2"/>
+  <circle cx="142" cy="158" r="107" fill="none" stroke="rgba(5,6,15,0.80)" stroke-width="1.2"/>
+
+  <!-- Faint radial lines (geodesics) -->
+  <g fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8">
+    <line x1="142" y1="43" x2="142" y2="273"/>
+    <line x1="25"  y1="158" x2="259" y2="158"/>
+    <line x1="59"  y1="75"  x2="225" y2="241"/>
+    <line x1="225" y1="75"  x2="59"  y2="241"/>
+  </g>
+
+  <!-- Disk border -->
+  <circle cx="142" cy="158" r="118" fill="none" stroke="rgba(201,168,76,0.10)" stroke-width="8"/>
+  <circle cx="142" cy="158" r="118" fill="none" stroke="rgba(201,168,76,0.38)" stroke-width="1.4"
+          filter="url(#gglow)"/>
+
+  <!-- ── Right: bar chart of counts ── -->
+  <!-- Bars data: L=1:3, L=2:12, L=3:34, L=4:95, L=5:266, L=6:744 -->
+  <!-- (approximate counts for simple closed geodesics on genus-2 surface) -->
+  <!-- bar area: x=285..430, y=30..290 -->
+  <!-- normalize to max=744 → 260px height -->
+
+  <text x="358" y="20" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-size="13" fill="rgba(232,204,128,0.75)">
+    #(simple closed geodesics on Σ₂)
+  </text>
+
+  <!-- Axis -->
+  <line x1="297" y1="295" x2="297" y2="32" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+  <line x1="297" y1="295" x2="432" y2="295" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+  <!-- Bars -->
+  <!-- colors match rings: L=1 gold, L=2 gold2, L=3 cyan, L=4 cyan2, L=5 red, L=6 red2 -->
+  <g font-family="Cormorant Garamond,serif" font-style="italic" font-size="12">
+    <!-- L=1: count=3, bar_h = 3/744*260 = 1.0 (very small, show at least 4) -->
+    <rect x="301" y="291" width="17" height="5"  fill="rgba(201,168,76,0.85)"/>
+    <text x="309" y="304" text-anchor="middle" font-size="11" fill="rgba(201,168,76,0.70)">1</text>
+
+    <!-- L=2: count=12, bar_h = 4.2 -->
+    <rect x="320" y="287" width="17" height="9"  fill="rgba(195,155,55,0.80)"/>
+    <text x="328" y="304" text-anchor="middle" font-size="11" fill="rgba(195,155,55,0.70)">2</text>
+
+    <!-- L=3: count=34, bar_h = 11.9 -->
+    <rect x="339" y="283" width="17" height="13" fill="rgba(55,170,185,0.80)"/>
+    <text x="347" y="304" text-anchor="middle" font-size="11" fill="rgba(55,170,185,0.70)">3</text>
+
+    <!-- L=4: count=95, bar_h = 33.2 -->
+    <rect x="358" y="262" width="17" height="34" fill="rgba(50,155,170,0.80)"/>
+    <text x="366" y="304" text-anchor="middle" font-size="11" fill="rgba(50,155,170,0.70)">4</text>
+
+    <!-- L=5: count=266, bar_h = 93.0 -->
+    <rect x="377" y="202" width="17" height="94" fill="rgba(196,85,85,0.75)"/>
+    <text x="385" y="304" text-anchor="middle" font-size="11" fill="rgba(196,85,85,0.70)">5</text>
+
+    <!-- L=6: count=744, bar_h = 260 -->
+    <rect x="396" y="35" width="17" height="261" fill="rgba(170,65,65,0.75)"/>
+    <text x="404" y="304" text-anchor="middle" font-size="11" fill="rgba(170,65,65,0.70)">6</text>
+  </g>
+
+  <!-- Count labels on bars -->
+  <g font-family="EB Garamond,serif" font-size="10.5" fill="rgba(232,204,128,0.62)" text-anchor="middle">
+    <text x="309" y="288">3</text>
+    <text x="328" y="284">12</text>
+    <text x="347" y="279">34</text>
+    <text x="366" y="258">95</text>
+    <text x="385" y="198">266</text>
+    <text x="404" y="30">744</text>
+  </g>
+
+  <!-- Axis labels -->
+  <text x="365" y="316" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="11.5" fill="rgba(255,255,255,0.30)">L (length band)</text>
+  <text x="430" y="295" text-anchor="start"
+        font-family="EB Garamond,serif" font-size="11" fill="rgba(255,255,255,0.25)">→</text>
+
+  <!-- Polynomial growth label -->
+  <text x="358" y="322" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="11" fill="rgba(201,168,76,0.50)">
+    s(L,Σ₂) ~ c · L⁶  as L→∞  (polynomial, not exponential)
+  </text>
+</svg>
+        <div class="ctrl-bar" style="flex-direction:column;align-items:flex-start;gap:.2rem">
+          <span style="color:var(--text);font-size:.88rem">Simple closed geodesics by length class</span>
+          <span style="color:var(--muted);font-size:.82rem">Each ring = geodesics in one unit length band. Count grows as L<sup>6g−6</sup></span>
+        </div>
+      </div>
+      <div class="disk-wrap" style="background:#07081c">
+        <svg viewBox="0 0 640 430" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="Mirzakhani topological recursion: genus-2 surface cut along separating geodesic gamma into one-holed torus and another one-holed torus">
+  <defs>
+    <radialGradient id="mg1" cx="50%" cy="38%" r="62%">
+      <stop offset="0%"  stop-color="#252c78"/>
+      <stop offset="100%" stop-color="#080c28"/>
+    </radialGradient>
+    <radialGradient id="mg2" cx="46%" cy="36%" r="60%">
+      <stop offset="0%"  stop-color="#153858"/>
+      <stop offset="100%" stop-color="#060d1e"/>
+    </radialGradient>
+    <radialGradient id="mg3" cx="46%" cy="36%" r="60%">
+      <stop offset="0%"  stop-color="#2d1858"/>
+      <stop offset="100%" stop-color="#0c0620"/>
+    </radialGradient>
+    <filter id="mgl" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="marr2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(201,168,76,0.78)"/>
+    </marker>
+  </defs>
+
+  <rect width="640" height="430" fill="#04050e"/>
+
+  <!-- ════════════════════════════════════════════
+       LEFT: Σ_{2,1}(b)
+       Genus-2 surface = two torus handles joined,
+       with ONE geodesic boundary b at the bottom.
+       γ is the SEPARATING geodesic cutting the waist
+       between the two handles — far above b.
+       ════════════════════════════════════════════ -->
+
+  <!-- Surface body -->
+  <ellipse cx="148" cy="130" rx="98" ry="78"
+           fill="url(#mg1)" stroke="rgba(201,168,76,0.30)" stroke-width="1.5"/>
+
+  <!-- Left handle -->
+  <ellipse cx="94"  cy="86"  rx="31" ry="20" fill="url(#mg1)"
+           stroke="rgba(201,168,76,0.24)" stroke-width="1.1"/>
+  <ellipse cx="94"  cy="86"  rx="15" ry="9"  fill="#04050e"
+           stroke="rgba(201,168,76,0.12)" stroke-width="0.9"/>
+
+  <!-- Right handle -->
+  <ellipse cx="202" cy="86"  rx="31" ry="20" fill="url(#mg1)"
+           stroke="rgba(201,168,76,0.24)" stroke-width="1.1"/>
+  <ellipse cx="202" cy="86"  rx="15" ry="9"  fill="#04050e"
+           stroke="rgba(201,168,76,0.12)" stroke-width="0.9"/>
+
+  <!-- Geodesic boundary b — clearly at the BOTTOM of the surface,
+       well separated from γ.
+       b spans y = 196..218. -->
+  <ellipse cx="148" cy="207" rx="30" ry="11"
+           fill="rgba(60,184,195,0.06)"
+           stroke="rgba(60,184,195,0.82)" stroke-width="2.0"
+           stroke-dasharray="5,3"/>
+
+  <!-- b label with arrow pointing at boundary so it's unambiguous -->
+  <line x1="148" y1="226" x2="148" y2="219"
+        stroke="rgba(60,184,195,0.60)" stroke-width="1.2"
+        marker-end="none"/>
+  <text x="148" y="238" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="15"
+        fill="rgba(60,184,195,0.90)">b</text>
+  <text x="148" y="252" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="10.5"
+        fill="rgba(60,184,195,0.50)">(boundary length)</text>
+
+  <!-- ── Separating geodesic γ ──
+       Runs through the WAIST between the two handles,
+       vertically from y≈86 to y≈148.
+       Bottom of γ (y=148) is 48px above top of b (y=196). ✓ -->
+  <ellipse cx="148" cy="117" rx="15" ry="35"
+           fill="none"
+           stroke="rgba(201,168,76,0.94)" stroke-width="2.2"
+           stroke-dasharray="7,4" filter="url(#mgl)"/>
+
+  <!-- γ label to the LEFT of the ellipse, with "length ℓ" clearly beneath -->
+  <text x="118" y="112" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="19"
+        fill="rgba(201,168,76,0.97)" filter="url(#mgl)">γ</text>
+  <text x="118" y="128" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="10.5"
+        fill="rgba(201,168,76,0.52)">length ℓ</text>
+
+  <!-- Surface label: Σ with readable subscript -->
+  <text x="115" y="285" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="20"
+        fill="rgba(232,204,128,0.94)">Σ</text>
+  <text x="133" y="293" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="13"
+        fill="rgba(201,168,76,0.80)">2,1</text>
+  <text x="155" y="285" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="18"
+        fill="rgba(232,204,128,0.88)">(b)</text>
+  <text x="148" y="305" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="11.5"
+        fill="rgba(150,140,200,0.58)">genus 2 · 1 geodesic boundary</text>
+
+  <!-- ══ Arrow "cut along γ" ══ -->
+  <line x1="268" y1="155" x2="316" y2="155"
+        stroke="rgba(201,168,76,0.70)" stroke-width="2.2"
+        marker-end="url(#marr2)"/>
+  <text x="292" y="145" text-anchor="middle"
+        font-family="EB Garamond,serif" font-style="italic" font-size="12"
+        fill="rgba(201,168,76,0.60)">cut along γ</text>
+
+  <!-- ════════════════════════════════════════════
+       RIGHT TOP: Σ_{1,2}(b, ℓ)
+       One-holed torus, 2 boundary components:
+       b (inherited from original) + ℓ (new cut boundary)
+       ════════════════════════════════════════════ -->
+  <ellipse cx="445" cy="88" rx="76" ry="56"
+           fill="url(#mg2)" stroke="rgba(201,168,76,0.28)" stroke-width="1.3"/>
+  <!-- One handle -->
+  <ellipse cx="418" cy="60" rx="25" ry="16" fill="url(#mg2)"
+           stroke="rgba(201,168,76,0.20)" stroke-width="1.0"/>
+  <ellipse cx="418" cy="60" rx="12" ry="7"  fill="#04050e"
+           stroke="rgba(201,168,76,0.10)" stroke-width="0.8"/>
+
+  <!-- Boundary b (bottom) -->
+  <ellipse cx="445" cy="134" rx="23" ry="9"
+           fill="rgba(60,184,195,0.05)"
+           stroke="rgba(60,184,195,0.75)" stroke-width="1.7" stroke-dasharray="5,3"/>
+  <text x="445" y="153" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="14"
+        fill="rgba(60,184,195,0.85)">b</text>
+
+  <!-- Boundary ℓ (right side — the new cut) -->
+  <ellipse cx="518" cy="88" rx="9" ry="30"
+           fill="rgba(201,168,76,0.04)"
+           stroke="rgba(201,168,76,0.82)" stroke-width="1.7" stroke-dasharray="5,3"/>
+  <text x="534" y="91" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="14"
+        fill="rgba(201,168,76,0.88)">ℓ</text>
+
+  <!-- Label: Σ_{1,2}(b, ℓ) -->
+  <text x="418" y="176" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="20"
+        fill="rgba(232,204,128,0.94)">Σ</text>
+  <text x="436" y="184" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="13"
+        fill="rgba(201,168,76,0.80)">1,2</text>
+  <text x="456" y="176" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="18"
+        fill="rgba(232,204,128,0.88)">(b, ℓ)</text>
+  <text x="445" y="198" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="11.5"
+        fill="rgba(150,140,200,0.55)">genus 1 · 2 boundaries</text>
+
+  <!-- ══ Disjoint union ══ -->
+  <text x="445" y="233" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-size="26"
+        fill="rgba(201,168,76,0.38)">⊔</text>
+
+  <!-- ════════════════════════════════════════════
+       RIGHT BOTTOM: Σ_{1,1}(ℓ)
+       One-holed torus, 1 boundary component ℓ
+       Positioned with 28px gap below ⊔ symbol.
+       ════════════════════════════════════════════ -->
+  <ellipse cx="445" cy="286" rx="70" ry="46"
+           fill="url(#mg3)" stroke="rgba(180,100,230,0.28)" stroke-width="1.3"/>
+  <!-- One handle -->
+  <ellipse cx="420" cy="260" rx="23" ry="15" fill="url(#mg3)"
+           stroke="rgba(180,100,230,0.20)" stroke-width="1.0"/>
+  <ellipse cx="420" cy="260" rx="11" ry="7"  fill="#04050e"
+           stroke="rgba(180,100,230,0.10)" stroke-width="0.8"/>
+
+  <!-- Boundary ℓ (right side — matching the cut) -->
+  <ellipse cx="513" cy="286" rx="9" ry="29"
+           fill="rgba(201,168,76,0.04)"
+           stroke="rgba(201,168,76,0.80)" stroke-width="1.7" stroke-dasharray="5,3"/>
+  <text x="528" y="289" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="14"
+        fill="rgba(201,168,76,0.88)">ℓ</text>
+
+  <!-- Label: Σ_{1,1}(ℓ) — plenty of space at y=345-360, equation at y=375+ -->
+  <text x="418" y="345" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="20"
+        fill="rgba(232,204,128,0.94)">Σ</text>
+  <text x="436" y="353" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="13"
+        fill="rgba(201,168,76,0.80)">1,1</text>
+  <text x="456" y="345" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="18"
+        fill="rgba(232,204,128,0.88)">(ℓ)</text>
+  <text x="445" y="367" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="11.5"
+        fill="rgba(150,140,200,0.55)">genus 1 · 1 boundary</text>
+
+  <!-- ════════════════════════════════════════════
+       Equation box — bottom left, well below labels
+       ════════════════════════════════════════════ -->
+  <!-- Equation box: full SVG width -->
+  <rect x="14" y="322" width="612" height="96" rx="6"
+        fill="rgba(16,18,50,0.92)" stroke="rgba(201,168,76,0.16)" stroke-width="1"/>
+
+  <!-- Row 1: V_{2,1}(b)  =  ∫_0^∞  ℓ · V_{1,2}(b, ℓ) · V_{1,1}(ℓ) dℓ -->
+  <!-- Built from carefully spaced SVG text segments so nothing overflows -->
+
+  <!-- "V" -->
+  <text x="128" y="351" text-anchor="end"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.90)">V</text>
+  <!-- subscript "2,1" -->
+  <text x="130" y="358" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="12"
+        fill="rgba(201,168,76,0.72)">2,1</text>
+  <!-- "(b)  =  ∫" -->
+  <text x="154" y="351" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.90)">(b)  =  ∫</text>
+  <!-- ∞ and 0 on the integral -->
+  <text x="213" y="344" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="11"
+        fill="rgba(201,168,76,0.58)">∞</text>
+  <text x="214" y="360" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="11"
+        fill="rgba(201,168,76,0.58)">0</text>
+  <!-- "ℓ · V" -->
+  <text x="232" y="351" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.90)">ℓ · V</text>
+  <!-- subscript "1,2" -->
+  <text x="278" y="358" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="12"
+        fill="rgba(201,168,76,0.72)">1,2</text>
+  <!-- "(b, ℓ)  ·  V" -->
+  <text x="300" y="351" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.90)">(b, ℓ)  ·  V</text>
+  <!-- subscript "1,1" -->
+  <text x="390" y="358" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="12"
+        fill="rgba(201,168,76,0.72)">1,1</text>
+  <!-- "(ℓ)  dℓ" -->
+  <text x="411" y="351" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.90)">(ℓ)  dℓ</text>
+
+  <!-- Row 2: + (non-separating terms) -->
+  <text x="128" y="387" text-anchor="end"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.55)"> </text>
+  <text x="232" y="387" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-style="italic" font-size="16"
+        fill="rgba(201,168,76,0.55)">+  (non-separating terms)</text>
+
+  <!-- Row 3: small note -->
+  <text x="320" y="408" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="11"
+        fill="rgba(150,140,200,0.50)">Mirzakhani recursion: V</text>
+  <text x="427" y="413" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="9"
+        fill="rgba(150,140,200,0.50)">g,n</text>
+  <text x="444" y="408" text-anchor="start"
+        font-family="EB Garamond,serif" font-size="11"
+        fill="rgba(150,140,200,0.50)">in terms of V</text>
+  <text x="548" y="413" text-anchor="start"
+        font-family="Cormorant Garamond,serif" font-size="9"
+        fill="rgba(150,140,200,0.50)">g′,n′</text>
+  <text x="566" y="408" text-anchor="start"
+        font-family="EB Garamond,serif" font-size="11"
+        fill="rgba(150,140,200,0.50)">(smaller)</text>
+</svg>
+        <div class="ctrl-bar" style="flex-direction:column;align-items:flex-start;gap:.2rem">
+          <span style="color:var(--text);font-size:.88rem">Mirzakhani's recursion: cutting along a geodesic</span>
+          <span style="color:var(--muted);font-size:.82rem">A surface of genus g breaks into simpler pieces, relating V<sub>g,n</sub> to smaller volumes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ══════════════════════════════ §9 VIEW FROM WITHIN -->
+<section class="wrap reveal">
+  <span class="sec-label">§ 9 — The View from Within</span>
+  <h2>What a hyperbolic being <em>sees</em></h2>
+  <div class="rule"></div>
+
+  <div class="two-col">
+    <div>
+      <p>Imagine being born inside a hyperbolic universe. Your visual experience would be profoundly, structurally different — not merely distorted, but governed by <em>different exponential laws</em> at every scale.</p>
+      <p><strong>Your complete visual field is the Poincaré disk.</strong> Every direction you can look corresponds to a point in the open unit disk. The glowing boundary circle represents the <em>visual horizon</em> — not a wall at finite distance, but the limit of every geodesic ray as it reaches infinitely far. Objects at large hyperbolic distance r appear compressed toward this boundary:</p>
+      <div class="theorem-box" style="font-size:1.1rem">
+        <span>Apparent angular position of object at distance r:<br>tanh(r/2) → 1 as r → ∞</span>
+      </div>
+      <p>All tiles in the animated tessellation are <strong>congruent</strong> in hyperbolic geometry — same shape, same angles, same area. Only your Euclidean eye sees them shrink. The central tile and a tile near the rim are <em>geometrically identical</em>. You are always at the center of your own infinite world.</p>
+      <div class="info-box">
+        <p>The boundary circle is the <strong>Gromov boundary</strong> of ℍ² — the space of "directions at infinity," homeomorphic to S¹ with a natural Hölder structure. Isometries of ℍ² extend to Möbius maps on this circle. This is the mathematical foundation of conformal field theory boundaries and AdS/CFT holography.</p>
+      </div>
+      <p>The animation shows a gentle figure-8 walk through the {7,3} tessellation. Your Möbius position in the disk corresponds exactly to your physical location in hyperbolic space.</p>
+    </div>
+    <div>
+      <div class="disk-wrap">
+        <canvas id="walkCanvas" width="480" height="480"></canvas>
+        <div class="ctrl-bar" style="flex-direction:column;align-items:flex-start;gap:.22rem">
+          <span style="color:var(--text);font-size:.9rem">Your complete visual field while walking through ℍ²</span>
+          <span style="color:var(--muted);font-size:.8rem">All tiles are congruent in hyperbolic geometry &nbsp;·&nbsp; boundary = horizon at ∞</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive H3 first-person -->
+  <h3 style="margin-top:3rem">Walk through hyperbolic 3-space</h3>
+  <div class="rule" style="margin:.6rem 0 1rem"></div>
+  <p>Below is a first-person view from inside ℍ³. The <strong>floor</strong> is tiled with congruent H² squares — but each successive row of tiles requires exponentially more to fill the same visual width. Standing trees are equally tall, equally spaced in H², but shrink <em>exponentially</em> faster than in Euclidean space (angular size ∝ 1/sinh(d) instead of 1/d). The <strong>horizon</strong> is not a wall at finite distance but the ideal boundary ∂ℍ³ ≅ S² — every direction extends infinitely, yet the entire infinite forest crowds into a thin strip near the skyline.</p>
+
+  <div class="disk-wrap wide-disk h3-scene">
+    <canvas id="streetCanvas" width="620" height="400" tabindex="0"
+      style="cursor:crosshair;display:block;width:100%;border-radius:12px 12px 0 0"></canvas>
+    <div id="h3Btns" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:.7rem 1rem;background:rgba(5,6,18,.85);border-top:1px solid rgba(201,168,76,.1);border-radius:0 0 12px 12px"></div>
+    <div class="ctrl-bar" style="flex-wrap:wrap;gap:.5rem;border-top:none;padding-top:.3rem">
+      <span style="color:var(--text);font-size:.88rem">First-person inside ℍ³ · <strong>W/S</strong> move · <strong>A/D</strong> turn · Arrow keys · Touch buttons above</span>
+      <span style="color:var(--muted);font-size:.8rem;margin-left:auto">Tiles: H² PSL(2,ℤ) checkerboard · Objects shrink as 1/sinh(d)</span>
+    </div>
+  </div>
+
+  <!-- Ray divergence + apparent size -->
+  <div class="two-col" style="margin-top:3rem">
+    <div>
+      <h3>Rays diverge exponentially</h3>
+      <div class="rule" style="margin:.6rem 0 1rem"></div>
+      <p>Two geodesic rays leaving your eye at angle θ apart are separated at hyperbolic distance d by:</p>
+      <div class="theorem-box" style="font-size:1.1rem;margin:.8rem 0">
+        <span>Δ(d) = 2 sinh(d) sin(θ/2) &nbsp;≈&nbsp; θ · e<sup>d</sup></span>
+      </div>
+      <p>Compare Euclidean Δ(d) ≈ θ·d. At d = 5: hyperbolic separation is sinh(5)/5 ≈ <strong>14.8×</strong> greater. Two walls that appear nearly parallel at d = 1 are exponentially far apart by d = 3.</p>
+      <div class="disk-wrap" style="margin-top:1rem">
+        <svg viewBox="0 0 440 290" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="Ray divergence comparison: Euclidean vs hyperbolic. Geodesic rays from a single point spread linearly in Euclidean space but exponentially in hyperbolic space.">
+  <defs>
+    <radialGradient id="dhbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#0f1235"/>
+      <stop offset="70%"  stop-color="#06081a"/>
+      <stop offset="100%" stop-color="#020308"/>
+    </radialGradient>
+    <filter id="rdglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="rdleft"><rect x="0" y="0" width="214" height="290"/></clipPath>
+    <clipPath id="rddisk"><circle cx="326" cy="153" r="118"/></clipPath>
+  </defs>
+
+  <rect width="440" height="290" fill="#05060f"/>
+
+  <!-- ══ LEFT PANEL: Euclidean ══ -->
+  <!-- Background grid -->
+  <g fill="none" stroke="rgba(255,255,255,0.045)" stroke-width="0.6" clip-path="url(#rdleft)">
+    <line x1="0"   y1="254" x2="215" y2="254"/>
+    <line x1="0"   y1="214" x2="215" y2="214"/>
+    <line x1="0"   y1="174" x2="215" y2="174"/>
+    <line x1="0"   y1="134" x2="215" y2="134"/>
+    <line x1="0"   y1="94"  x2="215" y2="94"/>
+    <line x1="36"  y1="0"   x2="36"  y2="290"/>
+    <line x1="76"  y1="0"   x2="76"  y2="290"/>
+    <line x1="116" y1="0"   x2="116" y2="290"/>
+    <line x1="156" y1="0"   x2="156" y2="290"/>
+    <line x1="196" y1="0"   x2="196" y2="290"/>
+  </g>
+
+  <!-- Origin at (16, 270) -->
+  <!-- Two ray pairs at ±theta=0.18 and ±0.09 rad from horizontal, pointing right -->
+  <!-- Outer rays (theta=0.18): at d=5.5*33px=181.5px, sep = 2*5.5*sin(0.18)*33 = 65.5px half-sep=32.8 -->
+  <!-- Inner rays (theta=0.09): half-sep=16.4px -->
+
+  <!-- Euclidean outer rays -->
+  <line x1="16" y1="270" x2="205" y2="202"  
+        stroke="rgba(201,168,76,0.85)" stroke-width="1.9" stroke-linecap="round"/>
+  <line x1="16" y1="270" x2="205" y2="338"  
+        stroke="rgba(201,168,76,0.85)" stroke-width="1.9" stroke-linecap="round"
+        clip-path="url(#rdleft)"/>
+  <!-- Euclidean inner rays (theta=0.09) -->
+  <line x1="16" y1="270" x2="205" y2="236"
+        stroke="rgba(201,168,76,0.35)" stroke-width="1.1" stroke-linecap="round"/>
+  <line x1="16" y1="270" x2="205" y2="304"
+        stroke="rgba(201,168,76,0.35)" stroke-width="1.1" stroke-linecap="round"
+        clip-path="url(#rdleft)"/>
+
+  <!-- Separation arcs at d=1,3,5 (arc radii: 1*33=33, 3*33=99, 5*33=165) -->
+  <!-- d=1: arc r=33, angle span ±0.18 rad, center (16,270) -->
+  <path d="M 16 270 m 32.9 -5.9 A 33 33 0 0 0 32.9 -5.9"
+        fill="none"/>
+  <!-- draw arcs as partial circles -->
+  <path d="M 32.9 264.1 A 33 33 0 0 1 32.9 275.9"
+        fill="none" stroke="rgba(60,184,195,0.40)" stroke-width="1.1" transform="translate(16,270) translate(-16,-270)"/>
+  <!-- simpler: arc through two points on the rays -->
+  <!-- At d=1 (r=33px): upper=(16+33*cos(0.18), 270-33*sin(0.18))=(48.7,264.1), lower=(48.7,275.9) -->
+  <path d="M 48.7 264.1 A 33 33 0 0 1 48.7 275.9" transform="translate(0,0)"
+        fill="none" stroke="rgba(60,184,195,0.45)" stroke-width="1.1"/>
+  <text x="52" y="268" font-family="EB Garamond,serif" font-size="9.5"
+        fill="rgba(60,184,195,0.65)">Δ=0.36</text>
+
+  <!-- At d=3 (r=99px): (16+99*cos0.18, 270-99*sin0.18)=(113.8,252.2), lower 270+17.8=287.8 -->
+  <path d="M 113.8 252.2 A 99 99 0 0 1 113.8 287.8"
+        fill="none" stroke="rgba(60,184,195,0.40)" stroke-width="1.1"
+        clip-path="url(#rdleft)"/>
+  <text x="118" y="258" font-family="EB Garamond,serif" font-size="9.5"
+        fill="rgba(60,184,195,0.60)">Δ=1.07</text>
+
+  <!-- At d=5 (r=165px): x=178.8, upper=270-29.7=240.3, lower=270+29.7=299.7 -->
+  <path d="M 178.8 240.3 A 165 165 0 0 1 178.8 299.7"
+        fill="none" stroke="rgba(60,184,195,0.35)" stroke-width="1.1"
+        clip-path="url(#rdleft)"/>
+  <text x="182" y="246" font-family="EB Garamond,serif" font-size="9.5"
+        fill="rgba(60,184,195,0.55)">Δ=1.79</text>
+
+  <!-- Origin dot -->
+  <circle cx="16" cy="270" r="3.5" fill="#e8cc80"/>
+
+  <!-- Axis line -->
+  <line x1="16" y1="270" x2="210" y2="270"
+        stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="215" y="274" font-family="EB Garamond,serif" font-size="10"
+        fill="rgba(255,255,255,0.25)">d</text>
+  <text x="5"   y="8"   font-family="EB Garamond,serif" font-size="9"
+        fill="rgba(255,255,255,0.18)">d=0  1    2    3    4    5</text>
+
+  <!-- Panel label -->
+  <text x="108" y="22" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-weight="600" font-size="14"
+        fill="rgba(201,168,76,0.88)">Euclidean</text>
+  <text x="108" y="37" text-anchor="middle"
+        font-family="EB Garamond,serif" font-style="italic" font-size="12"
+        fill="rgba(201,168,76,0.55)">Δ(d) = θ · d</text>
+
+  <!-- Divider -->
+  <line x1="219" y1="10" x2="219" y2="280"
+        stroke="rgba(201,168,76,0.10)" stroke-width="1"/>
+
+  <!-- ══ RIGHT PANEL: Hyperbolic (Poincaré disk) ══ -->
+  <!-- Disk: center (326,153), radius 118 -->
+  <circle cx="326" cy="153" r="118" fill="url(#dhbg)"/>
+
+  <!-- Faint geodesic texture -->
+  <g clip-path="url(#rddisk)" fill="none" stroke="rgba(201,168,76,0.07)" stroke-width="0.7">
+    <line x1="208" y1="153" x2="444" y2="153"/>
+    <line x1="326" y1="35"  x2="326" y2="271"/>
+    <line x1="241" y1="68"  x2="411" y2="238"/>
+    <line x1="411" y1="68"  x2="241" y2="238"/>
+  </g>
+
+  <!-- Two geodesic ray pairs from center (all diameters from center) -->
+  <!-- theta=0.18 rad from vertical (pointing up from center) -->
+  <!-- Upper ray upper: angle = π/2 + 0.18 = 90+10.3° = 100.3° from x-axis = pointing upper-left -->
+  <!-- Actually: base angle pointing UP = 270° in SVG coords -->
+  <!-- Ray 1: 270°+10.3° = 280.3°, Ray 2: 270°-10.3° = 259.7° -->
+  <!-- cos(280.3°)=0.181, sin(280.3°)=-0.983 → direction: right and up in SVG -->
+  <!-- let me just use: angle from top (SVG up=negative y) -->
+  <!-- theta = 0.18 rad offset from straight up -->
+  <!-- Ray coords: from (326,153) direction angle α from north: (326+118*sinα, 153-118*cosα) -->
+  <!-- Outer pair: α = ±0.18 rad, inner: α = ±0.09 rad -->
+  <!-- α=+0.18: end=(326+118*sin(0.18), 153-118*cos(0.18))=(326+21.2, 153-116.6)=(347.2, 36.4) -->
+  <!-- α=-0.18: end=(326-21.2, 153-116.6)=(304.8, 36.4) -->
+  <!-- inner: α=+0.09: (326+10.6, 153-117.5)=(336.6,35.5), α=-0.09: (315.4,35.5) -->
+
+  <!-- Geodesic diameters (from center to boundary, going UP) -->
+  <line x1="326" y1="153" x2="347.2" y2="36.4"
+        stroke="rgba(201,168,76,0.85)" stroke-width="2.0" stroke-linecap="round"
+        clip-path="url(#rddisk)" filter="url(#rdglow)"/>
+  <line x1="326" y1="153" x2="304.8" y2="36.4"
+        stroke="rgba(201,168,76,0.85)" stroke-width="2.0" stroke-linecap="round"
+        clip-path="url(#rddisk)" filter="url(#rdglow)"/>
+  <line x1="326" y1="153" x2="336.6" y2="35.5"
+        stroke="rgba(201,168,76,0.32)" stroke-width="1.1" stroke-linecap="round"
+        clip-path="url(#rddisk)"/>
+  <line x1="326" y1="153" x2="315.4" y2="35.5"
+        stroke="rgba(201,168,76,0.32)" stroke-width="1.1" stroke-linecap="round"
+        clip-path="url(#rddisk)"/>
+
+  <!-- Also extend downward (full geodesics) -->
+  <line x1="326" y1="153" x2="304.8" y2="269.6" stroke="rgba(201,168,76,0.30)" stroke-width="1.0" clip-path="url(#rddisk)"/>
+  <line x1="326" y1="153" x2="347.2" y2="269.6" stroke="rgba(201,168,76,0.30)" stroke-width="1.0" clip-path="url(#rddisk)"/>
+
+  <!-- Hyperbolic distance circles: r_disk = tanh(d/2)*118 -->
+  <!-- d=1: r=tanh(0.5)*118=0.462*118=54.5 -->
+  <!-- d=2: r=tanh(1)*118=0.762*118=89.9 -->
+  <!-- d=3: r=tanh(1.5)*118=0.905*118=106.8 -->
+  <!-- d=4: r=tanh(2)*118=0.964*118=113.7 -->
+  <g clip-path="url(#rddisk)" fill="none" stroke="rgba(60,184,195,0.18)" stroke-width="0.9">
+    <circle cx="326" cy="153" r="54.5"/>
+    <circle cx="326" cy="153" r="89.9"/>
+    <circle cx="326" cy="153" r="106.8"/>
+    <circle cx="326" cy="153" r="113.7"/>
+  </g>
+
+  <!-- Separation arcs at each distance (angle 0.18 rad from center) -->
+  <!-- d=1, r_disk=54.5: arc from α=-0.18 to +0.18 centered at center, up direction -->
+  <!-- Arc endpoints: (326+54.5*sin(-0.18), 153-54.5*cos(-0.18)) = (316.2, 99.4) -->
+  <!--                (326+54.5*sin(+0.18), 153-54.5*cos(+0.18)) = (335.8, 99.4) -->
+  <!-- sweep arc from (316.2,99.4) to (335.8,99.4) -->
+  <path d="M 316.2 99.4 A 54.5 54.5 0 0 1 335.8 99.4"
+        fill="none" stroke="rgba(60,184,195,0.50)" stroke-width="1.4"
+        clip-path="url(#rddisk)"/>
+  <!-- hyp sep at d=1: 2*sinh(1)*sin(0.18)=2*1.175*0.179=0.421 -->
+  <text x="338" y="96" font-family="EB Garamond,serif" font-size="9.5"
+        fill="rgba(60,184,195,0.68)">Δ=0.42</text>
+
+  <!-- d=2, r_disk=89.9: endpoints (326+89.9*sin(±0.18), 153-89.9*cos(±0.18)) -->
+  <!-- = (326±16.1, 153-88.4) = (342.1,64.6) and (309.9,64.6) -->
+  <path d="M 309.9 64.6 A 89.9 89.9 0 0 1 342.1 64.6"
+        fill="none" stroke="rgba(60,184,195,0.44)" stroke-width="1.4"
+        clip-path="url(#rddisk)"/>
+  <!-- hyp sep at d=2: 2*sinh(2)*sin(0.18)=2*3.627*0.179=1.298 -->
+  <text x="344" y="62" font-family="EB Garamond,serif" font-size="9.5"
+        fill="rgba(60,184,195,0.60)">Δ=1.30</text>
+
+  <!-- d=3, r_disk=106.8: (326±19.1, 153-104.9)=(345.1,48.1) and (306.9,48.1) -->
+  <path d="M 306.9 48.1 A 106.8 106.8 0 0 1 345.1 48.1"
+        fill="none" stroke="rgba(60,184,195,0.38)" stroke-width="1.4"
+        clip-path="url(#rddisk)"/>
+  <!-- hyp sep at d=3: 2*sinh(3)*sin(0.18)=2*10.018*0.179=3.59 -->
+  <text x="347" y="46" font-family="EB Garamond,serif" font-size="9.5"
+        fill="rgba(60,184,195,0.55)">Δ=3.59</text>
+
+  <!-- Origin dot -->
+  <circle cx="326" cy="153" r="4" fill="#e8cc80" filter="url(#rdglow)"/>
+
+  <!-- Disk border -->
+  <circle cx="326" cy="153" r="117.5" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="8"/>
+  <circle cx="326" cy="153" r="117.5" fill="none" stroke="rgba(201,168,76,0.36)" stroke-width="1.4"/>
+
+  <!-- Panel label -->
+  <text x="326" y="280" text-anchor="middle"
+        font-family="Cormorant Garamond,serif" font-weight="600" font-size="14"
+        fill="rgba(201,168,76,0.88)">Hyperbolic (Poincaré disk)</text>
+  <text x="326" y="294" text-anchor="middle"
+        font-family="EB Garamond,serif" font-style="italic" font-size="12"
+        fill="rgba(201,168,76,0.55)">Δ(d) = 2 sinh(d) sin(θ/2) ≈ θ · eᵈ</text>
+</svg>
+        <div class="ctrl-bar">
+          <span style="color:var(--muted);font-size:.82rem">Left: Euclidean &nbsp;|&nbsp; Right: Hyperbolic (Poincaré disk)</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>Friends vanish exponentially</h3>
+      <div class="rule" style="margin:.6rem 0 1rem"></div>
+      <p>An object of size s at hyperbolic distance d subtends apparent angle:</p>
+      <div class="theorem-box" style="font-size:1.1rem;margin:.8rem 0">
+        <span>α(d) = s / sinh(d) &nbsp;≈&nbsp; 2s · e<sup>−d</sup></span>
+      </div>
+      <p>Euclidean: α = s/d. At d = 5, a friend appears not 1/5 of her original angular size but <strong>e<sup>−5</sup>/2 ≈ 0.7%</strong> — she vanishes almost immediately.</p>
+      <div class="disk-wrap" style="margin-top:1rem">
+        <svg viewBox="0 0 440 280" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="Apparent angular size vs hyperbolic distance: hyperbolic shrinkage is exponentially faster than Euclidean">
+  <defs>
+    <filter id="sfglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="440" height="280" fill="#05060f"/>
+
+  <!-- Grid -->
+  <line x1="131.0" y1="258" x2="131.0" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="202.0" y1="258" x2="202.0" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="273.0" y1="258" x2="273.0" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="344.0" y1="258" x2="344.0" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="415.0" y1="258" x2="415.0" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="60" y1="216.5" x2="415" y2="216.5" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="60" y1="175.0" x2="415" y2="175.0" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="60" y1="133.4" x2="415" y2="133.4" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="60" y1="91.9" x2="415" y2="91.9" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/><line x1="60" y1="50.4" x2="415" y2="50.4" stroke="rgba(255,255,255,0.05)" stroke-width="0.8"/>
+
+  <!-- Shaded region between curves -->
+  <path d="M 65.3,40.0 L 67.1,40.0 L 68.8,40.0 L 70.6,40.0 L 72.3,40.0 L 74.1,40.0 L 75.9,40.0 L 77.6,40.0 L 79.4,40.0 L 81.1,40.0 L 82.9,40.0 L 84.6,40.0 L 86.4,40.0 L 88.2,40.0 L 89.9,40.0 L 91.7,40.0 L 93.4,40.0 L 95.2,40.0 L 96.9,40.0 L 98.7,40.0 L 100.5,40.0 L 102.2,40.0 L 104.0,40.0 L 105.7,40.0 L 107.5,40.0 L 109.2,40.0 L 111.0,40.0 L 112.8,40.0 L 114.5,40.0 L 116.3,40.0 L 118.0,40.0 L 119.8,40.0 L 121.5,40.0 L 123.3,40.0 L 125.1,40.0 L 126.8,40.0 L 128.6,40.7 L 130.3,47.8 L 132.1,54.5 L 133.8,60.9 L 135.6,67.0 L 137.4,72.9 L 139.1,78.5 L 140.9,83.9 L 142.6,89.1 L 144.4,94.1 L 146.1,98.9 L 147.9,103.5 L 149.7,108.0 L 151.4,112.2 L 153.2,116.4 L 154.9,120.3 L 156.7,124.2 L 158.4,127.9 L 160.2,131.5 L 162.0,135.0 L 163.7,138.3 L 165.5,141.6 L 167.2,144.7 L 169.0,147.7 L 170.7,150.7 L 172.5,153.5 L 174.3,156.3 L 176.0,159.0 L 177.8,161.6 L 179.5,164.1 L 181.3,166.6 L 183.0,169.0 L 184.8,171.3 L 186.6,173.5 L 188.3,175.7 L 190.1,177.8 L 191.8,179.9 L 193.6,181.9 L 195.3,183.8 L 197.1,185.7 L 198.9,187.6 L 200.6,189.4 L 202.4,191.1 L 204.1,192.8 L 205.9,194.4 L 207.6,196.0 L 209.4,197.6 L 211.2,199.1 L 212.9,200.6 L 214.7,202.0 L 216.4,203.4 L 218.2,204.8 L 219.9,206.1 L 221.7,207.4 L 223.5,208.7 L 225.2,209.9 L 227.0,211.1 L 228.7,212.3 L 230.5,213.4 L 232.2,214.5 L 234.0,215.6 L 235.8,216.7 L 237.5,217.7 L 239.3,218.7 L 241.0,219.7 L 242.8,220.6 L 244.5,221.5 L 246.3,222.4 L 248.1,223.3 L 249.8,224.2 L 251.6,225.0 L 253.3,225.8 L 255.1,226.6 L 256.8,227.4 L 258.6,228.1 L 260.4,228.9 L 262.1,229.6 L 263.9,230.3 L 265.6,231.0 L 267.4,231.6 L 269.1,232.3 L 270.9,232.9 L 272.7,233.5 L 274.4,234.1 L 276.2,234.7 L 277.9,235.3 L 279.7,235.8 L 281.4,236.4 L 283.2,236.9 L 285.0,237.4 L 286.7,237.9 L 288.5,238.4 L 290.2,238.9 L 292.0,239.4 L 293.7,239.8 L 295.5,240.3 L 297.3,240.7 L 299.0,241.1 L 300.8,241.6 L 302.5,242.0 L 304.3,242.3 L 306.1,242.7 L 307.8,243.1 L 309.6,243.5 L 311.3,243.8 L 313.1,244.2 L 314.8,244.5 L 316.6,244.8 L 318.4,245.2 L 320.1,245.5 L 321.9,245.8 L 323.6,246.1 L 325.4,246.4 L 327.1,246.7 L 328.9,246.9 L 330.7,247.2 L 332.4,247.5 L 334.2,247.7 L 335.9,248.0 L 337.7,248.2 L 339.4,248.5 L 341.2,248.7 L 343.0,248.9 L 344.7,249.1 L 346.5,249.4 L 348.2,249.6 L 350.0,249.8 L 351.7,250.0 L 353.5,250.2 L 355.3,250.4 L 357.0,250.6 L 358.8,250.7 L 360.5,250.9 L 362.3,251.1 L 364.0,251.3 L 365.8,251.4 L 367.6,251.6 L 369.3,251.7 L 371.1,251.9 L 372.8,252.0 L 374.6,252.2 L 376.3,252.3 L 378.1,252.5 L 379.9,252.6 L 381.6,252.7 L 383.4,252.9 L 385.1,253.0 L 386.9,253.1 L 388.6,253.2 L 390.4,253.3 L 392.2,253.5 L 393.9,253.6 L 395.7,253.7 L 397.4,253.8 L 399.2,253.9 L 400.9,254.0 L 402.7,254.1 L 404.5,254.2 L 406.2,254.3 L 408.0,254.4 L 409.7,254.5 L 411.5,254.5 L 413.2,254.6 L 415.0,254.7 L 415.0,216.5 L 413.2,216.3 L 411.5,216.1 L 409.7,215.9 L 408.0,215.6 L 406.2,215.4 L 404.5,215.2 L 402.7,215.0 L 400.9,214.8 L 399.2,214.5 L 397.4,214.3 L 395.7,214.1 L 393.9,213.9 L 392.2,213.6 L 390.4,213.4 L 388.6,213.1 L 386.9,212.9 L 385.1,212.7 L 383.4,212.4 L 381.6,212.2 L 379.9,211.9 L 378.1,211.7 L 376.3,211.4 L 374.6,211.1 L 372.8,210.9 L 371.1,210.6 L 369.3,210.3 L 367.6,210.1 L 365.8,209.8 L 364.0,209.5 L 362.3,209.2 L 360.5,208.9 L 358.8,208.7 L 357.0,208.4 L 355.3,208.1 L 353.5,207.8 L 351.7,207.5 L 350.0,207.2 L 348.2,206.9 L 346.5,206.5 L 344.7,206.2 L 343.0,205.9 L 341.2,205.6 L 339.4,205.2 L 337.7,204.9 L 335.9,204.6 L 334.2,204.2 L 332.4,203.9 L 330.7,203.5 L 328.9,203.2 L 327.1,202.8 L 325.4,202.5 L 323.6,202.1 L 321.9,201.7 L 320.1,201.3 L 318.4,200.9 L 316.6,200.6 L 314.8,200.2 L 313.1,199.8 L 311.3,199.3 L 309.6,198.9 L 307.8,198.5 L 306.1,198.1 L 304.3,197.7 L 302.5,197.2 L 300.8,196.8 L 299.0,196.3 L 297.3,195.9 L 295.5,195.4 L 293.7,194.9 L 292.0,194.5 L 290.2,194.0 L 288.5,193.5 L 286.7,193.0 L 285.0,192.5 L 283.2,192.0 L 281.4,191.4 L 279.7,190.9 L 277.9,190.4 L 276.2,189.8 L 274.4,189.3 L 272.7,188.7 L 270.9,188.1 L 269.1,187.5 L 267.4,186.9 L 265.6,186.3 L 263.9,185.7 L 262.1,185.1 L 260.4,184.4 L 258.6,183.8 L 256.8,183.1 L 255.1,182.4 L 253.3,181.8 L 251.6,181.1 L 249.8,180.3 L 248.1,179.6 L 246.3,178.9 L 244.5,178.1 L 242.8,177.4 L 241.0,176.6 L 239.3,175.8 L 237.5,175.0 L 235.8,174.1 L 234.0,173.3 L 232.2,172.4 L 230.5,171.5 L 228.7,170.6 L 227.0,169.7 L 225.2,168.8 L 223.5,167.8 L 221.7,166.8 L 219.9,165.8 L 218.2,164.8 L 216.4,163.8 L 214.7,162.7 L 212.9,161.6 L 211.2,160.5 L 209.4,159.3 L 207.6,158.2 L 205.9,157.0 L 204.1,155.7 L 202.4,154.5 L 200.6,153.2 L 198.9,151.8 L 197.1,150.5 L 195.3,149.1 L 193.6,147.7 L 191.8,146.2 L 190.1,144.7 L 188.3,143.1 L 186.6,141.5 L 184.8,139.9 L 183.0,138.2 L 181.3,136.5 L 179.5,134.7 L 177.8,132.8 L 176.0,130.9 L 174.3,129.0 L 172.5,127.0 L 170.7,124.9 L 169.0,122.7 L 167.2,120.5 L 165.5,118.2 L 163.7,115.9 L 162.0,113.4 L 160.2,110.9 L 158.4,108.3 L 156.7,105.5 L 154.9,102.7 L 153.2,99.8 L 151.4,96.7 L 149.7,93.6 L 147.9,90.3 L 146.1,86.9 L 144.4,83.3 L 142.6,79.6 L 140.9,75.7 L 139.1,71.7 L 137.4,67.4 L 135.6,63.0 L 133.8,58.4 L 132.1,53.5 L 130.3,48.4 L 128.6,43.0 L 126.8,40.0 L 125.1,40.0 L 123.3,40.0 L 121.5,40.0 L 119.8,40.0 L 118.0,40.0 L 116.3,40.0 L 114.5,40.0 L 112.8,40.0 L 111.0,40.0 L 109.2,40.0 L 107.5,40.0 L 105.7,40.0 L 104.0,40.0 L 102.2,40.0 L 100.5,40.0 L 98.7,40.0 L 96.9,40.0 L 95.2,40.0 L 93.4,40.0 L 91.7,40.0 L 89.9,40.0 L 88.2,40.0 L 86.4,40.0 L 84.6,40.0 L 82.9,40.0 L 81.1,40.0 L 79.4,40.0 L 77.6,40.0 L 75.9,40.0 L 74.1,40.0 L 72.3,40.0 L 70.6,40.0 L 68.8,40.0 L 67.1,40.0 L 65.3,40.0 Z" fill="rgba(196,85,85,0.08)"/>
+
+  <!-- Euclidean curve: alpha = 1/d -->
+  <path d="M 65.3,40.0 L 67.1,40.0 L 68.8,40.0 L 70.6,40.0 L 72.3,40.0 L 74.1,40.0 L 75.9,40.0 L 77.6,40.0 L 79.4,40.0 L 81.1,40.0 L 82.9,40.0 L 84.6,40.0 L 86.4,40.0 L 88.2,40.0 L 89.9,40.0 L 91.7,40.0 L 93.4,40.0 L 95.2,40.0 L 96.9,40.0 L 98.7,40.0 L 100.5,40.0 L 102.2,40.0 L 104.0,40.0 L 105.7,40.0 L 107.5,40.0 L 109.2,40.0 L 111.0,40.0 L 112.8,40.0 L 114.5,40.0 L 116.3,40.0 L 118.0,40.0 L 119.8,40.0 L 121.5,40.0 L 123.3,40.0 L 125.1,40.0 L 126.8,40.0 L 128.6,43.0 L 130.3,48.4 L 132.1,53.5 L 133.8,58.4 L 135.6,63.0 L 137.4,67.4 L 139.1,71.7 L 140.9,75.7 L 142.6,79.6 L 144.4,83.3 L 146.1,86.9 L 147.9,90.3 L 149.7,93.6 L 151.4,96.7 L 153.2,99.8 L 154.9,102.7 L 156.7,105.5 L 158.4,108.3 L 160.2,110.9 L 162.0,113.4 L 163.7,115.9 L 165.5,118.2 L 167.2,120.5 L 169.0,122.7 L 170.7,124.9 L 172.5,127.0 L 174.3,129.0 L 176.0,130.9 L 177.8,132.8 L 179.5,134.7 L 181.3,136.5 L 183.0,138.2 L 184.8,139.9 L 186.6,141.5 L 188.3,143.1 L 190.1,144.7 L 191.8,146.2 L 193.6,147.7 L 195.3,149.1 L 197.1,150.5 L 198.9,151.8 L 200.6,153.2 L 202.4,154.5 L 204.1,155.7 L 205.9,157.0 L 207.6,158.2 L 209.4,159.3 L 211.2,160.5 L 212.9,161.6 L 214.7,162.7 L 216.4,163.8 L 218.2,164.8 L 219.9,165.8 L 221.7,166.8 L 223.5,167.8 L 225.2,168.8 L 227.0,169.7 L 228.7,170.6 L 230.5,171.5 L 232.2,172.4 L 234.0,173.3 L 235.8,174.1 L 237.5,175.0 L 239.3,175.8 L 241.0,176.6 L 242.8,177.4 L 244.5,178.1 L 246.3,178.9 L 248.1,179.6 L 249.8,180.3 L 251.6,181.1 L 253.3,181.8 L 255.1,182.4 L 256.8,183.1 L 258.6,183.8 L 260.4,184.4 L 262.1,185.1 L 263.9,185.7 L 265.6,186.3 L 267.4,186.9 L 269.1,187.5 L 270.9,188.1 L 272.7,188.7 L 274.4,189.3 L 276.2,189.8 L 277.9,190.4 L 279.7,190.9 L 281.4,191.4 L 283.2,192.0 L 285.0,192.5 L 286.7,193.0 L 288.5,193.5 L 290.2,194.0 L 292.0,194.5 L 293.7,194.9 L 295.5,195.4 L 297.3,195.9 L 299.0,196.3 L 300.8,196.8 L 302.5,197.2 L 304.3,197.7 L 306.1,198.1 L 307.8,198.5 L 309.6,198.9 L 311.3,199.3 L 313.1,199.8 L 314.8,200.2 L 316.6,200.6 L 318.4,200.9 L 320.1,201.3 L 321.9,201.7 L 323.6,202.1 L 325.4,202.5 L 327.1,202.8 L 328.9,203.2 L 330.7,203.5 L 332.4,203.9 L 334.2,204.2 L 335.9,204.6 L 337.7,204.9 L 339.4,205.2 L 341.2,205.6 L 343.0,205.9 L 344.7,206.2 L 346.5,206.5 L 348.2,206.9 L 350.0,207.2 L 351.7,207.5 L 353.5,207.8 L 355.3,208.1 L 357.0,208.4 L 358.8,208.7 L 360.5,208.9 L 362.3,209.2 L 364.0,209.5 L 365.8,209.8 L 367.6,210.1 L 369.3,210.3 L 371.1,210.6 L 372.8,210.9 L 374.6,211.1 L 376.3,211.4 L 378.1,211.7 L 379.9,211.9 L 381.6,212.2 L 383.4,212.4 L 385.1,212.7 L 386.9,212.9 L 388.6,213.1 L 390.4,213.4 L 392.2,213.6 L 393.9,213.9 L 395.7,214.1 L 397.4,214.3 L 399.2,214.5 L 400.9,214.8 L 402.7,215.0 L 404.5,215.2 L 406.2,215.4 L 408.0,215.6 L 409.7,215.9 L 411.5,216.1 L 413.2,216.3 L 415.0,216.5"
+        fill="none" stroke="rgba(201,168,76,0.88)" stroke-width="2.6"
+        stroke-linecap="round" stroke-linejoin="round" filter="url(#sfglow)"/>
+
+  <!-- Hyperbolic curve: alpha = 1/sinh(d) -->
+  <path d="M 65.3,40.0 L 67.1,40.0 L 68.8,40.0 L 70.6,40.0 L 72.3,40.0 L 74.1,40.0 L 75.9,40.0 L 77.6,40.0 L 79.4,40.0 L 81.1,40.0 L 82.9,40.0 L 84.6,40.0 L 86.4,40.0 L 88.2,40.0 L 89.9,40.0 L 91.7,40.0 L 93.4,40.0 L 95.2,40.0 L 96.9,40.0 L 98.7,40.0 L 100.5,40.0 L 102.2,40.0 L 104.0,40.0 L 105.7,40.0 L 107.5,40.0 L 109.2,40.0 L 111.0,40.0 L 112.8,40.0 L 114.5,40.0 L 116.3,40.0 L 118.0,40.0 L 119.8,40.0 L 121.5,40.0 L 123.3,40.0 L 125.1,40.0 L 126.8,40.0 L 128.6,40.7 L 130.3,47.8 L 132.1,54.5 L 133.8,60.9 L 135.6,67.0 L 137.4,72.9 L 139.1,78.5 L 140.9,83.9 L 142.6,89.1 L 144.4,94.1 L 146.1,98.9 L 147.9,103.5 L 149.7,108.0 L 151.4,112.2 L 153.2,116.4 L 154.9,120.3 L 156.7,124.2 L 158.4,127.9 L 160.2,131.5 L 162.0,135.0 L 163.7,138.3 L 165.5,141.6 L 167.2,144.7 L 169.0,147.7 L 170.7,150.7 L 172.5,153.5 L 174.3,156.3 L 176.0,159.0 L 177.8,161.6 L 179.5,164.1 L 181.3,166.6 L 183.0,169.0 L 184.8,171.3 L 186.6,173.5 L 188.3,175.7 L 190.1,177.8 L 191.8,179.9 L 193.6,181.9 L 195.3,183.8 L 197.1,185.7 L 198.9,187.6 L 200.6,189.4 L 202.4,191.1 L 204.1,192.8 L 205.9,194.4 L 207.6,196.0 L 209.4,197.6 L 211.2,199.1 L 212.9,200.6 L 214.7,202.0 L 216.4,203.4 L 218.2,204.8 L 219.9,206.1 L 221.7,207.4 L 223.5,208.7 L 225.2,209.9 L 227.0,211.1 L 228.7,212.3 L 230.5,213.4 L 232.2,214.5 L 234.0,215.6 L 235.8,216.7 L 237.5,217.7 L 239.3,218.7 L 241.0,219.7 L 242.8,220.6 L 244.5,221.5 L 246.3,222.4 L 248.1,223.3 L 249.8,224.2 L 251.6,225.0 L 253.3,225.8 L 255.1,226.6 L 256.8,227.4 L 258.6,228.1 L 260.4,228.9 L 262.1,229.6 L 263.9,230.3 L 265.6,231.0 L 267.4,231.6 L 269.1,232.3 L 270.9,232.9 L 272.7,233.5 L 274.4,234.1 L 276.2,234.7 L 277.9,235.3 L 279.7,235.8 L 281.4,236.4 L 283.2,236.9 L 285.0,237.4 L 286.7,237.9 L 288.5,238.4 L 290.2,238.9 L 292.0,239.4 L 293.7,239.8 L 295.5,240.3 L 297.3,240.7 L 299.0,241.1 L 300.8,241.6 L 302.5,242.0 L 304.3,242.3 L 306.1,242.7 L 307.8,243.1 L 309.6,243.5 L 311.3,243.8 L 313.1,244.2 L 314.8,244.5 L 316.6,244.8 L 318.4,245.2 L 320.1,245.5 L 321.9,245.8 L 323.6,246.1 L 325.4,246.4 L 327.1,246.7 L 328.9,246.9 L 330.7,247.2 L 332.4,247.5 L 334.2,247.7 L 335.9,248.0 L 337.7,248.2 L 339.4,248.5 L 341.2,248.7 L 343.0,248.9 L 344.7,249.1 L 346.5,249.4 L 348.2,249.6 L 350.0,249.8 L 351.7,250.0 L 353.5,250.2 L 355.3,250.4 L 357.0,250.6 L 358.8,250.7 L 360.5,250.9 L 362.3,251.1 L 364.0,251.3 L 365.8,251.4 L 367.6,251.6 L 369.3,251.7 L 371.1,251.9 L 372.8,252.0 L 374.6,252.2 L 376.3,252.3 L 378.1,252.5 L 379.9,252.6 L 381.6,252.7 L 383.4,252.9 L 385.1,253.0 L 386.9,253.1 L 388.6,253.2 L 390.4,253.3 L 392.2,253.5 L 393.9,253.6 L 395.7,253.7 L 397.4,253.8 L 399.2,253.9 L 400.9,254.0 L 402.7,254.1 L 404.5,254.2 L 406.2,254.3 L 408.0,254.4 L 409.7,254.5 L 411.5,254.5 L 413.2,254.6 L 415.0,254.7"
+        fill="none" stroke="rgba(60,184,195,0.88)" stroke-width="2.6"
+        stroke-linecap="round" stroke-linejoin="round" filter="url(#sfglow)"/>
+
+  <!-- Axes -->
+  <line x1="60" y1="258" x2="427" y2="258"
+        stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+  <line x1="60" y1="258" x2="60" y2="30"
+        stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+
+  <!-- Axis labels -->
+  <text x="131.0" y="273" text-anchor="middle" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">1</text><text x="202.0" y="273" text-anchor="middle" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">2</text><text x="273.0" y="273" text-anchor="middle" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">3</text><text x="344.0" y="273" text-anchor="middle" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">4</text><text x="415.0" y="273" text-anchor="middle" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">5</text>
+  <text x="53" y="220.5" text-anchor="end" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">0.2</text><text x="53" y="179.0" text-anchor="end" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">0.4</text><text x="53" y="137.4" text-anchor="end" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">0.6</text><text x="53" y="95.9" text-anchor="end" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">0.8</text><text x="53" y="54.4" text-anchor="end" font-family="EB Garamond,serif" font-size="12" fill="rgba(255,255,255,0.28)">1.0</text>
+  <text x="237.5" y="288" text-anchor="middle"
+        font-family="EB Garamond,serif" font-size="13" fill="rgba(255,255,255,0.35)">distance d</text>
+  <text x="13" y="149.0" text-anchor="middle" font-size="12"
+        font-family="EB Garamond,serif" fill="rgba(255,255,255,0.32)"
+        transform="rotate(-90,13,149.0)">apparent size α(d)</text>
+
+  <!-- Annotation: gap at d=3 -->
+  <line x1="273.0" y1="188.8" x2="273.0" y2="233.6"
+        stroke="rgba(196,85,85,0.60)" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <circle cx="273.0" cy="188.8" r="3" fill="rgba(201,168,76,0.85)"/>
+  <circle cx="273.0" cy="233.6" r="3" fill="rgba(60,184,195,0.85)"/>
+  <text x="281.0" y="211.2"
+        font-family="EB Garamond,serif" font-size="11" fill="rgba(196,85,85,0.80)">×2.8 larger in ℝ²</text>
+
+  <!-- Legend -->
+  <line x1="72" y1="18" x2="98" y2="18" stroke="rgba(201,168,76,0.85)" stroke-width="2.5"/>
+  <text x="104" y="22" font-family="Cormorant Garamond,serif" font-style="italic" font-size="13"
+        fill="rgba(201,168,76,0.85)">Euclidean:  α = 1/d</text>
+  <line x1="72" y1="36" x2="98" y2="36" stroke="rgba(60,184,195,0.85)" stroke-width="2.5"/>
+  <text x="104" y="40" font-family="Cormorant Garamond,serif" font-style="italic" font-size="13"
+        fill="rgba(60,184,195,0.85)">Hyperbolic:  α = 1/sinh(d) ≈ 2e⁻ᵈ</text>
+</svg>
+        <div class="ctrl-bar" style="gap:1.5rem">
+          <span style="color:var(--gold);font-size:.88rem">— Euclidean: 1/d</span>
+          <span style="color:var(--cyan);font-size:.88rem">— Hyperbolic: 1/sinh(d)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:2.5rem">
+    <p><strong>The bright night sky.</strong> In ℍ³, the volume of a ball of radius r grows as V(r) = π(sinh(2r) − 2r) ≈ πe²ʳ. Stars in the shell [r, r+1] number ~e²ʳ more than the innermost shell. Each appears e<sup>−2r</sup> dimmer (apparent size squared). Their total contribution to sky brightness stays <em>constant per shell</em> — a hyperbolic Olbers' paradox. The night sky would be uniformly luminous: packed at every angle with exponentially crowded, exponentially faint stars. This is exactly what the star field in the street view above begins to show.
+    </p>
+  </div>
+</section>
+
+<script>
+"use strict";
+const TAU=2*Math.PI;
+
+// ── Complex arithmetic ──
+const cx={
+  add:([ax,ay],[bx,by])=>[ax+bx,ay+by],
+  sub:([ax,ay],[bx,by])=>[ax-bx,ay-by],
+  mul:([ax,ay],[bx,by])=>[ax*bx-ay*by,ax*by+ay*bx],
+  div:([ax,ay],[bx,by])=>{const d=bx*bx+by*by;return[(ax*bx+ay*by)/d,(ay*bx-ax*by)/d]},
+  conj:([x,y])=>[x,-y],
+  abs:([x,y])=>Math.sqrt(x*x+y*y),
+  abs2:([x,y])=>x*x+y*y,
+  scale:([x,y],s)=>[x*s,y*s],
+  arg:([x,y])=>Math.atan2(y,x),
+};
+
+// Möbius: φ_a(z) = (z-a)/(1-conj(a)·z), sends a→0, automorphism of disk
+function mob(z,a){
+  return cx.div(cx.sub(z,a),cx.sub([1,0],cx.mul(cx.conj(a),z)));
+}
+
+// Hyperbolic angle at A in triangle A,B,C
+function hypAngle(A,B,C){
+  const B_=mob(B,A),C_=mob(C,A);
+  let a=Math.abs(cx.arg(C_)-cx.arg(B_));
+  if(a>Math.PI) a=TAU-a;
+  return a;
+}
+
+// Geodesic circle through p1,p2 → {cx,cy,r} or null (diameter)
+function geodCircle(p1,p2){
+  const[ax,ay]=p1,[bx,by]=p2;
+  const cross=ax*by-bx*ay;
+  if(Math.abs(cross)<1e-9) return null;
+  const r1=1+ax*ax+ay*ay,r2=1+bx*bx+by*by;
+  const gcx=(r1*by-r2*ay)/(2*cross);
+  const gcy=(ax*r2-bx*r1)/(2*cross);
+  return{cx:gcx,cy:gcy,r:Math.sqrt(Math.max(0,gcx*gcx+gcy*gcy-1))};
+}
+
+// Reflect p across geodesic through A,B
+function geodReflect(p,A,B){
+  const[px,py]=p,[ax,ay]=A,[bx,by]=B;
+  const aO=ax*ax+ay*ay<1e-12,bO=bx*bx+by*by<1e-12;
+  const cross=ax*by-bx*ay;
+  if(Math.abs(cross)<1e-9){
+    const[dx,dy]=aO?[bx,by]:[ax,ay],L=Math.sqrt(dx*dx+dy*dy)||1;
+    const ux=dx/L,uy=dy/L,dot=px*ux+py*uy;
+    return[2*dot*ux-px,2*dot*uy-py];
+  }
+  const gc=geodCircle(A,B);
+  const{cx:gcx,cy:gcy,r}=gc;
+  const r2=r*r,dx=px-gcx,dy=py-gcy,D=dx*dx+dy*dy;
+  return[gcx+r2*dx/D,gcy+r2*dy/D];
+}
+
+// Ideal endpoints of geodesic through A,B (on unit circle)
+function geodBoundary(A,B){
+  const[ax,ay]=A,[bx,by]=B;
+  const cross=ax*by-bx*ay;
+  if(Math.abs(cross)<1e-8){
+    const L=Math.sqrt(ax*ax+ay*ay)||Math.sqrt(bx*bx+by*by)||1;
+    const ux=(ax||bx)/L,uy=(ay||by)/L;
+    return[[ux,uy],[-ux,-uy]];
+  }
+  const r1=1+ax*ax+ay*ay,r2=1+bx*bx+by*by;
+  const gcx=(r1*by-r2*ay)/(2*cross);
+  const gcy=(ax*r2-bx*r1)/(2*cross);
+  const D=gcx*gcx+gcy*gcy;
+  const h=Math.sqrt(Math.max(0,1-1/D));
+  const nx=-gcy/Math.sqrt(D),ny=gcx/Math.sqrt(D);
+  return[[gcx/D+h*nx,gcy/D+h*ny],[gcx/D-h*nx,gcy/D-h*ny]];
+}
+
+// Hash triangle for dedup
+function hashTri([A,B,C]){
+  const f=x=>Math.round(x*6000);
+  const s=([x,y])=>`${f(x)},${f(y)}`;
+  return[s(A),s(B),s(C)].sort().join('|');
+}
+
+// Fundamental triangle for (2,p,q) group
+function fundamentalTriangle(p,q){
+  const cc=Math.cos(Math.PI/q)/Math.sin(Math.PI/p);
+  const cb=Math.cos(Math.PI/p)/Math.sin(Math.PI/q);
+  if(cc<=1||cb<=1) return null;
+  return{V0:[0,0],V1:[Math.tanh(Math.acosh(cc)/2),0],V2:[0,Math.tanh(Math.acosh(cb)/2)]};
+}
+
+// BFS tessellation
+function buildTess(p,q,maxTris=3000){
+  const ft=fundamentalTriangle(p,q);
+  if(!ft) return null;
+  const{V0,V1,V2}=ft;
+  const tris=[],seen=new Set();
+  const queue=[{tri:[V0,V1,V2],par:0,depth:0}];
+  while(queue.length>0&&tris.length<maxTris){
+    const{tri:[A,B,C],par,depth}=queue.shift();
+    const h=hashTri([A,B,C]);
+    if(seen.has(h)) continue; seen.add(h);
+    if(Math.max(cx.abs(A),cx.abs(B),cx.abs(C))>0.9998) continue;
+    tris.push({verts:[A,B,C],par});
+    if(depth<40){
+      queue.push({tri:[geodReflect(A,B,C),B,C],par:1-par,depth:depth+1});
+      queue.push({tri:[A,geodReflect(B,A,C),C],par:1-par,depth:depth+1});
+      queue.push({tri:[A,B,geodReflect(C,A,B)],par:1-par,depth:depth+1});
+    }
+  }
+  return tris;
+}
+
+// ── Canvas rendering helpers ──
+function arcTo(ctx,A,B,dcx,dcy,dR){
+  const[ax,ay]=A,[bx,by]=B;
+  const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+  const cross=ax*by-bx*ay;
+  if(Math.abs(cross)<1e-8){ctx.lineTo(tx(bx),ty(by));return;}
+  const r1=1+ax*ax+ay*ay,r2=1+bx*bx+by*by;
+  const gcx=(r1*by-r2*ay)/(2*cross);
+  const gcy=(ax*r2-bx*r1)/(2*cross);
+  const gr=Math.sqrt(Math.max(0,gcx*gcx+gcy*gcy-1));
+  const ccx=tx(gcx),ccy=ty(gcy),cr=gr*dR;
+  const sa=Math.atan2(ty(ay)-ccy,tx(ax)-ccx);
+  const ea=Math.atan2(ty(by)-ccy,tx(bx)-ccx);
+  let da=ea-sa;
+  if(da>Math.PI)da-=TAU;if(da<-Math.PI)da+=TAU;
+  const ma=sa+da*.5;
+  const mdx=(ccx+cr*Math.cos(ma)-dcx)/dR,mdy=-(ccy+cr*Math.sin(ma)-dcy)/dR;
+  if(mdx*mdx+mdy*mdy>1.01) da=da>0?da-TAU:da+TAU;
+  const N=Math.max(4,Math.ceil(Math.abs(da)*Math.max(cr,20)/2));
+  for(let i=1;i<=N;i++){const a=sa+da*i/N;ctx.lineTo(ccx+cr*Math.cos(a),ccy+cr*Math.sin(a));}
+}
+
+function fillHTri(ctx,A,B,C,dcx,dcy,dR){
+  const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+  ctx.beginPath();ctx.moveTo(tx(A[0]),ty(A[1]));
+  arcTo(ctx,A,B,dcx,dcy,dR);arcTo(ctx,B,C,dcx,dcy,dR);arcTo(ctx,C,A,dcx,dcy,dR);
+  ctx.closePath();ctx.fill();
+}
+
+function strokeGeodSeg(ctx,A,B,dcx,dcy,dR){
+  const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+  ctx.beginPath();ctx.moveTo(tx(A[0]),ty(A[1]));arcTo(ctx,A,B,dcx,dcy,dR);ctx.stroke();
+}
+
+function strokeFullGeod(ctx,A,B,dcx,dcy,dR){
+  if(cx.abs(cx.sub(A,B))<1e-9) return;
+  const ends=geodBoundary(A,B);if(!ends) return;
+  const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+  ctx.beginPath();ctx.moveTo(tx(ends[0][0]),ty(ends[0][1]));
+  arcTo(ctx,ends[0],ends[1],dcx,dcy,dR);ctx.stroke();
+}
+
+function drawDisk(ctx,dcx,dcy,dR,c1='#07081a',c2='#04050f'){
+  const g=ctx.createRadialGradient(dcx,dcy*0.85,0,dcx,dcy,dR);
+  g.addColorStop(0,c1);g.addColorStop(1,c2);
+  ctx.beginPath();ctx.arc(dcx,dcy,dR,0,TAU);ctx.fillStyle=g;ctx.fill();
+}
+
+function drawDiskBorder(ctx,dcx,dcy,dR){
+  ctx.beginPath();ctx.arc(dcx,dcy,dR,0,TAU);
+  ctx.strokeStyle='rgba(201,168,76,.55)';ctx.lineWidth=2;ctx.stroke();
+}
+
+function dot(ctx,x,y,r,col){
+  ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fillStyle=col;ctx.fill();
+}
+
+// ── Disk-canvas coordinate helpers ──
+function diskSetup(canvas){
+  const W=canvas.width,H=canvas.height;
+  const dR=Math.min(W,H)*0.455;
+  return{W,H,dcx:W/2,dcy:H/2,dR};
+}
+function canvasToDisk(ex,ey,canvas,dcx,dcy,dR){
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=canvas.width/rect.width,scaleY=canvas.height/rect.height;
+  const cx2=(ex-rect.left)*scaleX,cy2=(ey-rect.top)*scaleY;
+  const x=(cx2-dcx)/dR,y=-(cy2-dcy)/dR;
+  const r=Math.sqrt(x*x+y*y);
+  if(r>=0.98) return null;
+  return[x,y];
+}
+
+// ════════════════════════════════════════════════
+// HERO CANVAS — animated {7,3} tessellation
+// ════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('heroCanvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,dcx,dcy,dR;
+  const tris=buildTess(7,3,3000);
+  const pal0=(d)=>`rgba(${190+30*(1-d)|0},${135+25*(1-d)|0},${50+20*(1-d)|0},${0.8-d*0.6})`;
+  const pal1=(d)=>`rgba(${35+20*(1-d)|0},${150+40*(1-d)|0},${170+30*(1-d)|0},${0.6-d*0.45})`;
+  function resize(){
+    W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;
+    dcx=W/2;dcy=H/2;dR=Math.min(W,H)*0.44;
+  }
+  function draw(ts){
+    requestAnimationFrame(draw);
+    const angle=ts*0.000032;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#05060f';ctx.fillRect(0,0,W,H);
+    if(!tris) return;
+    ctx.save();
+    ctx.beginPath();ctx.arc(dcx,dcy,dR,0,TAU);ctx.clip();
+    drawDisk(ctx,dcx,dcy,dR,'#10102a','#05060f');
+    const cosA=Math.cos(angle),sinA=Math.sin(angle);
+    const rot=([x,y])=>[x*cosA-y*sinA,x*sinA+y*cosA];
+    // Fill
+    tris.forEach(({verts:[A,B,C],par})=>{
+      const rA=rot(A),rB=rot(B),rC=rot(C);
+      const cen=[(rA[0]+rB[0]+rC[0])/3,(rA[1]+rB[1]+rC[1])/3];
+      const d=Math.min(Math.sqrt(cen[0]*cen[0]+cen[1]*cen[1]),0.99);
+      if(d>0.975) return;
+      ctx.fillStyle=par===0?pal0(d):pal1(d);
+      fillHTri(ctx,rA,rB,rC,dcx,dcy,dR);
+    });
+    // Edges
+    ctx.strokeStyle='rgba(4,4,12,0.6)';ctx.lineWidth=0.8;
+    tris.forEach(({verts:[A,B,C]})=>{
+      const rA=rot(A),rB=rot(B),rC=rot(C);
+      const cen=[(rA[0]+rB[0]+rC[0])/3,(rA[1]+rB[1]+rC[1])/3];
+      const d=Math.sqrt(cen[0]*cen[0]+cen[1]*cen[1]);
+      if(d>0.975) return;
+      const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+      ctx.beginPath();ctx.moveTo(tx(rA[0]),ty(rA[1]));
+      arcTo(ctx,rA,rB,dcx,dcy,dR);arcTo(ctx,rB,rC,dcx,dcy,dR);arcTo(ctx,rC,rA,dcx,dcy,dR);
+      ctx.closePath();ctx.stroke();
+    });
+    ctx.restore();
+    // Glow ring
+    ctx.save();
+    const gl=ctx.createRadialGradient(dcx,dcy,dR*0.88,dcx,dcy,dR*1.06);
+    gl.addColorStop(0,'rgba(201,168,76,0)');gl.addColorStop(.5,'rgba(201,168,76,.18)');gl.addColorStop(1,'rgba(201,168,76,0)');
+    ctx.strokeStyle=gl;ctx.lineWidth=4;
+    ctx.beginPath();ctx.arc(dcx,dcy,dR,0,TAU);ctx.stroke();
+    ctx.strokeStyle='rgba(201,168,76,0.45)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(dcx,dcy,dR,0,TAU);ctx.stroke();
+    ctx.restore();
+    // Vignette
+    const vig=ctx.createRadialGradient(dcx,dcy,dR*.4,dcx,dcy,dR*1.5);
+    vig.addColorStop(0,'rgba(5,6,15,0)');vig.addColorStop(1,'rgba(5,6,15,0.97)');
+    ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
+  }
+  window.addEventListener('resize',resize);resize();
+  requestAnimationFrame(draw);
+})();
+
+// ════════════════════════════════════════════════
+// §1 PARALLEL CANVAS
+// ════════════════════════════════════════════════
+let parallelMode='draw';
+let pPoints=[];
+function setParallelMode(m){
+  parallelMode=m;
+  document.getElementById('btnDraw').classList.toggle('active',m==='draw');
+  document.getElementById('btnParallel').classList.toggle('active',m==='parallel');
+  drawParallel();
+}
+function resetParallel(){pPoints=[];parallelMode='draw';setParallelMode('draw');}
+
+const pCanvas=document.getElementById('parallelCanvas');
+const pCtx=pCanvas.getContext('2d');
+const pS=diskSetup(pCanvas);
+
+function drawParallel(){
+  const{W,H,dcx,dcy,dR}=pS;
+  pCtx.clearRect(0,0,W,H);
+  drawDisk(pCtx,dcx,dcy,dR,'#080920','#040510');
+  // Grid of faint geodesics for atmosphere
+  pCtx.save();
+  pCtx.strokeStyle='rgba(201,168,76,0.05)';pCtx.lineWidth=1;
+  for(let i=0;i<12;i++){
+    const a=i*Math.PI/12;
+    const A=[Math.cos(a)*0.01,Math.sin(a)*0.01];
+    const B=[Math.cos(a+Math.PI/12)*0.6,Math.sin(a+Math.PI/12)*0.6];
+    strokeFullGeod(pCtx,A,B,dcx,dcy,dR);
+  }
+  pCtx.restore();
+
+  const[p1,p2,p3]=pPoints;
+
+  if(p1&&p2){
+    // Main geodesic
+    pCtx.save();
+    pCtx.strokeStyle='rgba(201,168,76,0.9)';pCtx.lineWidth=2.2;
+    strokeFullGeod(pCtx,p1,p2,dcx,dcy,dR);
+    pCtx.restore();
+    // Point markers
+    const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+    dot(pCtx,tx(p1[0]),ty(p1[1]),6,'#c9a84c');
+    dot(pCtx,tx(p2[0]),ty(p2[1]),6,'#c9a84c');
+  }
+
+  if(p3&&p1&&p2){
+    const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+    dot(pCtx,tx(p3[0]),ty(p3[1]),7,'#3cb8c3');
+    // Draw several parallel geodesics through p3
+    // A parallel through p3 to line p1p2: any geodesic through p3
+    // that doesn't intersect geodesic p1p2. We generate a fan.
+    // Method: in upper half-plane or directly: use Möbius maps.
+    // Simpler: draw geodesics through p3 at different angles, filter those not crossing p1-p2 geodesic.
+    const ends12=geodBoundary(p1,p2);
+    if(ends12){
+      const[e1,e2]=ends12;
+      // The geodesic through p3 that is "parallel" (ultraparallel or limiting)
+      // For visual richness, we pick geodesics through p3 and a point on the boundary arc
+      // between e1 and e2 on the side not containing the geodesic.
+      const a1=Math.atan2(e1[1],e1[0]),a2=Math.atan2(e2[1],e2[0]);
+      let start=a1,end=a2;
+      if(end-start<0) end+=TAU;
+      if(end-start>Math.PI){[start,end]=[end,start+TAU];}
+      const N=18;
+      for(let i=0;i<=N;i++){
+        const t=i/N;
+        const a=start+t*(end-start);
+        const bnd=[Math.cos(a),Math.sin(a)];
+        // Avoid endpoints themselves (limiting parallels)
+        const eps=0.002;
+        if(Math.abs(a-a1)<eps||Math.abs(a-a2)<eps) continue;
+        // Draw from p3 to bnd (geodesic through p3 and boundary point)
+        const alpha=i===0||i===N?0.95:0.35-0.3*Math.abs(t-.5)*2;
+        pCtx.save();
+        pCtx.strokeStyle=`rgba(60,184,195,${alpha})`;
+        pCtx.lineWidth=i===0||i===N?2.2:1;
+        // Geodesic from p3 to boundary point bnd
+        // bnd is on the circle, so we need a point just inside
+        const bIn=[bnd[0]*0.9999,bnd[1]*0.9999];
+        strokeFullGeod(pCtx,p3,bIn,dcx,dcy,dR);
+        pCtx.restore();
+      }
+      // Labels for ideal boundary points (limiting parallels)
+      pCtx.save();
+      pCtx.fillStyle='rgba(201,168,76,0.7)';pCtx.font='italic 13px "EB Garamond",serif';
+      pCtx.fillText('Ω₁',tx(e1[0])*1.04-dcx*0.04+dcx-dcx,ty(e1[1])*1.04-dcy*0.04+dcy-dcy);
+      // simplified:
+      const le1x=dcx+e1[0]*dR*1.04,le1y=dcy-e1[1]*dR*1.04;
+      const le2x=dcx+e2[0]*dR*1.04,le2y=dcy-e2[1]*dR*1.04;
+      pCtx.fillText('Ω₁',le1x-8,le1y+5);
+      pCtx.fillText('Ω₂',le2x-8,le2y+5);
+      pCtx.restore();
+    }
+  }
+  drawDiskBorder(pCtx,dcx,dcy,dR);
+}
+drawParallel();
+
+pCanvas.addEventListener('click',function(e){
+  const pt=canvasToDisk(e.clientX,e.clientY,pCanvas,pS.dcx,pS.dcy,pS.dR);
+  if(!pt) return;
+  if(parallelMode==='draw'){
+    if(pPoints.length<2) pPoints.push(pt);
+    else pPoints=[pt];
+  } else {
+    if(pPoints.length>=2) pPoints=[pPoints[0],pPoints[1],pt];
+  }
+  drawParallel();
+});
+
+// ════════════════════════════════════════════════
+// §2 THREE GEOMETRIES CARDS
+// ════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════
+// §3 GAUSS–BONNET CANVAS
+// ════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('gaussCanvas');
+  const ctx=canvas.getContext('2d');
+  const{W,H,dcx,dcy,dR}=diskSetup(canvas);
+  let verts=[[-.15,.5],[.6,-.3],[-.55,-.35]];
+  let drag=-1;
+  const VCOL=['#e8cc80','#3cb8c3','#c45555'];
+
+  function fmt(r){return r.toFixed(3);}
+
+  function drawG(){
+    ctx.clearRect(0,0,W,H);
+    drawDisk(ctx,dcx,dcy,dR,'#080920','#040510');
+    // Faint grid
+    ctx.save();ctx.strokeStyle='rgba(201,168,76,0.04)';ctx.lineWidth=1;
+    for(let i=0;i<8;i++){
+      const a=i*Math.PI/8;
+      strokeFullGeod(ctx,[0.01*Math.cos(a),0.01*Math.sin(a)],[0.01*Math.cos(a+Math.PI/8+.2),0.01*Math.sin(a+Math.PI/8+.2)],dcx,dcy,dR);
+    }
+    ctx.restore();
+
+    const[A,B,C]=verts;
+    // Fill triangle
+    ctx.save();
+    ctx.fillStyle='rgba(201,168,76,0.12)';
+    fillHTri(ctx,A,B,C,dcx,dcy,dR);
+    ctx.restore();
+    // Sides
+    [[A,B,'#e8cc80'],[B,C,'#3cb8c3'],[C,A,'#c45555']].forEach(([P,Q,col])=>{
+      ctx.save();ctx.strokeStyle=col;ctx.lineWidth=2.2;ctx.globalAlpha=0.9;
+      strokeGeodSeg(ctx,P,Q,dcx,dcy,dR);ctx.restore();
+    });
+    // Vertices
+    const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+    verts.forEach(([vx,vy],i)=>{
+      dot(ctx,tx(vx),ty(vy),7,VCOL[i]);
+      ctx.beginPath();ctx.arc(tx(vx),ty(vy),10,0,TAU);
+      ctx.strokeStyle=VCOL[i];ctx.lineWidth=1;ctx.globalAlpha=0.35;ctx.stroke();
+      ctx.globalAlpha=1;
+    });
+    // Compute angles
+    const alpha=hypAngle(A,B,C),beta=hypAngle(B,C,A),gamma=hypAngle(C,A,B);
+    const sum=alpha+beta+gamma;
+    const deficit=Math.PI-sum;
+    const area=Math.max(0,deficit);
+    document.getElementById('ga').textContent=fmt(alpha)+' rad';
+    document.getElementById('gb').textContent=fmt(beta)+' rad';
+    document.getElementById('gc').textContent=fmt(gamma)+' rad';
+    document.getElementById('gsum').textContent=fmt(sum)+' rad';
+    document.getElementById('gdef').textContent=fmt(deficit)+' rad';
+    document.getElementById('garea').textContent=fmt(area)+' (hyperbolic units²)';
+    drawDiskBorder(ctx,dcx,dcy,dR);
+  }
+  drawG();
+
+  function getVert(e){
+    const pt=canvasToDisk(e.clientX,e.clientY,canvas,dcx,dcy,dR);
+    if(!pt) return -1;
+    const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+    const rect=canvas.getBoundingClientRect();
+    const scx=canvas.width/rect.width,scy=canvas.height/rect.height;
+    const ex2=(e.clientX-rect.left)*scx,ey2=(e.clientY-rect.top)*scy;
+    for(let i=0;i<3;i++){
+      const dx=ex2-(dcx+verts[i][0]*dR),dy=ey2-(dcy-verts[i][1]*dR);
+      if(dx*dx+dy*dy<200) return i;
+    }
+    return -1;
+  }
+  canvas.addEventListener('mousedown',e=>{drag=getVert(e);});
+  canvas.addEventListener('mousemove',e=>{
+    if(drag<0) return;
+    const pt=canvasToDisk(e.clientX,e.clientY,canvas,dcx,dcy,dR);
+    if(pt){verts[drag]=pt;drawG();}
+  });
+  canvas.addEventListener('mouseup',()=>{drag=-1;});
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();drag=getVert(e.touches[0]);},{passive:false});
+  canvas.addEventListener('touchmove',e=>{
+    e.preventDefault();if(drag<0) return;
+    const pt=canvasToDisk(e.touches[0].clientX,e.touches[0].clientY,canvas,dcx,dcy,dR);
+    if(pt){verts[drag]=pt;drawG();}
+  },{passive:false});
+  canvas.addEventListener('touchend',()=>{drag=-1;});
+})();
+
+// ════════════════════════════════════════════════
+// §4 TESSELLATION CANVAS
+// ════════════════════════════════════════════════
+let tilingTris=null;
+const TPAL0=[
+  (d)=>`rgba(${185+25*(1-d)|0},${125+30*(1-d)|0},${40+15*(1-d)|0},${0.82-d*0.62})`,
+  (d)=>`rgba(${30+20*(1-d)|0},${145+40*(1-d)|0},${165+30*(1-d)|0},${0.68-d*0.52})`,
+  (d)=>`rgba(${140+30*(1-d)|0},${60+20*(1-d)|0},${120+20*(1-d)|0},${0.65-d*0.48})`,
+  (d)=>`rgba(${50+20*(1-d)|0},${130+30*(1-d)|0},${90+20*(1-d)|0},${0.65-d*0.48})`,
+];
+
+function rebuildTiling(){
+  const p=parseInt(document.getElementById('pSel').value);
+  const q=parseInt(document.getElementById('qSel').value);
+  // Keep display labels in sync (in case called from JS directly)
+  const pv=document.getElementById('pVal'); if(pv) pv.textContent=p;
+  const qv=document.getElementById('qVal'); if(qv) qv.textContent=q;
+  const st=document.getElementById('tilingStatus');
+  const val=(p-2)*(q-2);
+  if(val<=4){
+    st.textContent=`{${p},${q}}: (p−2)(q−2)=${val} ≤ 4 — not hyperbolic`;
+    st.className='warn';
+    tilingTris=null;
+    drawTiling(p,q);
+    return;
+  }
+  st.textContent=`{${p},${q}} — (p−2)(q−2) = ${val} > 4 ✓`;
+  st.className='ok';
+  tilingTris=buildTess(p,q,2800);
+  drawTiling(p,q);
+}
+
+function drawTiling(p,q){
+  const canvas=document.getElementById('tilingCanvas');
+  const ctx=canvas.getContext('2d');
+  const{W,H,dcx,dcy,dR}=diskSetup(canvas);
+  ctx.clearRect(0,0,W,H);
+  drawDisk(ctx,dcx,dcy,dR,'#080a1f','#04050f');
+  if(!tilingTris){
+    ctx.fillStyle='rgba(196,85,85,0.7)';ctx.font='italic 18px "Cormorant Garamond",serif';
+    ctx.textAlign='center';ctx.fillText('This tiling is not hyperbolic',dcx,dcy);ctx.textAlign='left';
+    drawDiskBorder(ctx,dcx,dcy,dR);return;
+  }
+  // Determine number of colors based on symmetry
+  const nCol=4;
+  tilingTris.forEach(({verts:[A,B,C],par},idx)=>{
+    const cen=[(A[0]+B[0]+C[0])/3,(A[1]+B[1]+C[1])/3];
+    const d=Math.sqrt(cen[0]*cen[0]+cen[1]*cen[1]);
+    if(d>0.978) return;
+    const ci=(par*2+(Math.round(cx.arg(cen)*2/Math.PI+4))%2)%nCol;
+    ctx.fillStyle=TPAL0[ci%nCol](d);
+    fillHTri(ctx,A,B,C,dcx,dcy,dR);
+  });
+  // Edge lines
+  ctx.strokeStyle='rgba(3,4,12,0.55)';ctx.lineWidth=0.65;
+  tilingTris.forEach(({verts:[A,B,C]})=>{
+    const cen=[(A[0]+B[0]+C[0])/3,(A[1]+B[1]+C[1])/3];
+    const d=Math.sqrt(cen[0]*cen[0]+cen[1]*cen[1]);
+    if(d>0.978) return;
+    const tx=x=>dcx+x*dR,ty=y=>dcy-y*dR;
+    ctx.beginPath();ctx.moveTo(tx(A[0]),ty(A[1]));
+    arcTo(ctx,A,B,dcx,dcy,dR);arcTo(ctx,B,C,dcx,dcy,dR);arcTo(ctx,C,A,dcx,dcy,dR);
+    ctx.closePath();ctx.stroke();
+  });
+  drawDiskBorder(ctx,dcx,dcy,dR);
+}
+rebuildTiling();
+
+// ════════════════════════════════════════════════
+// §5 GROWTH CANVAS
+
+// ════════════════════════════════════════════════
+// §6 GENUS-3 SURFACE — FENCHEL-NIELSEN
+// ════════════════════════════════════════════════
+function drawGenus3(){
+  const canvas=document.getElementById('pantsCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+
+  // Read sliders: l1..l3 are neck radii (0-1), l4..l6 are hole radii (0-1)
+  function sv(id){return parseInt(document.getElementById(id).value)/100;}
+  const l1=sv('sl_l1'),l2=sv('sl_l2'),l3=sv('sl_l3');
+  const l4=sv('sl_l4'),l5=sv('sl_l5'),l6=sv('sl_l6');
+  document.getElementById('vl1').textContent=l1.toFixed(2);
+  document.getElementById('vl2').textContent=l2.toFixed(2);
+  document.getElementById('vl3').textContent=l3.toFixed(2);
+  document.getElementById('vl4').textContent=l4.toFixed(2);
+  document.getElementById('vl5').textContent=l5.toFixed(2);
+  document.getElementById('vl6').textContent=l6.toFixed(2);
+
+  // ── layout constants ──
+  // Central piece P0 at (cx,cy); three arms at 120° apart
+  const cx=W/2, cy=H/2+8;
+  const ARM_LEN = 88;   // px distance from center to each torus center
+  const angles = [-Math.PI/2, -Math.PI/2 + 2*Math.PI/3, -Math.PI/2 + 4*Math.PI/3];
+
+  // Torus centre positions
+  const torCen = angles.map(a=>[ cx + ARM_LEN*Math.cos(a), cy + ARM_LEN*Math.sin(a) ]);
+
+  // Neck circle radii — l1..l3 control widths (px 7..38)
+  const neckR = [l1,l2,l3].map(l => 7 + l*31);
+  // Torus hole radii — l4..l6 (px 5..30) 
+  const holeR = [l4,l5,l6].map(l => 5 + l*25);
+  // Torus body radii — slightly bigger than neck
+  const torRmaj = neckR.map((nr,i) => Math.max(nr+8, holeR[i]*2+6));
+  const torRmin = torRmaj.map(r => r*0.6);
+
+  // ── background ──
+  ctx.clearRect(0,0,W,H);
+  const bg=ctx.createRadialGradient(cx,cy,10,cx,cy,W*0.7);
+  bg.addColorStop(0,'#0d1030');bg.addColorStop(1,'#050610');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  // Soft grid lines (reference)
+  ctx.save();ctx.globalAlpha=0.06;
+  for(let y2=0;y2<H;y2+=22){ctx.beginPath();ctx.moveTo(0,y2);ctx.lineTo(W,y2);ctx.strokeStyle='#c9a84c';ctx.lineWidth=0.5;ctx.stroke();}
+  ctx.restore();
+
+  // ── draw connecting tubes (necks) from center to each torus ──
+  // Each tube is a pair of parallel tangent lines from the central hub to the torus ellipse
+  // The central hub is a rounded blob; we draw the tube as a bezier band
+
+  // Helper: draw a thick connection band between point A and point B with given half-width
+  function drawTube(ax,ay,bx,by,wa,wb,fillCol,strokeCol){
+    const dx=bx-ax,dy=by-ay;
+    const len=Math.sqrt(dx*dx+dy*dy);
+    const nx=-dy/len,ny=dx/len; // normal
+    ctx.beginPath();
+    ctx.moveTo(ax+nx*wa,ay+ny*wa);
+    // cubic bezier for smooth taper
+    const mx=(ax+bx)/2,my=(ay+by)/2;
+    ctx.bezierCurveTo(mx+nx*wa,my+ny*wa,mx+nx*wb,my+ny*wb,bx+nx*wb,by+ny*wb);
+    ctx.lineTo(bx-nx*wb,by-ny*wb);
+    ctx.bezierCurveTo(mx-nx*wb,my-ny*wb,mx-nx*wa,my-ny*wa,ax-nx*wa,ay-ny*wa);
+    ctx.closePath();
+    ctx.fillStyle=fillCol;ctx.fill();
+    ctx.strokeStyle=strokeCol;ctx.lineWidth=1.2;ctx.stroke();
+  }
+
+  // Draw tori bodies first (background layer)
+  torCen.forEach(([tx,ty],i)=>{
+    const rx=torRmaj[i],ry=torRmin[i];
+    const hr=holeR[i];
+    // Outer body fill
+    ctx.save();
+    ctx.beginPath();ctx.ellipse(tx,ty,rx,ry,angles[i]+Math.PI/2,0,Math.PI*2);
+    ctx.fillStyle='rgba(18,22,58,0.97)';ctx.fill();
+    ctx.strokeStyle='rgba(201,168,76,0.25)';ctx.lineWidth=1.8;ctx.stroke();
+    // Inner hole
+    ctx.beginPath();ctx.ellipse(tx,ty,hr,hr*0.65,angles[i]+Math.PI/2,0,Math.PI*2);
+    ctx.fillStyle='#070818';ctx.fill();
+    ctx.strokeStyle='rgba(201,168,76,0.12)';ctx.lineWidth=1;ctx.stroke();
+    ctx.restore();
+  });
+
+  // Draw tubes (necks) between central hub and each torus
+  const tubeBodyFill='rgba(14,18,48,0.92)';
+  const tubeBodyStroke='rgba(201,168,76,0.18)';
+  torCen.forEach(([tx,ty],i)=>{
+    const nr=neckR[i];
+    drawTube(cx,cy,tx,ty,nr+4,nr,tubeBodyFill,tubeBodyStroke);
+  });
+
+  // Central hub polygon / blob
+  ctx.save();
+  // Draw a slightly irregular hexagonal hub
+  ctx.beginPath();
+  for(let k=0;k<6;k++){
+    const a=k*Math.PI/3-Math.PI/6;
+    const r=24+Math.sin(k*2.1)*4;
+    if(k===0)ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
+    else ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(20,24,60,0.98)';ctx.fill();
+  ctx.strokeStyle='rgba(201,168,76,0.3)';ctx.lineWidth=1.8;ctx.stroke();
+  ctx.restore();
+
+  // ── seam geodesics ──
+  const seamCols=['rgba(201,168,76,0.95)','rgba(60,184,195,0.95)','rgba(196,85,120,0.9)',
+                  'rgba(120,195,100,0.9)','rgba(180,120,210,0.9)','rgba(240,160,70,0.9)'];
+  const seamLabels=['γ₁','γ₂','γ₃','γ₄','γ₅','γ₆'];
+
+  // γ₁..γ₃: neck seams (at the connection circle between tube and torus)
+  // drawn as ellipses perpendicular to the arm direction
+  torCen.forEach(([tx,ty],i)=>{
+    const armAng=angles[i];
+    // Seam is at the junction — draw as a thin ellipse whose major axis is perpendicular to the arm
+    const nr=neckR[i];
+    const scx=tx - Math.cos(armAng)*(torRmaj[i]-nr*0.5);
+    const scy=ty - Math.sin(armAng)*(torRmaj[i]-nr*0.5);
+
+    ctx.save();
+    ctx.translate(scx,scy);
+    ctx.rotate(armAng+Math.PI/2);
+    // Front half — solid
+    ctx.beginPath();
+    ctx.ellipse(0,0,nr,nr*0.28,0,-Math.PI,0);
+    ctx.strokeStyle=seamCols[i];ctx.lineWidth=2.5;
+    ctx.shadowColor=seamCols[i];ctx.shadowBlur=7;ctx.stroke();
+    // Back half — dashed
+    ctx.beginPath();ctx.setLineDash([4,3]);
+    ctx.ellipse(0,0,nr,nr*0.28,0,0,Math.PI);
+    ctx.strokeStyle=seamCols[i];ctx.lineWidth=1.5;ctx.stroke();
+    ctx.setLineDash([]);ctx.shadowBlur=0;
+    // Label
+    ctx.rotate(-(armAng+Math.PI/2));
+    ctx.font='italic bold 13px "Cormorant Garamond",serif';
+    ctx.fillStyle=seamCols[i];
+    const lx=nr+6, ly=-5;
+    ctx.fillText(seamLabels[i],lx,ly);
+    ctx.restore();
+  });
+
+  // γ₄..γ₆: hole seams (circles around the hole inside each torus)
+  torCen.forEach(([tx,ty],i)=>{
+    const hr=holeR[i];
+    const armAng=angles[i];
+    ctx.save();
+    ctx.translate(tx,ty);
+    ctx.rotate(armAng+Math.PI/2);
+    // Front half
+    ctx.beginPath();
+    ctx.ellipse(0,0,hr,hr*0.45,0,-Math.PI,0);
+    ctx.strokeStyle=seamCols[i+3];ctx.lineWidth=2.2;
+    ctx.shadowColor=seamCols[i+3];ctx.shadowBlur=6;ctx.stroke();
+    // Back half
+    ctx.beginPath();ctx.setLineDash([3,3]);
+    ctx.ellipse(0,0,hr,hr*0.45,0,0,Math.PI);
+    ctx.strokeStyle=seamCols[i+3];ctx.lineWidth=1.3;ctx.stroke();
+    ctx.setLineDash([]);ctx.shadowBlur=0;
+    // Label
+    ctx.rotate(-(armAng+Math.PI/2));
+    ctx.font='italic bold 12px "Cormorant Garamond",serif';
+    ctx.fillStyle=seamCols[i+3];
+    ctx.fillText(seamLabels[i+3],hr+5,4);
+    ctx.restore();
+  });
+
+  // ── arm labels P₀,P₁,P₂,P₃ ──
+  ctx.font='bold 11px "Cormorant Garamond",serif';
+  ctx.fillStyle='rgba(201,168,76,0.45)';
+  ctx.textAlign='center';
+  ctx.fillText('P₀',cx,cy+4);
+  torCen.forEach(([tx,ty],i)=>{
+    ctx.fillText(`P${i+1}`,tx,ty+4);
+  });
+  ctx.textAlign='left';
+
+  // ── legend ──
+  ctx.font='12.5px "EB Garamond",serif';
+  ctx.fillStyle='rgba(201,168,76,0.55)';
+  ctx.fillText('(ℓ₁…ℓ₆,θ₁…θ₆) ∈ ℝ₊⁶ × ℝ⁶ = T₃ ≅ ℝ¹²',14,H-15);
+
+  // Degeneration warning
+  const pinched=[l1,l2,l3].some(l=>l<0.12);
+  const collapsed=[l4,l5,l6].some(l=>l<0.1);
+  if(pinched){
+    ctx.save();ctx.fillStyle='rgba(196,85,85,0.9)';
+    ctx.font='italic 12px "Cormorant Garamond",serif';
+    ctx.fillText('neck ℓ → 0: arm pinches off → cusp',14,H-34);ctx.restore();
+  } else if(collapsed){
+    ctx.save();ctx.fillStyle='rgba(196,85,85,0.9)';
+    ctx.font='italic 12px "Cormorant Garamond",serif';
+    ctx.fillText('hole ℓ → 0: handle collapses',14,H-34);ctx.restore();
+  }
+}
+drawGenus3();
+
+// ════════════════════════════════════════════════
+// §7 MODULI SPACE — Fundamental domain of PSL(2,ℤ)
+// ════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('modCanvas');
+  const tCanvas=document.getElementById('torusCanvas');
+  if(!canvas||!tCanvas) return;
+  const ctx=canvas.getContext('2d');
+  const tCtx=tCanvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const TW=tCanvas.width,TH=tCanvas.height;
+
+  // Coordinate system: Re(τ) in [-1.6, 1.6], Im(τ) in [0.05, 3.0]
+  const RE_MIN=-1.6,RE_MAX=1.6,IM_MIN=0.05,IM_MAX=3.0;
+  function toCanvas(re,im){
+    return[
+      (re-RE_MIN)/(RE_MAX-RE_MIN)*W,
+      H-(im-IM_MIN)/(IM_MAX-IM_MIN)*H
+    ];
+  }
+  function fromCanvas(px,py){
+    return[
+      RE_MIN+(px/W)*(RE_MAX-RE_MIN),
+      IM_MIN+((H-py)/H)*(IM_MAX-IM_MIN)
+    ];
+  }
+
+  // Is τ in the standard fundamental domain?
+  function inFundDomain(re,im){
+    return re*re+im*im>=1&&re>=-0.5&&re<=0.5&&im>0;
+  }
+
+  // Map τ to the fundamental domain (reduce by T and S)
+  function toFundDomain(re,im){
+    let x=re,y=im,iter=0;
+    while(iter++<60){
+      // Apply T^n: shift Re to [-0.5, 0.5]
+      x=x-Math.round(x);
+      // If |τ|<1, apply S: τ→-1/τ
+      const r2=x*x+y*y;
+      if(r2<1-1e-9){const nx=x/r2,ny=y/r2;x=-nx;y=ny;}
+      else break;
+    }
+    return[x,y];
+  }
+
+  // Current τ position (in fundamental domain)
+  let tau=[0,1.4];
+
+  // Draw the SL(2,Z) tessellation (Ford circles approach)
+  function drawTessellation(){
+    ctx.clearRect(0,0,W,H);
+    // Background gradient
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#08091e');bg.addColorStop(1,'#050610');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+    // Draw the images of the fundamental domain under PSL(2,Z)
+    // We sample a grid and color each point by which copy of F it belongs to
+    const idata=ctx.createImageData(W,H);
+    for(let px=0;px<W;px++){
+      for(let py=0;py<H;py++){
+        const[re,im]=fromCanvas(px,py);
+        if(im<0.01) continue;
+        const[fx,fy]=toFundDomain(re,im);
+        // Color by position in fundamental domain
+        const u=(fx+0.5);        // 0..1 in Re
+        const v=Math.min(1,(fy-0.8)/2); // 0..1 in Im (roughly)
+        const idx=(py*W+px)*4;
+        // Alternating stripes to show the tessellation structure
+        const inF=inFundDomain(fx,fy);
+        // Use angle from origin in fund domain for coloring
+        const ang=Math.atan2(fy,fx);
+        const col_r=20+Math.sin(ang*3+u*4)*15;
+        const col_g=25+Math.cos(ang*2+v*3)*15;
+        const col_b=55+Math.sin(ang+u*2)*20;
+        idata.data[idx]=col_r|0;
+        idata.data[idx+1]=col_g|0;
+        idata.data[idx+2]=col_b|0;
+        idata.data[idx+3]=im<0.05?0:200;
+      }
+    }
+    ctx.putImageData(idata,0,0);
+
+    // Draw fundamental domain boundary
+    // The unit semicircle
+    ctx.save();
+    ctx.beginPath();
+    const steps=120;
+    for(let i=0;i<=steps;i++){
+      const a=Math.PI-i*Math.PI/steps;
+      const re=Math.cos(a),im=Math.sin(a);
+      if(im<0.01) continue;
+      const[px,py]=toCanvas(re,im);
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle='rgba(201,168,76,0.85)';ctx.lineWidth=2;
+    ctx.shadowColor='rgba(201,168,76,0.5)';ctx.shadowBlur=8;
+    ctx.stroke();ctx.shadowBlur=0;
+    // Vertical boundaries Re=±1/2
+    const[lx1,ly1]=toCanvas(-0.5,IM_MIN);
+    const[lx2,ly2]=toCanvas(-0.5,IM_MAX);
+    ctx.beginPath();ctx.moveTo(lx1,ly1);ctx.lineTo(lx2,ly2);
+    ctx.strokeStyle='rgba(201,168,76,0.85)';ctx.lineWidth=2;ctx.stroke();
+    const[rx1,ry1]=toCanvas(0.5,IM_MIN);
+    const[rx2,ry2]=toCanvas(0.5,IM_MAX);
+    ctx.beginPath();ctx.moveTo(rx1,ry1);ctx.lineTo(rx2,ry2);ctx.stroke();
+    ctx.restore();
+
+    // Label special points
+    ctx.save();
+    ctx.font='italic 13px "Cormorant Garamond",serif';ctx.fillStyle='rgba(201,168,76,0.8)';
+    const[ix,iy]=toCanvas(0,1);
+    ctx.fillText('i',ix+5,iy+4);
+    const[rx3,ry3]=toCanvas(0.5,Math.sqrt(3)/2);
+    ctx.fillText('ρ',rx3+4,ry3+4);
+    const[rx4,ry4]=toCanvas(-0.5,Math.sqrt(3)/2);
+    ctx.fillText('ρ̄',rx4-14,ry4+4);
+    ctx.font='11px "EB Garamond",serif';ctx.fillStyle='rgba(201,168,76,0.55)';
+    ctx.fillText('F = {|τ|≥1, |Re τ|≤½}',W/2-60,H-12);
+    ctx.restore();
+
+    // Draw τ point
+    const[tx3,ty3]=toCanvas(tau[0],tau[1]);
+    ctx.save();
+    ctx.beginPath();ctx.arc(tx3,ty3,8,0,TAU);
+    ctx.fillStyle='#e8cc80';
+    ctx.shadowColor='rgba(232,204,128,0.8)';ctx.shadowBlur=16;ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.beginPath();ctx.arc(tx3,ty3,8,0,TAU);
+    ctx.strokeStyle='rgba(232,204,128,0.5)';ctx.lineWidth=1;ctx.stroke();
+    ctx.restore();
+
+    // τ label
+    ctx.save();
+    ctx.font='italic 14px "Cormorant Garamond",serif';ctx.fillStyle='rgba(232,204,128,0.9)';
+    ctx.fillText('τ',tx3+10,ty3-6);
+    ctx.restore();
+  }
+
+  function drawTorus(){
+    tCtx.clearRect(0,0,TW,TH);
+    tCtx.fillStyle='#07081a';tCtx.fillRect(0,0,TW,TH);
+    const[re,im]=tau;
+    const pad=22;
+    const scale=Math.min((TW-2*pad),(TH-2*pad))/Math.max(1+Math.abs(re),im)*0.92;
+    const ox=TW/2-scale*(0.5+re/2),oy=TH-pad;
+
+    // Parallelogram vertices: 0, 1, τ, 1+τ
+    const v0=[ox,oy];
+    const v1=[ox+scale,oy];
+    const v2=[ox+re*scale,oy-im*scale];
+    const v3=[ox+scale+re*scale,oy-im*scale];
+
+    // Fill
+    tCtx.beginPath();
+    tCtx.moveTo(...v0);tCtx.lineTo(...v1);tCtx.lineTo(...v3);tCtx.lineTo(...v2);
+    tCtx.closePath();
+    const gfill=tCtx.createLinearGradient(v0[0],v0[1],v3[0],v3[1]);
+    gfill.addColorStop(0,'rgba(201,168,76,0.08)');
+    gfill.addColorStop(1,'rgba(60,184,195,0.08)');
+    tCtx.fillStyle=gfill;tCtx.fill();
+
+    // Identified edges with arrows
+    function arrow(p1,p2,col,off){
+      const dx=p2[0]-p1[0],dy=p2[1]-p1[1],L=Math.sqrt(dx*dx+dy*dy);
+      const ux=dx/L,uy=dy/L;
+      const nx=-uy*off,ny=ux*off;
+      const mx=(p1[0]+p2[0])/2+nx,my=(p1[1]+p2[1])/2+ny;
+      tCtx.save();
+      tCtx.strokeStyle=col;tCtx.lineWidth=1.5;
+      tCtx.beginPath();tCtx.moveTo(p1[0],p1[1]);tCtx.lineTo(p2[0],p2[1]);tCtx.stroke();
+      // Arrowhead at midpoint
+      const aSize=6;
+      tCtx.beginPath();
+      tCtx.moveTo(mx,my);
+      tCtx.lineTo(mx-ux*aSize-uy*aSize*0.5,my-uy*aSize+ux*aSize*0.5);
+      tCtx.lineTo(mx-ux*aSize+uy*aSize*0.5,my-uy*aSize-ux*aSize*0.5);
+      tCtx.closePath();tCtx.fillStyle=col;tCtx.fill();
+      tCtx.restore();
+    }
+    arrow(v0,v1,'rgba(201,168,76,0.9)',3);
+    arrow(v2,v3,'rgba(201,168,76,0.9)',-3);
+    arrow(v0,v2,'rgba(60,184,195,0.9)',-3);
+    arrow(v1,v3,'rgba(60,184,195,0.9)',3);
+
+    // Lattice dots
+    for(let a=-1;a<=2;a++) for(let b=-1;b<=2;b++){
+      const px3=ox+a*scale+b*re*scale,py3=oy-b*im*scale;
+      if(px3>0&&px3<TW&&py3>0&&py3<TH){
+        tCtx.beginPath();tCtx.arc(px3,py3,2,0,TAU);
+        tCtx.fillStyle='rgba(201,168,76,0.5)';tCtx.fill();
+      }
+    }
+    // Origin
+    tCtx.beginPath();tCtx.arc(ox,oy,3.5,0,TAU);
+    tCtx.fillStyle='#e8cc80';tCtx.fill();
+
+    // Update label
+    const sign=re>=0?'+':'-';
+    document.getElementById('tauVal').textContent=
+      `${re.toFixed(2)} ${sign} ${Math.abs(im).toFixed(2)}i`.replace('+ -','- ');
+  }
+
+  function render(){
+    drawTessellation();
+    drawTorus();
+  }
+  render();
+
+  // Drag interaction
+  let dragging=false;
+  canvas.addEventListener('mousedown',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const px=(e.clientX-rect.left)*canvas.width/rect.width;
+    const py=(e.clientY-rect.top)*canvas.height/rect.height;
+    const[tx2,ty2]=toCanvas(tau[0],tau[1]);
+    if((px-tx2)**2+(py-ty2)**2<200) dragging=true;
+  });
+  canvas.addEventListener('mousemove',e=>{
+    if(!dragging) return;
+    const rect=canvas.getBoundingClientRect();
+    const px=(e.clientX-rect.left)*canvas.width/rect.width;
+    const py=(e.clientY-rect.top)*canvas.height/rect.height;
+    let[re,im]=fromCanvas(px,py);
+    im=Math.max(0.12,im);
+    // Map to fund domain
+    [re,im]=toFundDomain(re,im);
+    im=Math.max(0.12,im);
+    tau=[re,im];
+    render();
+  });
+  canvas.addEventListener('mouseup',()=>{dragging=false;});
+  canvas.addEventListener('mouseleave',()=>{dragging=false;});
+  // Touch
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();
+    const t2=e.touches[0],rect=canvas.getBoundingClientRect();
+    const px=(t2.clientX-rect.left)*canvas.width/rect.width;
+    const py=(t2.clientY-rect.top)*canvas.height/rect.height;
+    const[tx2,ty2]=toCanvas(tau[0],tau[1]);
+    if((px-tx2)**2+(py-ty2)**2<400) dragging=true;
+  },{passive:false});
+  canvas.addEventListener('touchmove',e=>{
+    e.preventDefault();if(!dragging) return;
+    const t2=e.touches[0],rect=canvas.getBoundingClientRect();
+    const px=(t2.clientX-rect.left)*canvas.width/rect.width;
+    const py=(t2.clientY-rect.top)*canvas.height/rect.height;
+    let[re,im]=fromCanvas(px,py);
+    im=Math.max(0.12,im);
+    [re,im]=toFundDomain(re,im);
+    tau=[re,Math.max(0.12,im)];
+    render();
+  },{passive:false});
+  canvas.addEventListener('touchend',()=>{dragging=false;});
+})();
+
+// ════════════════════════════════════════════════
+// §8 GEODESIC COUNTING VISUAL
+// ════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════
+// §8 MIRZAKHANI RECURSION SCHEMATIC
+// ════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════
+// §9 — WALK ANIMATION  (figure-8 path through {7,3})
+// ════════════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('walkCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dcx = W/2, dcy = H/2, dR = W*0.465;
+
+  // Pre-build {7,3} tessellation (triangle pairs → heptagons)
+  const tris = buildTess(7,3,3600);
+
+  // Figure-8 walker path in hyperbolic disk coords
+  // Lemniscate-ish in tanh space so it stays well inside disk
+  function walkerPos(t){
+    // Lemniscate of Bernoulli in polar: r²=cos(2θ) — but in Poincaré coords
+    const a = 0.54;           // amplitude (Euclidean radius in disk)
+    const s = Math.sin(t);
+    const c = Math.cos(t);
+    const denom = 1 + s*s;   // lemniscate denominator
+    return [ a*c/denom, a*s*c/denom ];
+  }
+
+  // Apply Möbius translation sending pos p → origin, i.e. rotate whole tiling
+  function mobInv(z, p){
+    // φ_p(z) = (z - p)/(1 - conj(p)*z)
+    return mob(z, p);
+  }
+
+  let phase = 0;
+  const SPEED = 0.007;
+
+  // Colour scheme: radial gold→cyan by parity + distance
+  function triCol(par, verts){
+    const cx2 = (verts[0][0]+verts[1][0]+verts[2][0])/3;
+    const cy2 = (verts[0][1]+verts[1][1]+verts[2][1])/3;
+    const d = Math.sqrt(cx2*cx2+cy2*cy2);  // Euclidean dist in disk
+    const t = d;
+    if(par){
+      const r = Math.round(8  + t*22);
+      const g = Math.round(10 + t*28);
+      const b = Math.round(30 + t*55);
+      return `rgba(${r},${g},${b},${0.93-t*0.38})`;
+    } else {
+      const r = Math.round(25 + t*60);
+      const g = Math.round(18 + t*35);
+      const b = Math.round(8  + t*18);
+      return `rgba(${r},${g},${b},${0.9-t*0.35})`;
+    }
+  }
+
+  function frame(){
+    phase += SPEED;
+    const pos = walkerPos(phase);
+    // Current forward direction (tangent to path)
+    const pos2 = walkerPos(phase + 0.001);
+    const fwdX = pos2[0] - pos[0], fwdY = pos2[1] - pos[1];
+    const ang = -Math.atan2(fwdY, fwdX); // rotation to align forward with +x
+
+    ctx.clearRect(0,0,W,H);
+    drawDisk(ctx,dcx,dcy,dR,'#050618','#020310');
+
+    // Render tiles translated to walker's position
+    tris.forEach(({verts:[A,B,C], par})=>{
+      // Apply Möbius: move walker pos to origin (that's what the walker sees)
+      const rA = mob(A, pos);
+      const rB = mob(B, pos);
+      const rC = mob(C, pos);
+      // Then rotate so forward direction is up
+      function rot(z){
+        const x = z[0]*Math.cos(ang) - z[1]*Math.sin(ang);
+        const y = z[0]*Math.sin(ang) + z[1]*Math.cos(ang);
+        return [x,y];
+      }
+      const tA = rot(rA), tB = rot(rB), tC = rot(rC);
+      const d = Math.sqrt(((tA[0]+tB[0]+tC[0])/3)**2+((tA[1]+tB[1]+tC[1])/3)**2);
+      if(d > 0.9995) return;
+      ctx.fillStyle = triCol(par, [tA,tB,tC]);
+      fillHTri(ctx, tA, tB, tC, dcx, dcy, dR);
+    });
+
+    // Horizon glow — rings representing equidistant circles
+    [0.45, 0.65, 0.82, 0.93].forEach((r,i)=>{
+      const grd = ctx.createRadialGradient(dcx,dcy,r*dR-4,dcx,dcy,r*dR+6);
+      grd.addColorStop(0,'rgba(201,168,76,0)');
+      grd.addColorStop(0.5,`rgba(201,168,76,${0.06-i*0.01})`);
+      grd.addColorStop(1,'rgba(201,168,76,0)');
+      ctx.beginPath(); ctx.arc(dcx,dcy,r*dR,0,TAU);
+      ctx.strokeStyle = grd; ctx.lineWidth = 12; ctx.stroke();
+    });
+
+    // Walker dot (you are always at centre)
+    ctx.beginPath(); ctx.arc(dcx,dcy,5,0,TAU);
+    ctx.fillStyle = '#e8cc80';
+    ctx.shadowColor = '#e8cc80'; ctx.shadowBlur = 18;
+    ctx.fill(); ctx.shadowBlur = 0;
+
+    // Forward direction indicator
+    ctx.beginPath();
+    ctx.moveTo(dcx,dcy);
+    ctx.lineTo(dcx, dcy - 28);
+    ctx.strokeStyle = 'rgba(232,204,128,0.55)'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
+
+    drawDiskBorder(ctx,dcx,dcy,dR);
+
+    // Distance rings label
+    ctx.save();
+    ctx.font = 'italic 11px "EB Garamond",serif';
+    ctx.fillStyle = 'rgba(201,168,76,0.42)';
+    ctx.textAlign = 'center';
+    ctx.fillText('You are always at the centre of your infinite world', dcx, dcy+dR+22);
+    ctx.restore();
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+// ════════════════════════════════════════════════
+// §9 — INTERACTIVE H³ FIRST-PERSON VIEW
+// ════════════════════════════════════════════════
+// Clean rewrite: all geometry is exact O(1) Möbius algebra,
+// no Euler loops — safe to run at 60 fps.
+
+// ════════════════════════════════════════════════
+// §9 — H³ FIRST-PERSON RENDERER  (photorealistic rewrite)
+
+// ════════════════════════════════════════════════
+// §9 — H³ FIRST-PERSON RENDERER (with hyperbolic mountain elevations)
+// ════════════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('streetCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // ── Control buttons ────────────────────────────────────────────
+  const btns = document.getElementById('h3Btns');
+  if(btns) btns.innerHTML =
+    `<div class="h3-row">
+       <button class="h3btn" id="b_fwd">▲</button>
+     </div>
+     <div class="h3-row">
+       <button class="h3btn" id="b_left">◀</button>
+       <button class="h3btn" id="b_back">▼</button>
+       <button class="h3btn" id="b_right">▶</button>
+     </div>
+     <div style="font-size:.73rem;color:rgba(201,168,76,.4);margin-top:2px;text-align:center">
+       W/S/A/D · Arrow keys · Touch above
+     </div>`;
+
+  // ── Observer state ─────────────────────────────────────────────
+  let pos = [0, 0], heading = 0, frameT = 0;
+  const STEP = 0.18, TURN = Math.PI / 22;
+
+  // ── Hyperbolic geometry ────────────────────────────────────────
+  function move(p, dir, dist){
+    const td = Math.tanh(dist * 0.5);
+    const nx = td*Math.cos(dir), ny = td*Math.sin(dir);
+    const re = nx+p[0], im = ny+p[1];
+    const dr = 1+p[0]*nx+p[1]*ny, di = p[0]*ny-p[1]*nx;
+    const d2 = dr*dr+di*di;
+    return [(re*dr+im*di)/d2, (im*dr-re*di)/d2];
+  }
+  function diskToUHP(p){
+    const denom = (1-p[0])*(1-p[0])+p[1]*p[1];
+    return [-2*p[1]/denom, (1-p[0]*p[0]-p[1]*p[1])/denom];
+  }
+
+  // ── Camera parameters ──────────────────────────────────────────
+  const EYE_H = 1.0;   // hyperbolic height of observer above floor
+  const HFOV  = 1.3;   // horizontal half-FOV (radians)
+  const VFOV  = 0.65;  // vertical half-FOV (radians)
+  const HORIZ = H * 0.50;
+
+  function floorDist(screenRow){
+    const angV = VFOV*(0.5 - screenRow/H);
+    if(angV >= -0.005) return null;
+    const s = EYE_H/Math.tan(-angV);
+    return Math.log(s+Math.sqrt(s*s+1));
+  }
+
+  // ── Tile colouring (stone with grout lines) ────────────────────
+  function tileID(p){
+    const [ux,uy] = diskToUHP(p);
+    if(uy<=0) return [0,0,1];
+    const tx=Math.floor(ux), ty=Math.floor(Math.log(uy)/Math.LN2);
+    return [tx,ty,(tx+ty)&1];
+  }
+  function tileHash(tx,ty){
+    let h=((tx*374761393)^(ty*668265263))>>>0;
+    h=((h^(h>>13))*1540483477)>>>0;
+    return (h^(h>>15))/4294967295;
+  }
+  function subTile(p){
+    const [ux,uy]=diskToUHP(p); if(uy<=0) return [0,0];
+    const tx=Math.floor(ux), ty=Math.floor(Math.log(uy)/Math.LN2);
+    const ly=Math.pow(2,ty);
+    return [ux-tx, (uy-ly)/ly];
+  }
+  function tileColor(p,dist){
+    const [tx,ty,par]=tileID(p);
+    const noise=tileHash(tx,ty), fog=Math.max(0,1-dist/9);
+    const [sfx,sfy]=subTile(p);
+    const G=0.055;
+    if(sfx<G||sfx>1-G||sfy<G||sfy>1-G){
+      const v=(12+6*fog*noise)|0; return [v,v,v+4];
+    }
+    const nv=noise*0.28-0.14;
+    if(par===0){ const b=(0.18+nv)*fog; return [(22+18*b+8*nv)|0,(28+22*b+6*nv)|0,(62+30*b+12*nv)|0]; }
+    else        { const b=(0.36+nv)*fog; return [(38+32*b+10*nv)|0,(48+38*b+8*nv)|0,(82+40*b+14*nv)|0]; }
+  }
+
+  // ── RNG helpers ────────────────────────────────────────────────
+  const rng  = (s=>{let v=s; return()=>{v=(v*1664525+1013904223)>>>0; return v/4294967296;}})(97);
+  const rng2 = (s=>{let v=s; return()=>{v=(v*22695477+1)>>>0; return v/4294967296;}})(314);
+
+  // ── Stars ──────────────────────────────────────────────────────
+  const STARS = Array.from({length:480},()=>({
+    ah:(rng()-.5)*Math.PI*2.1, av:0.02+rng()*VFOV*.95,
+    r:0.4+rng()*1.8, a:0.12+rng()*0.82,
+    twinkle:rng()*Math.PI*2, speed:0.6+rng()*2.0
+  }));
+  const BRIGHT_STARS = Array.from({length:12},()=>({
+    ah:(rng()-.5)*Math.PI*2, av:0.05+rng()*VFOV*.85,
+    r:2.0+rng()*3.5, a:0.5+rng()*0.5
+  }));
+  const MOON={ah:0.68, av:VFOV*0.65, r:22, phase:0.72};
+
+  // ── Nebula (pre-rendered) ──────────────────────────────────────
+  const nebulaCanvas=document.createElement('canvas');
+  nebulaCanvas.width=W; nebulaCanvas.height=Math.ceil(HORIZ);
+  const nctx=nebulaCanvas.getContext('2d');
+  [{x:W*.28,y:H*.18,rx:140,ry:55,r:0,g:10,b:40,a:.07},
+   {x:W*.72,y:H*.12,rx:180,ry:65,r:10,g:5,b:50,a:.065},
+   {x:W*.5, y:H*.30,rx:220,ry:50,r:5,g:0,b:35,a:.055},
+   {x:W*.15,y:H*.08,rx:100,ry:40,r:15,g:8,b:45,a:.07},
+   {x:W*.85,y:H*.25,rx:130,ry:48,r:0,g:12,b:38,a:.06}
+  ].forEach(({x,y,rx,ry,r,g,b,a})=>{
+    const mr=Math.max(rx,ry);
+    const grad=nctx.createRadialGradient(x,y,0,x,y,mr);
+    grad.addColorStop(0,`rgba(${r},${g},${b},${a})`);
+    grad.addColorStop(1,'rgba(0,0,0,0)');
+    nctx.save();
+    nctx.scale(rx/mr,ry/mr);
+    nctx.fillStyle=grad;
+    nctx.fillRect(0,0,W*mr/rx,nebulaCanvas.height*mr/ry);
+    nctx.restore();
+  });
+
+  // ── TOWER: a single tall hyperbolic tower at fixed disk position ──
+  // As you walk closer in ℍ³, it grows exponentially taller.
+  // Height in ℍ³ = 4.0 units. Base on ℍ² floor at diskPos.
+  const TOWER = { diskPos: [0.45, 0.20], hypHeight: 4.0 };
+
+  // Project a vertical object at (diskPos, height hypH) above floor.
+  // Returns screen coords of base and tip, plus hyperbolic floor distance.
+  function projectTower(diskP, hypH) {
+    const ax=diskP[0]-pos[0], ay=diskP[1]-pos[1];
+    const dr=1-pos[0]*diskP[0]-pos[1]*diskP[1];
+    const di=pos[0]*diskP[1]-pos[1]*diskP[0];
+    const d2=dr*dr+di*di;
+    const wx=(ax*dr+ay*di)/d2, wy=(ay*dr-ax*di)/d2;
+    let relH=Math.atan2(wy,wx)-heading;
+    relH=((relH+3*Math.PI)%(2*Math.PI))-Math.PI;
+    if(Math.abs(relH)>HFOV*1.12) return null;
+    const r=Math.sqrt(wx*wx+wy*wy);
+    if(r<1e-4||r>0.9999) return null;
+    const dFloor=2*Math.atanh(r);
+    // Elevation angle to tip: exact ℍ³ formula
+    const D_euc = 2*Math.sinh(dFloor*0.5);
+    const elevTip = Math.atan2(Math.exp(hypH)-1, D_euc);
+    const elevBase = -Math.atan(EYE_H/Math.sinh(dFloor));
+    const screenX = W*(0.5+relH/(HFOV*2));
+    const tipY    = H*(0.5-elevTip/VFOV);
+    const baseY   = H*(0.5-elevBase/VFOV);
+    return {screenX, tipY, baseY, dFloor, elevTip};
+  }
+
+  // ── Tree positions ─────────────────────────────────────────────
+  const TREES=[];
+  for(let n=-18;n<=18;n++) for(let m=0;m<=6;m++){
+    const ux=n+(rng2()-.5)*.85, uy=Math.pow(2,m)*(0.9+rng2()*1.1);
+    const c=ux,dd=uy+1,de=c*c+dd*dd;
+    const tx=(c*c+(uy-1)*dd)/de, ty=((uy-1)*c-c*dd)/de;
+    if(tx*tx+ty*ty<0.9996) TREES.push({pos:[tx,ty],species:Math.floor(rng2()*3),hv:0.75+rng2()*.55});
+  }
+
+  function projectEntity(p){
+    const ax=p[0]-pos[0],ay=p[1]-pos[1];
+    const dr=1-pos[0]*p[0]-pos[1]*p[1],di=pos[0]*p[1]-pos[1]*p[0];
+    const d2=dr*dr+di*di;
+    const wx=(ax*dr+ay*di)/d2,wy=(ay*dr-ax*di)/d2;
+    let relH=Math.atan2(wy,wx)-heading;
+    relH=((relH+3*Math.PI)%(2*Math.PI))-Math.PI;
+    if(Math.abs(relH)>HFOV*1.08) return null;
+    const r=Math.sqrt(wx*wx+wy*wy);
+    if(r<1e-4) return null;
+    const hypDist=2*Math.atanh(Math.min(r,0.9999));
+    if(hypDist>8.5||hypDist<0.05) return null;
+    const angV=-Math.atan(EYE_H/Math.sinh(hypDist));
+    return {angH:relH,angV,hypDist};
+  }
+
+  // ── Floor ImageData ────────────────────────────────────────────
+  const floorData=ctx.createImageData(W,Math.ceil(H*0.5));
+
+  // ═══════════════════════════════════════════════════════════════
+  // ── MAIN DRAW ──────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    frameT+=0.016;
+
+    // ── Sky ──────────────────────────────────────────────────────
+    const skyG=ctx.createLinearGradient(0,0,0,HORIZ);
+    skyG.addColorStop(0,'#000108'); skyG.addColorStop(.3,'#010312');
+    skyG.addColorStop(.65,'#020720'); skyG.addColorStop(.85,'#040d30');
+    skyG.addColorStop(1,'#081840');
+    ctx.fillStyle=skyG; ctx.fillRect(0,0,W,HORIZ+2);
+    ctx.drawImage(nebulaCanvas,0,0);
+    const mwG=ctx.createLinearGradient(0,HORIZ*.6,W,0);
+    mwG.addColorStop(0,'rgba(30,25,60,0)'); mwG.addColorStop(.5,'rgba(40,32,70,0.055)');
+    mwG.addColorStop(1,'rgba(30,25,60,0)');
+    ctx.fillStyle=mwG; ctx.fillRect(0,0,W,HORIZ);
+
+    // Stars
+    ctx.save();
+    STARS.forEach(s=>{
+      let rA=((s.ah-heading+3*Math.PI)%(2*Math.PI))-Math.PI;
+      if(Math.abs(rA)>HFOV*1.12) return;
+      const spx=W*(0.5+rA/(HFOV*2)),spy=H*(0.5-s.av/VFOV);
+      if(s.r>1.2){ctx.shadowColor=`rgba(190,205,255,${(s.a*.35).toFixed(3)})`; ctx.shadowBlur=s.r*2.5;}
+      ctx.fill();
+    });
+    BRIGHT_STARS.forEach(s=>{
+      let rA=((s.ah-heading+3*Math.PI)%(2*Math.PI))-Math.PI;
+      if(Math.abs(rA)>HFOV*1.1) return;
+      const spx=W*(0.5+rA/(HFOV*2)),spy=H*(0.5-s.av/VFOV);
+      if(spy<0||spy>HORIZ*.95) return;
+      const g=ctx.createRadialGradient(spx,spy,0,spx,spy,s.r*5);
+      g.addColorStop(0,`rgba(220,230,255,${s.a})`); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g; ctx.fillRect(spx-s.r*5,spy-s.r*5,s.r*10,s.r*10);
+      ctx.beginPath(); ctx.arc(spx,spy,s.r*.5,0,TAU);
+      ctx.fillStyle=`rgba(255,250,245,${s.a})`; ctx.fill();
+      ctx.strokeStyle=`rgba(200,215,255,${s.a*.25})`; ctx.lineWidth=0.7;
+      [0,Math.PI/2].forEach(a=>{
+        ctx.beginPath(); ctx.moveTo(spx+Math.cos(a)*s.r*7,spy+Math.sin(a)*s.r*7);
+        ctx.lineTo(spx-Math.cos(a)*s.r*7,spy-Math.sin(a)*s.r*7); ctx.stroke();
+      });
+    });
+    ctx.shadowBlur=0; ctx.restore();
+
+    // Moon
+    {
+      let rM=((MOON.ah-heading+3*Math.PI)%(2*Math.PI))-Math.PI;
+      if(Math.abs(rM)<HFOV*1.1){
+        const mx=W*(0.5+rM/(HFOV*2)),my=H*(0.5-MOON.av/VFOV);
+        if(my>0&&my<HORIZ*.92){
+          const mg=ctx.createRadialGradient(mx,my,0,mx,my,MOON.r*4.5);
+          mg.addColorStop(0,'rgba(230,225,200,0.10)'); mg.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.fillStyle=mg; ctx.fillRect(mx-MOON.r*5,my-MOON.r*5,MOON.r*10,MOON.r*10);
+          ctx.save(); ctx.beginPath(); ctx.arc(mx,my,MOON.r,0,TAU); ctx.clip();
+          const ms=ctx.createRadialGradient(mx+MOON.r*.3,my-MOON.r*.25,0,mx,my,MOON.r);
+          ms.addColorStop(0,'rgba(245,242,228,1)'); ms.addColorStop(.6,'rgba(210,206,188,1)');
+          ms.addColorStop(1,'rgba(170,165,148,1)');
+          ctx.fillStyle=ms; ctx.fillRect(mx-MOON.r,my-MOON.r,MOON.r*2,MOON.r*2);
+          if(MOON.phase<1){
+            const termX=mx+MOON.r*(1-2*MOON.phase);
+            const sg=ctx.createRadialGradient(termX,my,0,termX,my,MOON.r*2);
+            sg.addColorStop(0,'rgba(2,4,18,0.98)'); sg.addColorStop(1,'rgba(2,4,18,0)');
+            ctx.fillStyle=sg; ctx.fillRect(mx-MOON.r,my-MOON.r,MOON.r*2,MOON.r*2);
+          }
+          ctx.restore();
+        }
+      }
+    }
+
+    // ── Background ridge silhouette ────────────────────────────
+    ctx.save();
+    ctx.fillStyle='rgba(8,12,32,0.80)';
+    ctx.beginPath(); ctx.moveTo(0,HORIZ+1);
+    for(let i=0;i<=80;i++){
+      const sx=-20+i*(W+40)/80;
+      const wx=sx-W*((heading*0.3)%1);
+      const mh=HORIZ-10-Math.max(0,Math.sin(wx*.018+1.1)*18+Math.sin(wx*.041+2.3)*9+Math.sin(wx*.087+0.7)*4);
+      ctx.lineTo(sx,mh);
+    }
+    ctx.lineTo(W+20,HORIZ+1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(6,9,26,0.86)';
+    ctx.beginPath(); ctx.moveTo(0,HORIZ+1);
+    for(let i=0;i<=80;i++){
+      const sx=-20+i*(W+40)/80;
+      const wx=sx-W*((heading*0.55)%1);
+      const mh=HORIZ-4-Math.max(0,Math.sin(wx*.026+3.7)*12+Math.sin(wx*.059+1.8)*6+Math.sin(wx*.11+4.2)*3);
+      ctx.lineTo(sx,mh);
+    }
+    ctx.lineTo(W+20,HORIZ+1); ctx.closePath(); ctx.fill();
+    ctx.restore();
+
+    // ── Floor ────────────────────────────────────────────────────
+    const fd=floorData.data;
+    for(let i=0;i<fd.length;i+=4){fd[i]=0;fd[i+1]=0;fd[i+2]=0;fd[i+3]=0;}
+    for(let row=0;row<Math.ceil(H*0.5);row++){
+      const screenY=HORIZ+row, d=floorDist(screenY+0.5);
+      if(d===null) continue;
+      const cs=d<2?1:d<4?2:3;
+      for(let col=0;col<W;col+=cs){
+        const angH2=((col+cs*0.5)/W-0.5)*(HFOV*2);
+        const fp=move(pos,heading+angH2,d);
+        const [r,g,b]=tileColor(fp,d);
+        for(let dc=0;dc<cs&&col+dc<W;dc++){
+          const idx=(row*W+col+dc)*4;
+          fd[idx]=r; fd[idx+1]=g; fd[idx+2]=b; fd[idx+3]=255;
+        }
+      }
+    }
+    ctx.putImageData(floorData,0,HORIZ);
+
+    // Floor fog
+    const fogG=ctx.createLinearGradient(0,HORIZ,0,H);
+    fogG.addColorStop(0,'rgba(4,8,28,0)');
+    fogG.addColorStop(0.55,'rgba(4,8,28,0.12)');
+    fogG.addColorStop(1,'rgba(4,8,28,0.55)');
+    ctx.fillStyle=fogG; ctx.fillRect(0,HORIZ,W,H-HORIZ);
+
+    // Horizon glow
+    ctx.save();
+    const hg=ctx.createLinearGradient(0,HORIZ-22,0,HORIZ+22);
+    hg.addColorStop(0,'rgba(20,45,110,0)'); hg.addColorStop(.5,'rgba(60,110,200,0.28)');
+    hg.addColorStop(1,'rgba(20,45,110,0)');
+    ctx.fillStyle=hg; ctx.fillRect(0,HORIZ-22,W,44);
+    const tl=ctx.createLinearGradient(0,HORIZ-1,0,HORIZ+1);
+    tl.addColorStop(0,'rgba(100,160,255,0)');
+    tl.addColorStop(.5,'rgba(140,190,255,0.55)');
+    tl.addColorStop(1,'rgba(100,160,255,0)');
+    ctx.fillStyle=tl; ctx.fillRect(0,HORIZ-1,W,2);
+    ctx.restore();
+
+    // ── TOWER (drawn before trees so trees can overlap at close range) ────
+    {
+      const tp = projectTower(TOWER.diskPos, TOWER.hypHeight);
+      if(tp && tp.baseY > HORIZ - 5) {
+        const {screenX, tipY, baseY, dFloor} = tp;
+        const fade = Math.min(1, Math.max(0.05, 1.3 - dFloor/8));
+        const towerW = Math.max(2, (baseY - tipY) * 0.09);
+
+        ctx.save();
+
+        // Shadow on ground (ellipse, only when close)
+        if(dFloor < 5) {
+          ctx.globalAlpha = Math.min(0.4, fade*0.5) * (1 - dFloor/6);
+          ctx.fillStyle = 'rgba(0,0,8,0.85)';
+          ctx.beginPath();
+          ctx.ellipse(screenX, baseY, towerW*2.5, towerW*0.6, 0, 0, TAU);
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = fade;
+
+        // Stone base (wider footing)
+        const baseG = ctx.createLinearGradient(screenX-towerW*1.8, baseY-towerW, screenX+towerW*1.8, baseY);
+        baseG.addColorStop(0, 'rgba(90,80,68,0.95)');
+        baseG.addColorStop(1, 'rgba(55,46,36,0.90)');
+        ctx.fillStyle = baseG;
+        ctx.fillRect(screenX - towerW*1.8, baseY - towerW, towerW*3.6, towerW);
+
+        // Tower body: tapered stone shaft
+        const h = baseY - tipY;
+        const bodyGrad = ctx.createLinearGradient(screenX - towerW, tipY, screenX + towerW, baseY);
+        bodyGrad.addColorStop(0,   'rgba(175,162,144,0.96)');  // lit face top
+        bodyGrad.addColorStop(0.45,'rgba(148,136,118,0.94)');
+        bodyGrad.addColorStop(1,   'rgba(112,100,84,0.90)');   // base
+        ctx.fillStyle = bodyGrad;
+        ctx.beginPath();
+        ctx.moveTo(screenX - towerW*0.72, tipY + h*0.08);     // top left
+        ctx.lineTo(screenX - towerW,       baseY);              // base left
+        ctx.lineTo(screenX + towerW,       baseY);              // base right
+        ctx.lineTo(screenX + towerW*0.72,  tipY + h*0.08);     // top right
+        ctx.closePath();
+        ctx.fill();
+
+        // Shadow side (right face darker)
+        const shadowFace = ctx.createLinearGradient(screenX, tipY, screenX + towerW*1.4, baseY);
+        shadowFace.addColorStop(0, 'rgba(40,34,26,0)');
+        shadowFace.addColorStop(1, 'rgba(40,34,26,0.52)');
+        ctx.fillStyle = shadowFace;
+        ctx.beginPath();
+        ctx.moveTo(screenX + towerW*0.72, tipY + h*0.08);
+        ctx.lineTo(screenX + towerW,      baseY);
+        ctx.lineTo(screenX + towerW*1.35, baseY);
+        ctx.lineTo(screenX + towerW,      tipY + h*0.08);
+        ctx.closePath();
+        ctx.fill();
+
+        // Horizontal stone courses (only visible when big enough)
+        if(h > 25) {
+          const nCourses = Math.min(18, Math.floor(h / 8));
+          ctx.strokeStyle = `rgba(80,70,58,${fade*0.30})`;
+          ctx.lineWidth = 0.8;
+          for(let ci = 1; ci < nCourses; ci++) {
+            const cy = tipY + h*0.08 + (h*0.92) * (ci/nCourses);
+            const frac = ci/nCourses;
+            const lx = screenX - towerW*(0.72 + 0.28*frac);
+            const rx = screenX + towerW*(0.72 + 0.28*frac);
+            ctx.beginPath(); ctx.moveTo(lx, cy); ctx.lineTo(rx, cy); ctx.stroke();
+          }
+        }
+
+        // Parapet / battlements at top
+        const parH = Math.max(2, towerW * 0.9);
+        const parW = towerW * 0.72;
+        const nMerlon = Math.max(2, Math.round(parW * 2 / (parH * 1.2)));
+        const merlonW = (parW * 2) / (nMerlon * 2 - 1);
+        ctx.fillStyle = `rgba(140,128,110,${fade*0.96})`;
+        for(let mi = 0; mi < nMerlon; mi++) {
+          const mx = screenX - parW + mi * merlonW * 2;
+          ctx.fillRect(mx, tipY, merlonW, parH + 2);
+        }
+        // Parapet platform
+        ctx.fillStyle = `rgba(130,118,100,${fade*0.88})`;
+        ctx.fillRect(screenX - parW, tipY + parH, parW*2, parH*0.35);
+
+        // Lit top edge highlight
+        if(fade > 0.3 && h > 15) {
+          ctx.strokeStyle = `rgba(210,198,178,${fade*0.45})`;
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          ctx.moveTo(screenX - towerW*0.72, tipY + h*0.08);
+          ctx.lineTo(screenX + towerW*0.72, tipY + h*0.08);
+          ctx.stroke();
+        }
+
+        // Windows (arrow slits) — only show when tall enough
+        if(h > 60) {
+          const nWindows = Math.min(4, Math.floor(h/40));
+          ctx.fillStyle = `rgba(12,8,4,${fade*0.82})`;
+          for(let wi = 0; wi < nWindows; wi++) {
+            const wy = tipY + h*(0.20 + wi * 0.18);
+            const wh = Math.max(3, h*0.07);
+            const ww = Math.max(1.5, towerW*0.22);
+            // Pointed arch slit
+            ctx.fillRect(screenX - ww/2, wy, ww, wh);
+          }
+        }
+
+        // Beacon light at tip (subtle golden glow)
+        if(fade > 0.2) {
+          const glow = ctx.createRadialGradient(screenX, tipY, 0, screenX, tipY, towerW*3);
+          glow.addColorStop(0,  `rgba(255,200,80,${fade*0.25})`);
+          glow.addColorStop(0.4,`rgba(255,160,40,${fade*0.10})`);
+          glow.addColorStop(1,  'rgba(0,0,0,0)');
+          ctx.fillStyle = glow;
+          ctx.fillRect(screenX - towerW*3, tipY - towerW*3, towerW*6, towerW*6);
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // ── Trees ─────────────────────────────────────────────────────
+    const visT=[];
+    TREES.forEach(tree=>{const p=projectEntity(tree.pos); if(p) visT.push({...p,...tree});});
+    visT.sort((a,b)=>b.hypDist-a.hypDist);
+    visT.forEach(({angH,angV,hypDist,species,hv})=>{
+      const sx=W*(0.5+angH/(HFOV*2)),sy=H*(0.5-angV/VFOV);
+      if(sy>H*.995||sy<HORIZ-2) return;
+      const fa=Math.min(1,Math.max(0,1.25-hypDist/7.5)); if(fa<0.04) return;
+      const scH=Math.min(H*.75,H*.62/Math.sinh(Math.max(.05,hypDist)))*hv; if(scH<2) return;
+      const trW=Math.max(1.5,scH*.075);
+      ctx.save(); ctx.globalAlpha=fa;
+      if(species===1){
+        const bg=ctx.createLinearGradient(sx-trW,sy-scH*.6,sx+trW,sy);
+        bg.addColorStop(0,'rgba(210,208,200,0.95)'); bg.addColorStop(1,'rgba(140,135,122,0.88)');
+        ctx.fillStyle=bg;
+        ctx.beginPath(); ctx.moveTo(sx-trW*.9,sy); ctx.lineTo(sx+trW*.9,sy);
+        ctx.lineTo(sx+trW*.35,sy-scH*.72); ctx.lineTo(sx-trW*.35,sy-scH*.72); ctx.closePath(); ctx.fill();
+        [[0,-.75],[-.2,-.6],[.2,-.6],[0,-.48]].forEach(([ox,oy])=>{
+          const cx3=sx+ox*scH*.25,cy3=sy+oy*scH,cr=scH*.25;
+          const cg=ctx.createRadialGradient(cx3-cr*.2,cy3-cr*.2,0,cx3,cy3,cr);
+          cg.addColorStop(0,'rgba(120,155,80,0.95)'); cg.addColorStop(1,'rgba(65,100,38,0.70)');
+          ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx3,cy3,cr,0,TAU); ctx.fill();
+        });
+      } else if(species===2){
+        const tg=ctx.createLinearGradient(sx-trW*1.1,sy,sx+trW*1.1,sy-scH*.55);
+        tg.addColorStop(0,'rgba(72,52,30,0.96)'); tg.addColorStop(1,'rgba(52,36,18,0.92)');
+        ctx.fillStyle=tg;
+        ctx.beginPath(); ctx.moveTo(sx-trW*1.1,sy); ctx.lineTo(sx+trW*1.1,sy);
+        ctx.lineTo(sx+trW*.5,sy-scH*.5); ctx.lineTo(sx-trW*.5,sy-scH*.5); ctx.closePath(); ctx.fill();
+        const br=scH*.42,cy3=sy-scH*.74;
+        const og=ctx.createRadialGradient(sx-br*.15,cy3-br*.15,0,sx,cy3,br);
+        og.addColorStop(0,'rgba(80,140,45,0.96)'); og.addColorStop(1,'rgba(38,88,18,0.75)');
+        ctx.fillStyle=og; ctx.beginPath(); ctx.arc(sx,cy3,br,0,TAU); ctx.fill();
+      } else {
+        const tg=ctx.createLinearGradient(sx-trW*.7,sy-scH*.55,sx+trW*.7,sy);
+        tg.addColorStop(0,'rgba(90,62,30,0.94)'); tg.addColorStop(1,'rgba(58,38,14,0.90)');
+        ctx.fillStyle=tg;
+        ctx.beginPath(); ctx.moveTo(sx-trW*.7,sy); ctx.lineTo(sx+trW*.7,sy);
+        ctx.lineTo(sx+trW*.28,sy-scH*.52); ctx.lineTo(sx-trW*.28,sy-scH*.52); ctx.closePath(); ctx.fill();
+        [{ws:.52,yt:1.00,yb:.52},{ws:.62,yt:.64,yb:.25},{ws:.72,yt:.40,yb:.08},
+         {ws:.78,yt:.24,yb:-.04},{ws:.68,yt:.13,yb:-.08}].forEach(({ws,yt,yb},li)=>{
+          const ly=sy-scH*yt,lb=sy-scH*yb,hw=scH*ws*.44;
+          const pg=ctx.createLinearGradient(sx-hw,ly,sx+hw,lb);
+          pg.addColorStop(0,`rgba(${55+li*3},${108+li*4},${42+li*2},0.96)`);
+          pg.addColorStop(1,`rgba(${30+li*2},${68+li*3},${20+li*2},0.82)`);
+          ctx.fillStyle=pg;
+          ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx-hw,lb); ctx.lineTo(sx+hw,lb);
+          ctx.closePath(); ctx.fill();
+          if(li===0&&scH>30){
+            ctx.fillStyle='rgba(230,235,245,0.65)';
+            ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx-hw*.12,ly+scH*.06);
+            ctx.lineTo(sx+hw*.12,ly+scH*.06); ctx.closePath(); ctx.fill();
+          }
+        });
+      }
+      ctx.restore();
+    });
+
+    // ── Vignette ──────────────────────────────────────────────────
+    ctx.save();
+    const vig=ctx.createRadialGradient(W/2,H/2,H*.28,W/2,H/2,H*.75);
+    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,6,0.42)');
+    ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
+    ctx.restore();
+
+    // ══════════════════════════════════════════════════════════════
+    // ── TOWER INFO HUD (compact) ──────────────────────────────────
+    {
+      const tp = projectTower(TOWER.diskPos, TOWER.hypHeight);
+      if(tp) {
+        ctx.save();
+        ctx.font = '11px "EB Garamond",serif';
+        ctx.fillStyle = 'rgba(201,168,76,0.70)';
+        ctx.textAlign = 'left';
+        const d = tp.dFloor.toFixed(2);
+        const deg = (tp.elevTip*180/Math.PI).toFixed(1);
+        ctx.fillText(`Tower  d = ${d}  elev = ${deg}°`, 14, H-12);
+        ctx.restore();
+      }
+    }
+
+    // ── Mini compass ──────────────────────────────────────────────
+    ctx.save(); ctx.translate(W-44,44);
+    const cbg=ctx.createRadialGradient(0,0,0,0,0,20);
+    cbg.addColorStop(0,'rgba(4,6,22,0.75)'); cbg.addColorStop(1,'rgba(4,6,22,0.40)');
+    ctx.fillStyle=cbg; ctx.beginPath(); ctx.arc(0,0,20,0,TAU); ctx.fill();
+    ctx.strokeStyle='rgba(201,168,76,0.22)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(0,0,20,0,TAU); ctx.stroke();
+    ctx.strokeStyle='rgba(201,168,76,0.28)'; ctx.lineWidth=0.7;
+    for(let a=0;a<TAU;a+=Math.PI/2){
+      ctx.beginPath(); ctx.moveTo(Math.cos(a)*16,Math.sin(a)*16);
+      ctx.lineTo(Math.cos(a)*20,Math.sin(a)*20); ctx.stroke();
+    }
+    const hx=Math.cos(heading-Math.PI/2)*13,hy=Math.sin(heading-Math.PI/2)*13;
+    ctx.strokeStyle='rgba(232,204,128,0.85)'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(-hx*.25,-hy*.25); ctx.lineTo(hx,hy); ctx.stroke();
+    ctx.fillStyle='rgba(232,204,128,0.85)';
+    ctx.beginPath(); ctx.arc(hx,hy,2.5,0,TAU); ctx.fill();
+    ctx.restore();
+  }
+
+  // ── Input ──────────────────────────────────────────────────────
+  const keys={};
+  window.addEventListener('keydown',e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+    keys[e.key]=true;
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+  });
+  window.addEventListener('keyup',e=>{keys[e.key]=false;});
+  function bindBtn(id,key){
+    const el=document.getElementById(id); if(!el) return;
+    el.addEventListener('mousedown',e=>{keys[key]=true;e.preventDefault();});
+    el.addEventListener('mouseup',()=>{keys[key]=false;});
+    el.addEventListener('mouseleave',()=>{keys[key]=false;});
+    el.addEventListener('touchstart',e=>{keys[key]=true;e.preventDefault();},{passive:false});
+    el.addEventListener('touchend',()=>{keys[key]=false;});
+  }
+  requestAnimationFrame(()=>{
+    bindBtn('b_fwd','fwd'); bindBtn('b_back','back');
+    bindBtn('b_left','left'); bindBtn('b_right','right');
+  });
+
+  function update(){
+    if(keys['ArrowUp']  ||keys['w']||keys['W']||keys['fwd'])  pos=move(pos,heading,STEP);
+    if(keys['ArrowDown']||keys['s']||keys['S']||keys['back']) pos=move(pos,heading+Math.PI,STEP);
+    if(keys['ArrowLeft']||keys['a']||keys['A']||keys['left'])  heading-=TURN;
+    if(keys['ArrowRight']||keys['d']||keys['D']||keys['right']) heading+=TURN;
+    const r2=pos[0]*pos[0]+pos[1]*pos[1];
+    if(r2>0.98*0.98){const sc=0.97/Math.sqrt(r2);pos=[pos[0]*sc,pos[1]*sc];}
+  }
+
+  function loop(){ update(); draw(); requestAnimationFrame(loop); }
+  draw();
+  requestAnimationFrame(loop);
+})();
+
+// ════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════
+// SCROLL REVEAL
+// ════════════════════════════════════════════════
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// ════════════════════════════════════════════════
+
+</script>
+
+
+
+<script>
+window.NARRATION_CONFIG = {
+  chapter: 'hyperbolic',
+  basePath: 'assets/narration/hyperbolic/',
+  segments: [
+    { id: 0,  section: '#hero', label: 'Hero' },
+    { id: 1,  section: '#sec-1-curvature', label: '§1 Curvature' },
+    { id: 2,  section: '#sec-3-gauss-bonnet', label: '§3 Gauss Bonnet' },
+    { id: 3,  section: '#sec-4-tessellations', label: '§4 Tessellations' },
+    { id: 4,  section: '#sec-5-expansion', label: '§5 Expansion' },
+    { id: 5,  section: '#sec-6-teichmuller', label: '§6 Teichmuller' },
+    { id: 6,  section: '#sec-7-moduli', label: '§7 Moduli' },
+    { id: 7,  section: '#sec-8-mirzakhani', label: '§8 Mirzakhani' },
+    { id: 8,  section: '#sec-9-h3', label: '§9 H3' }
+  ]
+};
+</script>
+<script src="narration_player.js"></script>
+
+<div class="giscus-wrap" style="max-width:900px;margin:4rem auto 2rem;padding:0 2rem;">
+  <script src="https://giscus.app/client.js"
+    data-repo="kimshmath/edu"
+    data-repo-id="R_kgDORrE8sw"
+    data-category="Comments"
+    data-category-id="DIC_kwDORrE8s84C45oL"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="dark"
+    data-lang="en"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+<footer>
+  <div class="footer-rule"></div>
+  <div class="footer-attr">
+    <div class="footer-name">Sang-hyun Kim</div>
+    <div class="footer-inst">Korea Institute for Advanced Study<br>AI4Math, KAIST</div>
+    <a href="https://kimsh.kr" class="footer-url">kimsh.kr</a>
+  </div>
+</footer>
+
+<a class="floating-badge" href="https://edu.kimsh.kr">edu.kimsh.kr</a>
+
+</body>
+</html>

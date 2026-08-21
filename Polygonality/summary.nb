@@ -1,0 +1,102 @@
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[         0,          0]
+NotebookDataLength[      3375,        101]
+NotebookOptionsPosition[      2942,         80]
+NotebookOutlinePosition[      3283,         95]
+CellTagsIndexPosition[      3240,         92]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Result", " ", "and", " ", "no"}], "-", "geometric", "-", 
+  RowBox[{"like", " ", "words"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"1", ",", "0", ",", "1", ",", "2"}], "}"}], " ", ":", " ", 
+  RowBox[{"Done", " ", ":", " ", 
+   RowBox[{
+    RowBox[{"all", " ", "geometric"}], "-", 
+    "like"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"GeometricLike", "[", 
+   RowBox[{"2", ",", "0", ",", "1", ",", "1"}], "]"}], " ", ":", " ", 
+  RowBox[{"Done", " ", ":", " ", 
+   RowBox[{
+    RowBox[{"some", " ", "non"}], "-", "geometric", "-", 
+    RowBox[{"like", " ", "words", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"e", ".", "g", ".", "BS"}], 
+       RowBox[{"(", 
+        RowBox[{"1", ",", "3"}], ")"}]}], 
+      ")"}]}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"2", ",", "0", ",", "1", ",", "2"}], "}"}], " ", ":", " ", 
+  RowBox[{"Done", " ", ":", " ", 
+   RowBox[{
+    RowBox[{"all", " ", "geometric"}], "-", 
+    "like"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"2", ",", "0", ",", "2", ",", "2"}], "}"}], " ", ":", " ", 
+  RowBox[{"Done", " ", ":", " ", 
+   RowBox[{
+    RowBox[{"some", " ", "non"}], "-", "geometric", "-", 
+    RowBox[{"like", " ", "words"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"3", ",", "0", ",", "1", ",", "2"}], "}"}], " ", ":", " ", 
+  RowBox[{"Done", " ", ":", " ", 
+   RowBox[{
+    RowBox[{"all", " ", "geometric"}], "-", 
+    "like"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"2", ",", "1", ",", "1", ",", "2"}], "}"}], " ", ":", " ", 
+  RowBox[{"Done", " ", ":", " ", 
+   RowBox[{
+    RowBox[{"many", " ", "non"}], "-", "geometric", "-", 
+    RowBox[{"like", " ", "words"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"2", ",", "1", ",", "2", ",", "2"}], "}"}], " ", ":", " ", 
+  "Done"}]}], "Input",
+ CellChangeTimes->{{3.479824542950568*^9, 3.479824602508498*^9}, {
+  3.479825693540534*^9, 3.479825696137488*^9}, {3.4798330035167847`*^9, 
+  3.479833003810227*^9}, {3.480083776017062*^9, 3.480083785699213*^9}, {
+  3.480085584594194*^9, 3.480085603736244*^9}, {3.480085692436202*^9, 
+  3.480085715440843*^9}, {3.48008600127605*^9, 3.480086034276547*^9}, {
+  3.480086515571031*^9, 3.480086526657043*^9}, {3.480088140546979*^9, 
+  3.480088161058091*^9}, {3.480088507562416*^9, 3.480088529750445*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.4798329977114573`*^9, 3.479833002009737*^9}}]
+},
+WindowSize->{640, 750},
+WindowMargins->{{Automatic, -41}, {81, Automatic}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[400, 13, 2441, 62, 148, "Input"],
+Cell[2844, 77, 94, 1, 27, "Input"]
+}
+]
+*)
+

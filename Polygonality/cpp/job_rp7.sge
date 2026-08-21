@@ -1,0 +1,11 @@
+#$ -N job_rp7
+#$ -cwd
+#$ -V
+#$ -o rp7_console_out
+#$ -e rp.err
+#$ -l h_rt=47:59:00
+#$ -pe 1way 16
+#$ -q long
+#$ -S /bin/sh
+
+./rp.exe < in7 > out7

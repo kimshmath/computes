@@ -1,0 +1,50 @@
+Result and no-geometric-like words:
+{3,0,1,2} : Done
+{2,1,1,2} : Done : many non-geometric-like words
+{2,1,2,2} : Done
+Polygonality : l <=12 : Checked
+NON POLYGONAL WORDS:  aaababaB
+sigma = 23451, tau = 123
+p pp q r = 2, 0, 2, 1
+
+CheckGeometricLikeConjecture:(Not sure)
+If the graph is non-regular and complete after deleting multi-edges, then any word on it is geometric-like.
+(i.e. consider the case p > p' > 0 and pp'qr!=0 only):
+True for : l<=8
+Remark1. One cannot drop p!=p' and pp'!=0 (e.g. Baumslag-Solitar)
+Also, when p p' q r are 3,2,2,0, there is an exception; hence one cannot drop 	q r!=0 either.
+Counterexample at (3,2,2,0): {2,3,4,1,5},{2,3,4,1}
+Counterexample at (3,2,0,2): {2,3,4,1,5},{2,3,4,1}
+Remark2. p=p' case is done (regular). Also, Daniel did q r=0 case.
+Question. What if requiring precisely twice??
+Result. False for (3,2,1,1) and (2,1,2,1)!!!
+{3,2,1,1,{1, 3, 4, 5, 2}, {2, 3, 1, 4}}
+{2, 1, 2, 1, {1, 3, 2, 4, 5}, {2, 4, 1, 3}}
+
+CheckPolygonalityPos(Quite plausible)
+Each corner at a larger degree vertex may be used at most once.
+True for : l <= 12
+Remark. One cannot replace "at most" by "precisely".
+l = 13 ??
+
+CheckPoly Pos + edge??
+Each corner is used at most once, and each edge is used the same number of times, IF used.
+
+VerifyConjectureSC3: each edge is used the same number of times;
+True for l<=9
+
+CheckPolygonalityPos2
+Each corner at a larger degree vertex may be used at most once,
+even the empty corner!!: False!
+True for : l <=8
+Remark. One cannot replace "at most" by "precisely".
+
+CheckPolygonality:
+l <= 13 TRUE
+l = 14 ?
+
+
+CheckPolygonalityPos3
+Each corner at a smaller degree vertex is used the same number of times
+
+Each Simple Cycle is used at most once??? FALSE: (1,2,1,1) and ({3,1,2} and {3,4,2,1})

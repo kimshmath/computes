@@ -1,0 +1,32 @@
+{p, pp, q, r} = {3,0, 1, 2};
+PermA = Permutations[Range[p + q + r]];
+PermB = Permutations[Range[pp + q + r]];
+PA = (p + q + r)!;
+PB = (pp + q + r)!;
+For[i = 1, i <= PA, i++,
+  For[j = 1, j <= PB, j++,
+    xsol = VerifyConjectureSC1[p, pp, q, r, PermA[[i]], PermB[[j]]];
+    (*Print["A soution = ",xsol//MatrixForm];*)
+    
+    If[ Length[xsol] >= (p + q + r) (p + q + r - 1)/2,
+     (* Print["Solutions = ", xsol//MatrixForm]; *)
+     
+     xsolna = Transpose[xsol][[1]];
+     xsolnb = Transpose[xsol][[3]];
+     sa = 0;
+     sb = 0;
+     For[k = 1, k <= Length[xsolna], k++,
+      sa += Length[xsolna[[k]]];
+      sb += Length[xsolnb[[k]]];
+      ];
+     (*Print["sigma, tau = ",ToCycles[PermA[[i]]],",",ToCycles[PermB[[
+     j]]],", Length = ",Length[xsol],
+     ", Number of a- & b-pairs used = ", sa/2, " & ", sb/2];*)
+     
+     Print["sigma, tau = ", PermA[[i]], ",", PermB[[j]], 
+      ", Length = ", Length[xsol], 
+      ", Number of a- & b-pairs used = ", sa/2, " & ", sb/2];
+     Print[xsol // MatrixForm];
+     ];
+    ];
+  ];

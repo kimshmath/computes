@@ -1,0 +1,882 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     32156,        873]
+NotebookOptionsPosition[     30610,        824]
+NotebookOutlinePosition[     31047,        841]
+CellTagsIndexPosition[     31004,        838]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+    "}"}], "=", 
+   RowBox[{"{", 
+    RowBox[{"3", ",", "4", ",", "0", ",", "2", ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "1", ",", "5", ",", "2", ",", "4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"6", ",", "4", ",", "2", ",", "5", ",", "3", ",", "1"}], 
+      "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VerifyConjectureSC2", "[", 
+   RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+   "]"}], "//", "MatrixForm"}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Part", "::", "\<\"partw\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Part \\\\\\\"\\\", \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\!\\(1\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\({}\\), \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" does not exist.\\\\\\\"\\\", \
+\\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partw\\\", ButtonNote -> \
+\\\"Part::partw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.480096417841874*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Part", "::", "\<\"partw\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Part \\\\\\\"\\\", \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\!\\(2\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\({}\\), \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" does not exist.\\\\\\\"\\\", \
+\\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partw\\\", ButtonNote -> \
+\\\"Part::partw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.48009641784293*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Part", "::", "\<\"partw\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Part \\\\\\\"\\\", \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\!\\(1\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\({}\\), \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" does not exist.\\\\\\\"\\\", \
+\\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partw\\\", ButtonNote -> \
+\\\"Part::partw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.480096417844904*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"General", "::", "\<\"stop\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Further output of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\(Part :: \\\"partw\\\"\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" will be suppressed \
+during this calculation.\\\\\\\"\\\", \\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.480096417874934*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.480096417919883*^9}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "5"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "2"}], "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "5"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "2"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"6", ",", "1"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"6", ",", "1"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"3", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "2"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "3"}], "}"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.4800964179498377`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+    "}"}], "=", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "2", ",", "2", ",", "2", ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "7", ",", "5", ",", "2", ",", "6", ",", "3", ",", "1", ",", "8", ",", 
+       "4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "3", ",", "6", ",", "1", ",", "4", ",", "5"}], 
+      "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VerifyConjectureSC2", "[", 
+   RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+   "]"}], "//", "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.480096439568812*^9, 3.480096482600769*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Part", "::", "\<\"partw\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Part \\\\\\\"\\\", \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\!\\(1\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\({}\\), \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" does not exist.\\\\\\\"\\\", \
+\\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partw\\\", ButtonNote -> \
+\\\"Part::partw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.480096468516509*^9, 3.4800964834758177`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Part", "::", "\<\"partw\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Part \\\\\\\"\\\", \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\!\\(2\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\({}\\), \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" does not exist.\\\\\\\"\\\", \
+\\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partw\\\", ButtonNote -> \
+\\\"Part::partw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.480096468516509*^9, 3.480096483478917*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Part", "::", "\<\"partw\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Part \\\\\\\"\\\", \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\!\\(1\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\({}\\), \\\"MT\\\"]\\)\
+\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" does not exist.\\\\\\\"\\\", \
+\\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/partw\\\", ButtonNote -> \
+\\\"Part::partw\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.480096468516509*^9, 3.480096483480873*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"General", "::", "\<\"stop\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Further output of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\(Part :: \\\"partw\\\"\\), \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" will be suppressed \
+during this calculation.\\\\\\\"\\\", \\\"MT\\\"]\\) \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.480096468516509*^9, 3.48009648348272*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.480096468516509*^9, 3.480096483508013*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"7", ",", "2"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"7", ",", "6"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "6"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "4"}], "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"5", ",", "6"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "6"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "7"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "8"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"3", ",", "8"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "5"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"5", ",", "8"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "1"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "5"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"6", ",", "7"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "6"}], "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"8", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "4"}], "}"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.480096468654351*^9, 3.480096483567554*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"p", "=", "0"}], ";", " ", 
+  RowBox[{"pp", "=", "1"}], ";", " ", 
+  RowBox[{"q", "=", "3"}], ";", " ", 
+  RowBox[{"r", "=", "2"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sigma", "=", 
+   RowBox[{"{", 
+    RowBox[{"3", ",", "4", ",", "5", ",", "2", ",", "1"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tau", "=", 
+   RowBox[{"{", 
+    RowBox[{"6", ",", "5", ",", "2", ",", "1", ",", "3", ",", "4"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VerifyConjectureSC1", "[", 
+   RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+   "]"}], "//", "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.4790693373300447`*^9, 3.4790693729054003`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.47906937415524*^9, 3.480439488984932*^9}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "5"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"3", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "3"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"6", ",", "2"}], "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"6", ",", "4"}], "}"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.4790693741891623`*^9, 3.480439489076644*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"p", "=", "3"}], ";", 
+  RowBox[{"pp", "=", "4"}], ";", 
+  RowBox[{"q", "=", "0"}], ";", 
+  RowBox[{"r", "=", "3"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"sigma", "=", 
+   RowBox[{"{", 
+    RowBox[{"5", ",", "3", ",", "6", ",", "1", ",", "2", ",", "4"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tau", "=", 
+   RowBox[{"{", 
+    RowBox[{"5", ",", "1", ",", "4", ",", "7", ",", "3", ",", "2", ",", "6"}],
+     "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VerifyConjectureSC1", "[", 
+   RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+   "]"}], "//", "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.477081830237252*^9, 3.477081888620124*^9}, {
+  3.477081926649716*^9, 3.477081929770156*^9}, {3.47709212430066*^9, 
+  3.477092127653221*^9}, {3.4770922256393948`*^9, 3.477092229271324*^9}, {
+  3.477092311490016*^9, 3.47709231279949*^9}, {3.477092353886866*^9, 
+  3.477092388662434*^9}, {3.477092438394125*^9, 3.47709247312669*^9}, {
+  3.477092539822798*^9, 3.4770925598045387`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.477092552766656*^9, 3.477092560443851*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "6"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "4"}], "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "7"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"4", ",", "5"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "6"}], "}"}], 
+      RowBox[{"{", "}"}]},
+     {
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "6"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "2"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"7", ",", "2"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"1", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "4"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "7"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "6"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"2", ",", "5"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "2"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"3", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"4", ",", "2"}], "}"}]},
+     {
+      RowBox[{"{", 
+       RowBox[{"3", ",", "6"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"6", ",", "1"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"2", ",", "7"}], "}"}], 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "3"}], "}"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.477092552816687*^9, 3.477092560490499*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.47709654222311*^9, {3.4770965815516157`*^9, 3.477096604392393*^9}, 
+   3.477096723294094*^9, 3.4770977797336903`*^9, {3.477097820143553*^9, 
+   3.4770978345264482`*^9}, 3.477097964070799*^9, 3.477101068560581*^9, {
+   3.4771478753233137`*^9, 3.477147898520067*^9}, 3.477147987748939*^9, {
+   3.480439494113481*^9, 3.480439518004341*^9}}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"sigma, tau = \"\>", "\[InvisibleSpace]", 
+   RowBox[{"{", 
+    RowBox[{
+    "3", ",", "4", ",", "7", ",", "5", ",", "6", ",", "8", ",", "2", ",", 
+     "1"}], "}"}], "\[InvisibleSpace]", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "5", ",", "6", ",", "2", ",", "3", ",", "4"}], "}"}], 
+   "\[InvisibleSpace]", "\<\", Length = \"\>", "\[InvisibleSpace]", "42", 
+   "\[InvisibleSpace]", "\<\", Number of a- & b-pairs used = \"\>", 
+   "\[InvisibleSpace]", "36", "\[InvisibleSpace]", "\<\" & \"\>", 
+   "\[InvisibleSpace]", "28"}],
+  SequenceForm[
+  "sigma, tau = ", {3, 4, 7, 5, 6, 8, 2, 1}, {1, 5, 6, 2, 3, 4}, 
+   ", Length = ", 42, ", Number of a- & b-pairs used = ", 36, " & ", 28],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.480439494334578*^9, 3.480439518322784*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.47709654222311*^9, {3.4770965815516157`*^9, 3.477096604392393*^9}, 
+   3.477096723294094*^9, 3.4770977797336903`*^9, {3.477097820143553*^9, 
+   3.4770978345264482`*^9}, 3.477097964070799*^9, 3.477101068560581*^9, {
+   3.4771478753233137`*^9, 3.477147898520067*^9}, 3.477147987748939*^9, {
+   3.480439494113481*^9, 3.480439518371711*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinearProgramming", "::", "\<\"lpip\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Warning: integer linear programming \
+will use a machine precision approximation of the inputs.\\\\\\\"\\\", \\\"MT\
+\\\"]\\) \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\
+\", ButtonFrame->None, ButtonData:>\\\"paclet:ref/LinearProgramming\\\", \
+ButtonNote -> \\\"LinearProgramming::lpip\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.47709654222311*^9, {3.4770965815516157`*^9, 3.477096604392393*^9}, 
+   3.477096723294094*^9, 3.4770977797336903`*^9, {3.477097820143553*^9, 
+   3.4770978345264482`*^9}, 3.477097964070799*^9, 3.477101068560581*^9, {
+   3.4771478753233137`*^9, 3.477147898520067*^9}, 3.477147987748939*^9, {
+   3.480439494113481*^9, 3.4804395186081257`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"General", "::", "\<\"stop\"\>"}], ":", 
+  " ", "\<\"\\!\\(\\*StyleBox[\\\"\\\\\\\"Further output of \\\\\\\"\\\", \
+\\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\!\\(LinearProgramming :: \\\"lpip\
+\\\"\\), \\\"MT\\\"]\\)\[NoBreak]\\!\\(\\*StyleBox[\\\"\\\\\\\" will be \
+suppressed during this calculation.\\\\\\\"\\\", \\\"MT\\\"]\\) \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/stop\\\", \
+ButtonNote -> \\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.47709654222311*^9, {3.4770965815516157`*^9, 3.477096604392393*^9}, 
+   3.477096723294094*^9, 3.4770977797336903`*^9, {3.477097820143553*^9, 
+   3.4770978345264482`*^9}, 3.477097964070799*^9, 3.477101068560581*^9, {
+   3.4771478753233137`*^9, 3.477147898520067*^9}, 3.477147987748939*^9, {
+   3.480439494113481*^9, 3.480439518658053*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{" ", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Check", " ", "Random"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"p", "=", "4"}], ";", 
+    RowBox[{"pp", "=", "2"}], ";", 
+    RowBox[{"q", "=", "2"}], ";", 
+    RowBox[{"r", "=", "2"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"PermA", "=", 
+     RowBox[{"Permutations", "[", 
+      RowBox[{"Range", "[", 
+       RowBox[{"p", "+", "q", "+", "r"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"PermB", "=", 
+     RowBox[{"Permutations", "[", 
+      RowBox[{"Range", "[", 
+       RowBox[{"pp", "+", "q", "+", "r"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"PA", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"p", "+", "q", "+", "r"}], ")"}], "!"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"PB", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"pp", "+", "q", "+", "r"}], ")"}], "!"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"TrialN", "=", "100"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"For", "[", 
+     RowBox[{
+      RowBox[{"ind", "=", "1"}], ",", 
+      RowBox[{"ind", "\[LessEqual]", "TrialN"}], ",", " ", 
+      RowBox[{"ind", "++"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"i", "=", 
+        RowBox[{"RandomInteger", "[", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "PA"}], "}"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"j", "=", 
+        RowBox[{"RandomInteger", "[", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "PB"}], "}"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"xsol", "=", 
+        RowBox[{"VerifyConjectureSC1", "[", 
+         RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", 
+          RowBox[{"PermA", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"PermB", "[", 
+           RowBox[{"[", "j", "]"}], "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Print", "[", 
+        RowBox[{"\"\<A soution = \>\"", ",", 
+         RowBox[{"xsol", "//", "MatrixForm"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "xsol", "]"}], "\[GreaterEqual]", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"p", "+", "q", "+", "r"}], ")"}], 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"p", "+", "q", "+", "r", "-", "1"}], ")"}], "/", 
+            "2"}]}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"(*", " ", 
+          RowBox[{
+           RowBox[{"Print", "[", 
+            RowBox[{"\"\<Solutions = \>\"", ",", " ", 
+             RowBox[{"xsol", "//", "MatrixForm"}]}], "]"}], ";"}], " ", 
+          "*)"}], "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"xsolna", "=", 
+           RowBox[{
+            RowBox[{"Transpose", "[", "xsol", "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"xsolnb", "=", 
+           RowBox[{
+            RowBox[{"Transpose", "[", "xsol", "]"}], "[", 
+            RowBox[{"[", "3", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"sa", "=", "0"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"sb", "=", "0"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"For", "[", 
+           RowBox[{
+            RowBox[{"k", "=", "1"}], ",", 
+            RowBox[{"k", "\[LessEqual]", " ", 
+             RowBox[{"Length", "[", "xsolna", "]"}]}], ",", " ", 
+            RowBox[{"k", "++"}], ",", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"sa", "+=", 
+              RowBox[{"Length", "[", 
+               RowBox[{"xsolna", "[", 
+                RowBox[{"[", "k", "]"}], "]"}], "]"}]}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"sb", "+=", 
+              RowBox[{"Length", "[", 
+               RowBox[{"xsolnb", "[", 
+                RowBox[{"[", "k", "]"}], "]"}], "]"}]}], ";"}]}], 
+           "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"Print", "[", 
+           RowBox[{"\"\<sigma, tau = \>\"", ",", 
+            RowBox[{"PermA", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], ",", 
+            RowBox[{"PermB", "[", 
+             RowBox[{"[", "j", "]"}], "]"}], ",", "\"\<, Length = \>\"", ",", 
+            
+            RowBox[{"Length", "[", "xsol", "]"}], ",", 
+            "\"\<, Number of a- & b-pairs used = \>\"", ",", " ", 
+            RowBox[{"sa", "/", "2"}], ",", " ", "\"\< & \>\"", ",", " ", 
+            RowBox[{"sb", "/", "2"}]}], "]"}], ";"}]}], "\[IndentingNewLine]",
+         "]"}], ";"}]}], "\[IndentingNewLine]", "]"}], ";"}]}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+    "}"}], "=", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", "1", ",", "2", ",", "1", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "3", ",", "2", ",", "4", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "4", ",", "1", ",", "3"}], "}"}]}], "}"}]}], ";", 
+  RowBox[{
+   RowBox[{"VerifyConjectureSCPosMin", "[", 
+    RowBox[{"p", ",", "pp", ",", "q", ",", "r", ",", "sigma", ",", "tau"}], 
+    "]"}], "//", "MatrixForm"}]}]], "Input"]
+},
+WindowSize->{640, 750},
+WindowMargins->{{Automatic, 179}, {126, Automatic}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 20, \
+2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 623, 16, 63, "Input"],
+Cell[1193, 40, 681, 12, 24, "Message"],
+Cell[1877, 54, 680, 12, 24, "Message"],
+Cell[2560, 68, 681, 12, 24, "Message"],
+Cell[3244, 82, 614, 10, 24, "Message"],
+Cell[3861, 94, 516, 8, 42, "Message"],
+Cell[4380, 104, 2126, 73, 131, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6543, 182, 734, 19, 63, "Input"],
+Cell[7280, 203, 707, 12, 24, "Message"],
+Cell[7990, 217, 705, 12, 24, "Message"],
+Cell[8698, 231, 705, 12, 24, "Message"],
+Cell[9406, 245, 637, 10, 24, "Message"],
+Cell[10046, 257, 540, 8, 42, "Message"],
+Cell[10589, 267, 2691, 94, 183, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13317, 366, 751, 20, 80, "Input"],
+Cell[14071, 388, 537, 8, 42, "Message"],
+Cell[14611, 398, 2148, 73, 131, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16796, 476, 1092, 25, 80, "Input"],
+Cell[17891, 503, 540, 8, 42, "Message"],
+Cell[18434, 513, 2510, 87, 165, "Output"],
+Cell[20947, 602, 836, 13, 42, "Message"],
+Cell[21786, 617, 825, 17, 38, "Print"],
+Cell[22614, 636, 836, 13, 42, "Message"],
+Cell[23453, 651, 838, 13, 42, "Message"],
+Cell[24294, 666, 946, 15, 41, "Message"]
+}, Open  ]],
+Cell[25255, 684, 4768, 121, 471, "Input"],
+Cell[30026, 807, 580, 15, 46, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

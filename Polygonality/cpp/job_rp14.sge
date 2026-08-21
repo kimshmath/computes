@@ -1,0 +1,11 @@
+#$ -N job_rp
+#$ -cwd
+#$ -V
+#$ -o rp_console_out
+#$ -e rp.err
+#$ -l h_rt=47:59:00
+#$ -pe 1way 16
+#$ -q long
+#$ -S /bin/sh
+
+./rp.exe < in14 > out14

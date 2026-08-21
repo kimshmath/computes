@@ -1,0 +1,67 @@
+/* hyperbolic_ios.css - iOS specific styling for Hyperbolic Space chapter */
+
+/* Hide web-only elements */
+#badge, .floating-badge, footer {
+  display: none !important;
+}
+
+/* Base safe area padding */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Touch targets optimization */
+input[type="range"] {
+  height: 44px; /* Apple HIG minimum touch target */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 28px;
+  height: 28px;
+}
+
+select {
+  height: 44px;
+  font-size: 1.1rem;
+  padding: 0 16px;
+}
+
+button.action-btn, #btnDraw, #btnParallel {
+  min-height: 44px;
+  min-width: 44px;
+  font-size: 1rem;
+  padding: 8px 16px;
+}
+
+.tess-ctrl {
+  gap: 1.5rem !important;
+}
+
+/* D-pad and H3 buttons */
+#h3Btns {
+  padding: 1rem 1rem !important;
+  gap: 8px !important;
+}
+
+#h3Btns button {
+  min-width: 60px;
+  min-height: 50px;
+  font-size: 1.2rem;
+  margin: 0 4px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+#h3Btns button:active {
+  background: rgba(201,168,76,0.3);
+}
+
+/* Canvas optimizations to prevent scrolling while drawing */
+#parallelCanvas, #gaussCanvas, #tilingCanvas, #modCanvas, #streetCanvas {
+  touch-action: none;
+}
