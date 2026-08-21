@@ -1,0 +1,117 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3519,        107]
+NotebookOptionsPosition[      2858,         88]
+NotebookOutlinePosition[      3250,        104]
+CellTagsIndexPosition[      3207,        101]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"SetDirectory", "[", 
+     RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"strtmp", "=", 
+     RowBox[{"\"\<d := \>\"", "<>", 
+      RowBox[{"ToString", "[", "d", "]"}], "<>", "\"\<;\>\""}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Export", "[", 
+     RowBox[{"\"\<JK-Bianchi-FD-initial.txt\>\"", ",", "strtmp"}], "]"}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "Run", "[", 
+     "\"\</Applications/Magma/magma JK-Bianchi-FD-initial.txt \
+JK-Bianchi-FD-rev5.m\>\"", "]"}], ";", 
+    RowBox[{"dimtar", "=", 
+     RowBox[{"ToExpression", "[", 
+      RowBox[{
+      "Import", "[", "\"\<./JK-Bianchi-FD-out-N-H1-gen.txt\>\"", "]"}], 
+      "]"}]}], ";"}]}]}]], "Input",
+ CellLabel->
+  "In[119]:=",ExpressionUUID->"c630f210-ab89-4da1-98d4-30c1a25b2975"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NotebookDirectory", "nosv", 
+   "\"The notebook \
+\\!\\(\\*TemplateBox[List[\\\"a1dbb91f-afe6-4063-af39-f6e85e325562\\\", \
+\\\"\\\\\\\"Untitled-3\\\\\\\"\\\"], \\\"NotebookObjectUUIDUnsaved\\\"]\\) is \
+not saved.\"", 2, 119, 36, 25917151162142816675, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.87996195387922*^9},
+ CellLabel->
+  "During evaluation of \
+In[119]:=",ExpressionUUID->"215afe80-dbc1-4d4f-b017-4d4844585780"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "SetDirectory", "badfile", 
+   "\"The specified argument \\!\\(\\*RowBox[{\\\"$Failed\\\"}]\\) should be \
+a valid string or File.\"", 2, 119, 37, 25917151162142816675, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.879961953931816*^9},
+ CellLabel->
+  "During evaluation of \
+In[119]:=",ExpressionUUID->"4770d15e-cc19-47f1-ac19-6c5832365eaf"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Import", "nffil", 
+   "\"File \\!\\(\\*RowBox[{\\\"\\\\\\\"./JK-Bianchi-FD-out-N-H1-gen.txt\\\\\\\
+\"\\\"}]\\) not found during \\!\\(\\*RowBox[{\\\"Import\\\"}]\\).\"", 2, 122,
+    38, 25917151162142816675, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.879961953979547*^9},
+ CellLabel->
+  "During evaluation of \
+In[119]:=",ExpressionUUID->"e4acaf96-c576-423e-a25f-97f57ad05661"]
+}, Open  ]]
+},
+WindowSize->{808, 647},
+WindowMargins->{{20, Automatic}, {Automatic, 44}},
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (July 9, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"a1dbb91f-afe6-4063-af39-f6e85e325562"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 935, 27, 136, "Input",ExpressionUUID->"c630f210-ab89-4da1-98d4-30c1a25b2975"],
+Cell[1518, 51, 482, 11, 34, "Message",ExpressionUUID->"215afe80-dbc1-4d4f-b017-4d4844585780"],
+Cell[2003, 64, 398, 9, 28, "Message",ExpressionUUID->"4770d15e-cc19-47f1-ac19-6c5832365eaf"],
+Cell[2404, 75, 438, 10, 28, "Message",ExpressionUUID->"e4acaf96-c576-423e-a25f-97f57ad05661"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

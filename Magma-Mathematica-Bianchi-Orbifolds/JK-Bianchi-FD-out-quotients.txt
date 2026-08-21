@@ -1,0 +1,46 @@
+-HPG.2
+HPG.1
+HPG.1
+-HPG.1
+-HPG.1
+HPG.1
+0
+-HPG.1
+0
+0
+HPG.2
+-HPG.1
+HPG.1 - HPG.2
+-HPG.1 + HPG.2
+0
+0
+0
+0
+-HPG.1 + HPG.2
+HPG.1 - HPG.2
+-HPG.1 + HPG.2
+HPG.1 - HPG.2
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+HPG.1
+-HPG.1
+0
+HPG.2
+-HPG.2
+HPG.2
+-HPG.2
+-HPG.1
+HPG.1
+-HPG.2
+HPG.2
+HPG.2
+-HPG.2
+HPG.1
